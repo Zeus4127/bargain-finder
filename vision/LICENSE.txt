@@ -1,0 +1,1 @@
+Apache-2.0: TensorFlow.js (https://github.com/tensorflow/tfjs) and MobileNet v2 weights (tfjs-models)
