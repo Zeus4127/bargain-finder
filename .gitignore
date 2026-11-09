@@ -1,0 +1,8 @@
+# never publish keys or secrets
+*.p12
+*.jks
+*.keystore
+*.pem
+*.key
+.env
+.env.*
