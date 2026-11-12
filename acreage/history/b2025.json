@@ -1,0 +1,3695 @@
+{
+ "year": 2025,
+ "regions": [
+  {
+   "state": "QLD",
+   "name": "Central",
+   "median": 1252,
+   "yoy": 96.4,
+   "cagr5": 27.1,
+   "cagr10": 17.6,
+   "cagr20": 13.3,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "Central Highlands",
+   "median": 6879,
+   "yoy": 6.3,
+   "cagr5": 13.7,
+   "cagr10": 13.6,
+   "cagr20": 8.9,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "Far North",
+   "median": 14509,
+   "yoy": -0.6,
+   "cagr5": 10.1,
+   "cagr10": 8.4,
+   "cagr20": 6.3,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "North",
+   "median": 12878,
+   "yoy": -7.2,
+   "cagr5": 8.6,
+   "cagr10": 9.0,
+   "cagr20": 6.9,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "South East",
+   "median": 15682,
+   "yoy": 2.0,
+   "cagr5": 12.8,
+   "cagr10": 9.9,
+   "cagr20": 8.5,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "Southern Coastal",
+   "median": 10067,
+   "yoy": 14.5,
+   "cagr5": 15.8,
+   "cagr10": 10.4,
+   "cagr20": 9.1,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "West",
+   "median": 255,
+   "yoy": -1.0,
+   "cagr5": 15.3,
+   "cagr10": 14.8,
+   "cagr20": 10.7,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "Western Downs",
+   "median": 4472,
+   "yoy": 0.5,
+   "cagr5": 16.6,
+   "cagr10": 12.3,
+   "cagr20": 9.4,
+   "is_state": false
+  },
+  {
+   "state": "QLD",
+   "name": "Queensland",
+   "median": 10439,
+   "yoy": 5.8,
+   "cagr5": 15.0,
+   "cagr10": 10.7,
+   "cagr20": 7.4,
+   "is_state": true
+  },
+  {
+   "state": "NSW",
+   "name": "Central West",
+   "median": 6571,
+   "yoy": -5.6,
+   "cagr5": 11.5,
+   "cagr10": 11.1,
+   "cagr20": 7.5,
+   "is_state": false
+  },
+  {
+   "state": "NSW",
+   "name": "Far West",
+   "median": 1144,
+   "yoy": 129.7,
+   "cagr5": 41.8,
+   "cagr10": 22.0,
+   "cagr20": 14.8,
+   "is_state": false
+  },
+  {
+   "state": "NSW",
+   "name": "Hunter",
+   "median": 14996,
+   "yoy": 11.2,
+   "cagr5": 9.6,
+   "cagr10": 8.4,
+   "cagr20": 4.9,
+   "is_state": false
+  },
+  {
+   "state": "NSW",
+   "name": "North Coast",
+   "median": 15214,
+   "yoy": 17.4,
+   "cagr5": 11.0,
+   "cagr10": 10.8,
+   "cagr20": 6.4,
+   "is_state": false
+  },
+  {
+   "state": "NSW",
+   "name": "Riverina Murray",
+   "median": 8881,
+   "yoy": -8.5,
+   "cagr5": 12.5,
+   "cagr10": 13.1,
+   "cagr20": 7.5,
+   "is_state": false
+  },
+  {
+   "state": "NSW",
+   "name": "South East",
+   "median": 12621,
+   "yoy": 2.7,
+   "cagr5": 11.4,
+   "cagr10": 10.5,
+   "cagr20": 7.0,
+   "is_state": false
+  },
+  {
+   "state": "NSW",
+   "name": "New South Wales",
+   "median": 9884,
+   "yoy": 4.5,
+   "cagr5": 11.0,
+   "cagr10": 11.6,
+   "cagr20": 7.4,
+   "is_state": true
+  },
+  {
+   "state": "VIC",
+   "name": "Central",
+   "median": 11129,
+   "yoy": -10.8,
+   "cagr5": 17.4,
+   "cagr10": 13.3,
+   "cagr20": 8.2,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "East Gippsland",
+   "median": 14336,
+   "yoy": 13.2,
+   "cagr5": 16.2,
+   "cagr10": 9.0,
+   "cagr20": 6.9,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "Goulburn",
+   "median": 14875,
+   "yoy": 5.3,
+   "cagr5": 15.0,
+   "cagr10": 11.2,
+   "cagr20": 6.2,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "Mallee",
+   "median": 5159,
+   "yoy": -10.6,
+   "cagr5": 14.6,
+   "cagr10": 14.5,
+   "cagr20": 9.3,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "Ovens Murray",
+   "median": 17216,
+   "yoy": 3.1,
+   "cagr5": 13.0,
+   "cagr10": 11.8,
+   "cagr20": 6.7,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "South West",
+   "median": 16968,
+   "yoy": -7.8,
+   "cagr5": 9.2,
+   "cagr10": 10.9,
+   "cagr20": 7.3,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "Wimmera",
+   "median": 10505,
+   "yoy": 3.2,
+   "cagr5": 12.9,
+   "cagr10": 16.2,
+   "cagr20": 10.3,
+   "is_state": false
+  },
+  {
+   "state": "VIC",
+   "name": "VICTORIA",
+   "median": 14790,
+   "yoy": -0.4,
+   "cagr5": 12.8,
+   "cagr10": 11.9,
+   "cagr20": 7.3,
+   "is_state": true
+  },
+  {
+   "state": "TAS",
+   "name": "North West",
+   "median": 24136,
+   "yoy": -10.7,
+   "cagr5": 6.7,
+   "cagr10": 7.5,
+   "cagr20": 6.2,
+   "is_state": false
+  },
+  {
+   "state": "TAS",
+   "name": "Northern",
+   "median": 17741,
+   "yoy": -9.7,
+   "cagr5": 6.8,
+   "cagr10": 7.0,
+   "cagr20": 6.8,
+   "is_state": false
+  },
+  {
+   "state": "TAS",
+   "name": "South",
+   "median": 8979,
+   "yoy": 8.7,
+   "cagr5": 12.2,
+   "cagr10": 6.3,
+   "cagr20": 6.3,
+   "is_state": false
+  },
+  {
+   "state": "TAS",
+   "name": "TASMANIA",
+   "median": 18424,
+   "yoy": -20.6,
+   "cagr5": 6.1,
+   "cagr10": 7.8,
+   "cagr20": 6.6,
+   "is_state": true
+  },
+  {
+   "state": "SA",
+   "name": "Adelaide & Fleurieu",
+   "median": 25874,
+   "yoy": 15.1,
+   "cagr5": 10.5,
+   "cagr10": 7.7,
+   "cagr20": 5.7,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "Eyre Peninsula",
+   "median": 2870,
+   "yoy": 32.2,
+   "cagr5": 13.8,
+   "cagr10": 12.5,
+   "cagr20": 6.9,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "Kangaroo Island",
+   "median": 7419,
+   "yoy": -7.3,
+   "cagr5": 10.4,
+   "cagr10": 11.6,
+   "cagr20": 5.8,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "Lower South East",
+   "median": 14680,
+   "yoy": -15.8,
+   "cagr5": 14.1,
+   "cagr10": 13.4,
+   "cagr20": 6.9,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "Murray & Mallee",
+   "median": 4364,
+   "yoy": 9.6,
+   "cagr5": 11.0,
+   "cagr10": 14.6,
+   "cagr20": 7.7,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "North",
+   "median": 1907,
+   "yoy": -23.1,
+   "cagr5": -4.5,
+   "cagr10": 3.1,
+   "cagr20": 3.4,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "Yorke & Mid-North",
+   "median": 12150,
+   "yoy": -1.9,
+   "cagr5": 10.4,
+   "cagr10": 12.3,
+   "cagr20": 7.4,
+   "is_state": false
+  },
+  {
+   "state": "SA",
+   "name": "SOUTH AUSTRALIA",
+   "median": 9421,
+   "yoy": 20.4,
+   "cagr5": 11.4,
+   "cagr10": 12.3,
+   "cagr20": 6.9,
+   "is_state": true
+  },
+  {
+   "state": "WA",
+   "name": "Avon-Midland",
+   "median": 10260,
+   "yoy": 10.9,
+   "cagr5": 23.5,
+   "cagr10": 13.1,
+   "cagr20": 8.3,
+   "is_state": false
+  },
+  {
+   "state": "WA",
+   "name": "Central",
+   "median": 6763,
+   "yoy": 7.6,
+   "cagr5": 26.4,
+   "cagr10": 16.0,
+   "cagr20": 8.5,
+   "is_state": false
+  },
+  {
+   "state": "WA",
+   "name": "Great Eastern",
+   "median": 1960,
+   "yoy": 6.3,
+   "cagr5": 20.6,
+   "cagr10": 10.6,
+   "cagr20": 5.0,
+   "is_state": false
+  },
+  {
+   "state": "WA",
+   "name": "Great Southern",
+   "median": 8949,
+   "yoy": 14.0,
+   "cagr5": 17.6,
+   "cagr10": 15.4,
+   "cagr20": 7.5,
+   "is_state": false
+  },
+  {
+   "state": "WA",
+   "name": "Northern",
+   "median": 4240,
+   "yoy": -7.3,
+   "cagr5": 23.5,
+   "cagr10": 11.6,
+   "cagr20": 6.0,
+   "is_state": false
+  },
+  {
+   "state": "WA",
+   "name": "South West",
+   "median": 18729,
+   "yoy": 8.7,
+   "cagr5": 15.5,
+   "cagr10": 8.0,
+   "cagr20": 5.1,
+   "is_state": false
+  },
+  {
+   "state": "WA",
+   "name": "WESTERN",
+   "median": 7255,
+   "yoy": 6.7,
+   "cagr5": 18.8,
+   "cagr10": 13.7,
+   "cagr20": 6.9,
+   "is_state": true
+  }
+ ],
+ "lgas": [
+  {
+   "state": "QLD",
+   "lga": "Lockyer Valley",
+   "median": 16558,
+   "cagr5": 13.2,
+   "cagr10": 9.4,
+   "cagr20": 7.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Moreton Bay",
+   "median": 24566,
+   "cagr5": 7.4,
+   "cagr10": 7.4,
+   "cagr20": 5.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Barcaldine",
+   "median": 1245,
+   "cagr5": 24.9,
+   "cagr10": 14.5,
+   "cagr20": 16.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Scenic Rim",
+   "median": 21501,
+   "cagr5": 12.7,
+   "cagr10": 9.3,
+   "cagr20": 7.7
+  },
+  {
+   "state": "QLD",
+   "lga": "Blackall Tambo",
+   "median": 2193,
+   "cagr5": 31.1,
+   "cagr10": 20.1,
+   "cagr20": 19.2
+  },
+  {
+   "state": "QLD",
+   "lga": "Somerset",
+   "median": 13405,
+   "cagr5": 9.8,
+   "cagr10": 8.1,
+   "cagr20": 7.9
+  },
+  {
+   "state": "QLD",
+   "lga": "Etheridge",
+   "median": 308,
+   "cagr5": 3.2,
+   "cagr10": 14.8,
+   "cagr20": 8.5
+  },
+  {
+   "state": "QLD",
+   "lga": "Southern Downs",
+   "median": 10545,
+   "cagr5": 12.4,
+   "cagr10": 8.1,
+   "cagr20": 8.2
+  },
+  {
+   "state": "QLD",
+   "lga": "Flinders",
+   "median": 1019,
+   "cagr5": 16.3,
+   "cagr10": 17.4,
+   "cagr20": 8.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Sunshine Coast",
+   "median": 24939,
+   "cagr5": 3.9,
+   "cagr10": 7.8,
+   "cagr20": 5.9
+  },
+  {
+   "state": "QLD",
+   "lga": "Toowoomba",
+   "median": 16481,
+   "cagr5": 16.4,
+   "cagr10": 12.9,
+   "cagr20": 9.0
+  },
+  {
+   "state": "QLD",
+   "lga": "Murweh",
+   "median": 2282,
+   "cagr5": 64.2,
+   "cagr10": 37.3,
+   "cagr20": 16.5
+  },
+  {
+   "state": "QLD",
+   "lga": "Bundaberg",
+   "median": 14286,
+   "cagr5": 24.9,
+   "cagr10": 14.9,
+   "cagr20": 10.9
+  },
+  {
+   "state": "QLD",
+   "lga": "Fraser Coast",
+   "median": 10225,
+   "cagr5": 10.5,
+   "cagr10": 12.6,
+   "cagr20": 6.8
+  },
+  {
+   "state": "QLD",
+   "lga": "Gladstone",
+   "median": 8673,
+   "cagr5": 17.8,
+   "cagr10": 11.2,
+   "cagr20": 9.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Banana",
+   "median": 7427,
+   "cagr5": 10.2,
+   "cagr10": 11.6,
+   "cagr20": 7.3
+  },
+  {
+   "state": "QLD",
+   "lga": "Gympie",
+   "median": 13299,
+   "cagr5": 5.7,
+   "cagr10": 9.4,
+   "cagr20": 10.0
+  },
+  {
+   "state": "QLD",
+   "lga": "Livingstone",
+   "median": 16499,
+   "cagr5": 28.2,
+   "cagr10": null,
+   "cagr20": null
+  },
+  {
+   "state": "QLD",
+   "lga": "Isaac",
+   "median": 5433,
+   "cagr5": 15.1,
+   "cagr10": 13.1,
+   "cagr20": 9.0
+  },
+  {
+   "state": "QLD",
+   "lga": "North Burnett",
+   "median": 6257,
+   "cagr5": 12.2,
+   "cagr10": 9.7,
+   "cagr20": 8.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Rockhampton",
+   "median": 11648,
+   "cagr5": 17.9,
+   "cagr10": 11.4,
+   "cagr20": 9.6
+  },
+  {
+   "state": "QLD",
+   "lga": "South Burnett",
+   "median": 9899,
+   "cagr5": 14.3,
+   "cagr10": 8.7,
+   "cagr20": 8.6
+  },
+  {
+   "state": "QLD",
+   "lga": "Cairns",
+   "median": 14100,
+   "cagr5": 7.0,
+   "cagr10": 7.2,
+   "cagr20": 3.2
+  },
+  {
+   "state": "QLD",
+   "lga": "Cassowary Coast",
+   "median": 13676,
+   "cagr5": 6.5,
+   "cagr10": 7.9,
+   "cagr20": 6.4
+  },
+  {
+   "state": "QLD",
+   "lga": "Cook",
+   "median": 4695,
+   "cagr5": 0.2,
+   "cagr10": 3.1,
+   "cagr20": 17.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Douglas",
+   "median": 14395,
+   "cagr5": 6.4,
+   "cagr10": null,
+   "cagr20": null
+  },
+  {
+   "state": "QLD",
+   "lga": "Mareeba",
+   "median": 13639,
+   "cagr5": 9.4,
+   "cagr10": null,
+   "cagr20": null
+  },
+  {
+   "state": "QLD",
+   "lga": "Paroo",
+   "median": 173,
+   "cagr5": -3.0,
+   "cagr10": 12.8,
+   "cagr20": 8.9
+  },
+  {
+   "state": "QLD",
+   "lga": "Tablelands",
+   "median": 18588,
+   "cagr5": 16.2,
+   "cagr10": 11.6,
+   "cagr20": 7.5
+  },
+  {
+   "state": "QLD",
+   "lga": "Winton",
+   "median": 799,
+   "cagr5": 24.5,
+   "cagr10": 17.1,
+   "cagr20": 16.8
+  },
+  {
+   "state": "QLD",
+   "lga": "Burdekin",
+   "median": 28462,
+   "cagr5": 14.5,
+   "cagr10": 18.0,
+   "cagr20": 8.8
+  },
+  {
+   "state": "QLD",
+   "lga": "Charters Towers",
+   "median": 9146,
+   "cagr5": 24.0,
+   "cagr10": 44.7,
+   "cagr20": 11.3
+  },
+  {
+   "state": "QLD",
+   "lga": "Balonne",
+   "median": 1629,
+   "cagr5": 23.5,
+   "cagr10": 16.6,
+   "cagr20": 12.4
+  },
+  {
+   "state": "QLD",
+   "lga": "Hinchinbrook",
+   "median": 8751,
+   "cagr5": 5.7,
+   "cagr10": 2.9,
+   "cagr20": 8.6
+  },
+  {
+   "state": "QLD",
+   "lga": "Goondiwindi",
+   "median": 3987,
+   "cagr5": 19.0,
+   "cagr10": 12.8,
+   "cagr20": 10.1
+  },
+  {
+   "state": "QLD",
+   "lga": "Mackay",
+   "median": 15840,
+   "cagr5": 9.7,
+   "cagr10": 9.4,
+   "cagr20": 7.2
+  },
+  {
+   "state": "QLD",
+   "lga": "Maranoa",
+   "median": 5441,
+   "cagr5": 24.3,
+   "cagr10": 15.8,
+   "cagr20": 15.6
+  },
+  {
+   "state": "QLD",
+   "lga": "Townsville",
+   "median": 14270,
+   "cagr5": 9.5,
+   "cagr10": 8.8,
+   "cagr20": 6.9
+  },
+  {
+   "state": "QLD",
+   "lga": "Whitsunday",
+   "median": 8012,
+   "cagr5": 7.2,
+   "cagr10": 8.1,
+   "cagr20": 7.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Cessnock",
+   "median": 24964,
+   "cagr5": 16.8,
+   "cagr10": 5.2,
+   "cagr20": 6.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Dungog",
+   "median": 16093,
+   "cagr5": 8.5,
+   "cagr10": 7.3,
+   "cagr20": 4.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Bathurst",
+   "median": 11358,
+   "cagr5": 11.9,
+   "cagr10": 14.5,
+   "cagr20": 7.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Blayney",
+   "median": 14092,
+   "cagr5": 4.6,
+   "cagr10": 12.0,
+   "cagr20": 5.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Mid-Coast",
+   "median": 15427,
+   "cagr5": 11.5,
+   "cagr10": 8.0,
+   "cagr20": 5.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Bogan",
+   "median": 1299,
+   "cagr5": 5.1,
+   "cagr10": 12.5,
+   "cagr20": 5.5
+  },
+  {
+   "state": "NSW",
+   "lga": "Muswellbrook",
+   "median": 11168,
+   "cagr5": 1.0,
+   "cagr10": 4.3,
+   "cagr20": 3.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Cabonne",
+   "median": 13290,
+   "cagr5": 15.8,
+   "cagr10": 11.2,
+   "cagr20": 7.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Singleton",
+   "median": 22274,
+   "cagr5": 10.7,
+   "cagr10": 15.4,
+   "cagr20": 5.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Coonamble",
+   "median": 3840,
+   "cagr5": 10.9,
+   "cagr10": 11.6,
+   "cagr20": 7.9
+  },
+  {
+   "state": "NSW",
+   "lga": "Upper Hunter",
+   "median": 7992,
+   "cagr5": 15.3,
+   "cagr10": 12.0,
+   "cagr20": 6.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Cowra",
+   "median": 14496,
+   "cagr5": 14.3,
+   "cagr10": 11.9,
+   "cagr20": 6.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Dubbo",
+   "median": 6336,
+   "cagr5": 9.9,
+   "cagr10": 9.6,
+   "cagr20": 6.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Forbes",
+   "median": 7976,
+   "cagr5": 13.6,
+   "cagr10": 13.2,
+   "cagr20": 9.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Armidale",
+   "median": 8112,
+   "cagr5": 7.5,
+   "cagr10": 5.4,
+   "cagr20": 6.5
+  },
+  {
+   "state": "NSW",
+   "lga": "Gilgandra",
+   "median": 3835,
+   "cagr5": 14.8,
+   "cagr10": 8.1,
+   "cagr20": 6.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Glen Innes Severn",
+   "median": 7453,
+   "cagr5": 7.8,
+   "cagr10": 11.4,
+   "cagr20": 7.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Lachlan",
+   "median": 3541,
+   "cagr5": 13.6,
+   "cagr10": 15.0,
+   "cagr20": 8.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Gunnedah",
+   "median": 9695,
+   "cagr5": 14.0,
+   "cagr10": 8.9,
+   "cagr20": 7.9
+  },
+  {
+   "state": "NSW",
+   "lga": "Lithgow",
+   "median": 15065,
+   "cagr5": 6.2,
+   "cagr10": 8.9,
+   "cagr20": 7.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Gwydir",
+   "median": 4789,
+   "cagr5": 7.0,
+   "cagr10": 9.8,
+   "cagr20": 6.7
+  },
+  {
+   "state": "NSW",
+   "lga": "Mid-Western",
+   "median": 8492,
+   "cagr5": 12.1,
+   "cagr10": 12.3,
+   "cagr20": 6.9
+  },
+  {
+   "state": "NSW",
+   "lga": "Inverell",
+   "median": 7190,
+   "cagr5": 12.3,
+   "cagr10": 12.5,
+   "cagr20": 8.7
+  },
+  {
+   "state": "NSW",
+   "lga": "Narromine",
+   "median": 6906,
+   "cagr5": 13.3,
+   "cagr10": 14.0,
+   "cagr20": 8.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Liverpool Plains",
+   "median": 10636,
+   "cagr5": 14.1,
+   "cagr10": 11.0,
+   "cagr20": 7.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Oberon",
+   "median": 13658,
+   "cagr5": 6.7,
+   "cagr10": 8.5,
+   "cagr20": 7.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Moree Plains",
+   "median": 11184,
+   "cagr5": 18.5,
+   "cagr10": 13.4,
+   "cagr20": 9.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Orange",
+   "median": 28880,
+   "cagr5": 26.5,
+   "cagr10": 7.6,
+   "cagr20": 5.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Narrabri",
+   "median": 6095,
+   "cagr5": 18.6,
+   "cagr10": 12.0,
+   "cagr20": 9.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Parkes",
+   "median": 4290,
+   "cagr5": 12.2,
+   "cagr10": 12.3,
+   "cagr20": 7.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Tamworth",
+   "median": 10531,
+   "cagr5": 13.6,
+   "cagr10": 8.7,
+   "cagr20": 8.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Warren",
+   "median": 3336,
+   "cagr5": 18.4,
+   "cagr10": 10.2,
+   "cagr20": 11.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Tenterfield",
+   "median": 5464,
+   "cagr5": 7.3,
+   "cagr10": 11.7,
+   "cagr20": 6.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Warrumbungle",
+   "median": 4111,
+   "cagr5": 14.0,
+   "cagr10": 9.9,
+   "cagr20": 7.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Uralla",
+   "median": 4776,
+   "cagr5": -2.8,
+   "cagr10": 7.4,
+   "cagr20": 4.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Weddin",
+   "median": 8267,
+   "cagr5": 12.7,
+   "cagr10": 12.3,
+   "cagr20": 7.7
+  },
+  {
+   "state": "NSW",
+   "lga": "Walcha",
+   "median": 7023,
+   "cagr5": -1.1,
+   "cagr10": 8.8,
+   "cagr20": 4.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Ballina",
+   "median": 26493,
+   "cagr5": 7.1,
+   "cagr10": 14.7,
+   "cagr20": 11.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Bellingen",
+   "median": 16413,
+   "cagr5": 4.9,
+   "cagr10": 10.3,
+   "cagr20": 3.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Clarence Valley",
+   "median": 12407,
+   "cagr5": 12.8,
+   "cagr10": 11.0,
+   "cagr20": 7.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Cobar",
+   "median": 1378,
+   "cagr5": 70.9,
+   "cagr10": 33.3,
+   "cagr20": 17.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Coffs Harbour",
+   "median": 17897,
+   "cagr5": 0.3,
+   "cagr10": 10.2,
+   "cagr20": 4.5
+  },
+  {
+   "state": "NSW",
+   "lga": "Kempsey",
+   "median": 14113,
+   "cagr5": 14.5,
+   "cagr10": 12.0,
+   "cagr20": 6.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Walgett",
+   "median": 2790,
+   "cagr5": 3.5,
+   "cagr10": 9.2,
+   "cagr20": 8.5
+  },
+  {
+   "state": "NSW",
+   "lga": "Kyogle",
+   "median": 14912,
+   "cagr5": 10.0,
+   "cagr10": 13.5,
+   "cagr20": 7.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Wentworth",
+   "median": 3120,
+   "cagr5": 41.0,
+   "cagr10": null,
+   "cagr20": 16.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Lismore",
+   "median": 19933,
+   "cagr5": 7.0,
+   "cagr10": 9.6,
+   "cagr20": 5.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Nambucca Valley",
+   "median": 16884,
+   "cagr5": 9.5,
+   "cagr10": 7.2,
+   "cagr20": 7.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Richmond Valley",
+   "median": 11299,
+   "cagr5": 9.6,
+   "cagr10": 11.1,
+   "cagr20": 6.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Tweed",
+   "median": 32975,
+   "cagr5": 14.0,
+   "cagr10": 10.5,
+   "cagr20": 6.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Albury",
+   "median": 25883,
+   "cagr5": null,
+   "cagr10": 11.6,
+   "cagr20": 9.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Berrigan",
+   "median": 12348,
+   "cagr5": 20.1,
+   "cagr10": 14.9,
+   "cagr20": 9.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Bland",
+   "median": 5242,
+   "cagr5": 15.2,
+   "cagr10": 13.6,
+   "cagr20": 9.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Carrathool",
+   "median": 4822,
+   "cagr5": 19.5,
+   "cagr10": 17.3,
+   "cagr20": 9.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Coolamon",
+   "median": 10418,
+   "cagr5": 12.6,
+   "cagr10": 15.1,
+   "cagr20": 9.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Edward River",
+   "median": 8519,
+   "cagr5": 14.2,
+   "cagr10": 13.1,
+   "cagr20": 7.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Federation",
+   "median": 11412,
+   "cagr5": 15.5,
+   "cagr10": 14.2,
+   "cagr20": 10.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Greater Hume",
+   "median": 14709,
+   "cagr5": 8.2,
+   "cagr10": 13.3,
+   "cagr20": 7.9
+  },
+  {
+   "state": "NSW",
+   "lga": "Griffith",
+   "median": 14000,
+   "cagr5": 33.6,
+   "cagr10": 20.3,
+   "cagr20": 7.7
+  },
+  {
+   "state": "NSW",
+   "lga": "Junee",
+   "median": 6793,
+   "cagr5": -4.3,
+   "cagr10": 6.1,
+   "cagr20": 4.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Leeton",
+   "median": 7343,
+   "cagr5": 2.5,
+   "cagr10": 9.1,
+   "cagr20": 7.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Lockhart",
+   "median": 11736,
+   "cagr5": 4.9,
+   "cagr10": 13.4,
+   "cagr20": 8.1
+  },
+  {
+   "state": "NSW",
+   "lga": "Murray River",
+   "median": 5601,
+   "cagr5": 18.7,
+   "cagr10": 11.6,
+   "cagr20": 5.8
+  },
+  {
+   "state": "NSW",
+   "lga": "Murrumbidgee",
+   "median": 6366,
+   "cagr5": 8.4,
+   "cagr10": 11.2,
+   "cagr20": 8.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Narrandera",
+   "median": 6920,
+   "cagr5": 8.7,
+   "cagr10": 14.6,
+   "cagr20": 9.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Snowy Valleys",
+   "median": 14148,
+   "cagr5": 18.5,
+   "cagr10": 17.5,
+   "cagr20": 7.4
+  },
+  {
+   "state": "NSW",
+   "lga": "Temora",
+   "median": 14512,
+   "cagr5": 15.6,
+   "cagr10": 17.2,
+   "cagr20": 9.9
+  },
+  {
+   "state": "NSW",
+   "lga": "Wagga Wagga",
+   "median": 11708,
+   "cagr5": 9.6,
+   "cagr10": 11.2,
+   "cagr20": 6.2
+  },
+  {
+   "state": "NSW",
+   "lga": "Bega Valley",
+   "median": 15493,
+   "cagr5": 9.7,
+   "cagr10": 9.7,
+   "cagr20": 6.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Eurobodalla",
+   "median": 17803,
+   "cagr5": 6.3,
+   "cagr10": 10.2,
+   "cagr20": 5.6
+  },
+  {
+   "state": "NSW",
+   "lga": "Goulburn Mulwaree",
+   "median": 22366,
+   "cagr5": 14.3,
+   "cagr10": 11.2,
+   "cagr20": 7.7
+  },
+  {
+   "state": "NSW",
+   "lga": "Hilltops",
+   "median": 10440,
+   "cagr5": 9.1,
+   "cagr10": 10.5,
+   "cagr20": 7.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Shoalhaven",
+   "median": 20677,
+   "cagr5": 1.6,
+   "cagr10": 2.6,
+   "cagr20": 3.3
+  },
+  {
+   "state": "NSW",
+   "lga": "Snowy Monaro",
+   "median": 5972,
+   "cagr5": 10.7,
+   "cagr10": 12.1,
+   "cagr20": 7.7
+  },
+  {
+   "state": "NSW",
+   "lga": "Upper Lachlan",
+   "median": 11405,
+   "cagr5": 11.9,
+   "cagr10": 12.9,
+   "cagr20": 6.0
+  },
+  {
+   "state": "NSW",
+   "lga": "Yass Valley",
+   "median": 17206,
+   "cagr5": 10.2,
+   "cagr10": 13.0,
+   "cagr20": 7.9
+  },
+  {
+   "state": "VIC",
+   "lga": "Alpine",
+   "median": 24849,
+   "cagr5": 20.3,
+   "cagr10": 14.2,
+   "cagr20": 8.6
+  },
+  {
+   "state": "VIC",
+   "lga": "Benalla",
+   "median": 15392,
+   "cagr5": 12.4,
+   "cagr10": 10.3,
+   "cagr20": 7.3
+  },
+  {
+   "state": "VIC",
+   "lga": "Ballarat",
+   "median": 23662,
+   "cagr5": 19.4,
+   "cagr10": 12.5,
+   "cagr20": 4.4
+  },
+  {
+   "state": "VIC",
+   "lga": "Indigo",
+   "median": 17825,
+   "cagr5": 15.4,
+   "cagr10": 10.8,
+   "cagr20": 6.3
+  },
+  {
+   "state": "VIC",
+   "lga": "Bendigo",
+   "median": 16589,
+   "cagr5": 20.4,
+   "cagr10": 14.2,
+   "cagr20": 8.8
+  },
+  {
+   "state": "VIC",
+   "lga": "Mansfield",
+   "median": 25341,
+   "cagr5": 13.2,
+   "cagr10": 12.9,
+   "cagr20": 7.1
+  },
+  {
+   "state": "VIC",
+   "lga": "Central Goldfields",
+   "median": 12166,
+   "cagr5": 31.7,
+   "cagr10": 21.1,
+   "cagr20": 10.1
+  },
+  {
+   "state": "VIC",
+   "lga": "Towong",
+   "median": 13119,
+   "cagr5": 15.7,
+   "cagr10": 16.7,
+   "cagr20": 7.8
+  },
+  {
+   "state": "VIC",
+   "lga": "Gannawarra",
+   "median": 7088,
+   "cagr5": 21.3,
+   "cagr10": 13.6,
+   "cagr20": 8.5
+  },
+  {
+   "state": "VIC",
+   "lga": "Wangaratta",
+   "median": 15111,
+   "cagr5": 8.7,
+   "cagr10": 11.1,
+   "cagr20": 5.4
+  },
+  {
+   "state": "VIC",
+   "lga": "Hepburn",
+   "median": 14826,
+   "cagr5": 8.3,
+   "cagr10": 7.2,
+   "cagr20": 4.9
+  },
+  {
+   "state": "VIC",
+   "lga": "Loddon",
+   "median": 7806,
+   "cagr5": 12.9,
+   "cagr10": 13.1,
+   "cagr20": 9.1
+  },
+  {
+   "state": "VIC",
+   "lga": "Macedon Ranges",
+   "median": 26174,
+   "cagr5": 11.2,
+   "cagr10": 19.4,
+   "cagr20": 2.7
+  },
+  {
+   "state": "VIC",
+   "lga": "Moorabool",
+   "median": 27494,
+   "cagr5": 15.5,
+   "cagr10": 12.6,
+   "cagr20": 8.2
+  },
+  {
+   "state": "VIC",
+   "lga": "Ararat",
+   "median": 8950,
+   "cagr5": 2.8,
+   "cagr10": 6.1,
+   "cagr20": 6.4
+  },
+  {
+   "state": "VIC",
+   "lga": "Mount Alexander",
+   "median": 10332,
+   "cagr5": -1.0,
+   "cagr10": 4.9,
+   "cagr20": 5.9
+  },
+  {
+   "state": "VIC",
+   "lga": "Colac Otway",
+   "median": 16805,
+   "cagr5": 9.6,
+   "cagr10": 6.4,
+   "cagr20": 5.3
+  },
+  {
+   "state": "VIC",
+   "lga": "Pyrenees",
+   "median": 12344,
+   "cagr5": 21.5,
+   "cagr10": 14.9,
+   "cagr20": 8.0
+  },
+  {
+   "state": "VIC",
+   "lga": "Corangamite",
+   "median": 18394,
+   "cagr5": 8.5,
+   "cagr10": 7.9,
+   "cagr20": 7.7
+  },
+  {
+   "state": "VIC",
+   "lga": "Glenelg",
+   "median": 15748,
+   "cagr5": 9.8,
+   "cagr10": 13.5,
+   "cagr20": 5.6
+  },
+  {
+   "state": "VIC",
+   "lga": "Golden Plains",
+   "median": 16083,
+   "cagr5": 7.6,
+   "cagr10": 9.5,
+   "cagr20": 7.4
+  },
+  {
+   "state": "VIC",
+   "lga": "Moyne",
+   "median": 18960,
+   "cagr5": 8.9,
+   "cagr10": 11.5,
+   "cagr20": 6.0
+  },
+  {
+   "state": "VIC",
+   "lga": "Wellington",
+   "median": 18738,
+   "cagr5": 20.1,
+   "cagr10": 9.4,
+   "cagr20": 7.8
+  },
+  {
+   "state": "VIC",
+   "lga": "Surf Coast",
+   "median": 31153,
+   "cagr5": 18.7,
+   "cagr10": 12.5,
+   "cagr20": 8.9
+  },
+  {
+   "state": "VIC",
+   "lga": "Campaspe",
+   "median": 13869,
+   "cagr5": 15.4,
+   "cagr10": 11.4,
+   "cagr20": 7.0
+  },
+  {
+   "state": "VIC",
+   "lga": "Mitchell",
+   "median": 11740,
+   "cagr5": 12.1,
+   "cagr10": 12.2,
+   "cagr20": 5.7
+  },
+  {
+   "state": "VIC",
+   "lga": "Bass Coast",
+   "median": 35302,
+   "cagr5": 14.5,
+   "cagr10": 12.5,
+   "cagr20": 7.4
+  },
+  {
+   "state": "VIC",
+   "lga": "Moira",
+   "median": 15225,
+   "cagr5": 16.4,
+   "cagr10": 11.3,
+   "cagr20": 6.0
+  },
+  {
+   "state": "VIC",
+   "lga": "Baw Baw",
+   "median": 27745,
+   "cagr5": 7.0,
+   "cagr10": 6.6,
+   "cagr20": 5.5
+  },
+  {
+   "state": "VIC",
+   "lga": "Murrindindi",
+   "median": 17210,
+   "cagr5": 12.8,
+   "cagr10": 9.6,
+   "cagr20": 6.8
+  },
+  {
+   "state": "VIC",
+   "lga": "Cardinia",
+   "median": 38209,
+   "cagr5": 14.1,
+   "cagr10": 7.8,
+   "cagr20": 4.1
+  },
+  {
+   "state": "VIC",
+   "lga": "Shepparton",
+   "median": 15444,
+   "cagr5": 12.8,
+   "cagr10": 10.4,
+   "cagr20": 5.6
+  },
+  {
+   "state": "VIC",
+   "lga": "La Trobe",
+   "median": 26749,
+   "cagr5": 15.3,
+   "cagr10": 11.8,
+   "cagr20": 9.9
+  },
+  {
+   "state": "VIC",
+   "lga": "Strathbogie",
+   "median": 14479,
+   "cagr5": 17.7,
+   "cagr10": 12.3,
+   "cagr20": 6.3
+  },
+  {
+   "state": "VIC",
+   "lga": "South Gippsland",
+   "median": 29774,
+   "cagr5": 13.9,
+   "cagr10": 9.6,
+   "cagr20": 7.1
+  },
+  {
+   "state": "VIC",
+   "lga": "Buloke",
+   "median": 6307,
+   "cagr5": 15.3,
+   "cagr10": 16.3,
+   "cagr20": 9.8
+  },
+  {
+   "state": "VIC",
+   "lga": "Hindmarsh",
+   "median": 8896,
+   "cagr5": 11.8,
+   "cagr10": 14.8,
+   "cagr20": 10.8
+  },
+  {
+   "state": "VIC",
+   "lga": "Mildura",
+   "median": 3089,
+   "cagr5": 20.9,
+   "cagr10": 12.4,
+   "cagr20": 7.4
+  },
+  {
+   "state": "VIC",
+   "lga": "Horsham",
+   "median": 13232,
+   "cagr5": 11.8,
+   "cagr10": 16.0,
+   "cagr20": 9.0
+  },
+  {
+   "state": "VIC",
+   "lga": "Swan Hill",
+   "median": 5364,
+   "cagr5": 15.3,
+   "cagr10": 13.8,
+   "cagr20": 11.3
+  },
+  {
+   "state": "VIC",
+   "lga": "Northern Grampians",
+   "median": 11118,
+   "cagr5": 20.1,
+   "cagr10": 17.0,
+   "cagr20": 11.5
+  },
+  {
+   "state": "VIC",
+   "lga": "West Wimmera",
+   "median": 7659,
+   "cagr5": 1.5,
+   "cagr10": 12.0,
+   "cagr20": 7.0
+  },
+  {
+   "state": "VIC",
+   "lga": "Yarriambiack",
+   "median": 9884,
+   "cagr5": 13.0,
+   "cagr10": 15.9,
+   "cagr20": 10.0
+  },
+  {
+   "state": "TAS",
+   "lga": "Central Coast",
+   "median": 20471,
+   "cagr5": 0.7,
+   "cagr10": 6.1,
+   "cagr20": 4.3
+  },
+  {
+   "state": "TAS",
+   "lga": "Kentish",
+   "median": 25143,
+   "cagr5": 3.8,
+   "cagr10": 4.6,
+   "cagr20": 7.3
+  },
+  {
+   "state": "TAS",
+   "lga": "Waratah-Wynyard",
+   "median": 35066,
+   "cagr5": 21.0,
+   "cagr10": 11.9,
+   "cagr20": 6.9
+  },
+  {
+   "state": "TAS",
+   "lga": "Meander Valley",
+   "median": 24462,
+   "cagr5": 14.9,
+   "cagr10": 9.0,
+   "cagr20": 7.7
+  },
+  {
+   "state": "TAS",
+   "lga": "Dorset",
+   "median": 13981,
+   "cagr5": 9.2,
+   "cagr10": 7.1,
+   "cagr20": 5.7
+  },
+  {
+   "state": "TAS",
+   "lga": "Northern Midlands",
+   "median": 19258,
+   "cagr5": -0.6,
+   "cagr10": 5.5,
+   "cagr20": 6.2
+  },
+  {
+   "state": "TAS",
+   "lga": "West Tamar",
+   "median": 22602,
+   "cagr5": 11.3,
+   "cagr10": 10.3,
+   "cagr20": 9.6
+  },
+  {
+   "state": "TAS",
+   "lga": "Huon Valley",
+   "median": 32045,
+   "cagr5": 41.3,
+   "cagr10": 14.8,
+   "cagr20": 10.2
+  },
+  {
+   "state": "TAS",
+   "lga": "Southern Midlands",
+   "median": 8805,
+   "cagr5": 14.3,
+   "cagr10": 10.3,
+   "cagr20": 7.3
+  },
+  {
+   "state": "SA",
+   "lga": "Coorong",
+   "median": 8333,
+   "cagr5": 14.7,
+   "cagr10": 17.1,
+   "cagr20": 10.9
+  },
+  {
+   "state": "SA",
+   "lga": "Adelaide Hills",
+   "median": 45434,
+   "cagr5": 17.3,
+   "cagr10": 8.1,
+   "cagr20": 5.4
+  },
+  {
+   "state": "SA",
+   "lga": "Alexandrina",
+   "median": 27312,
+   "cagr5": 10.9,
+   "cagr10": 9.0,
+   "cagr20": 5.5
+  },
+  {
+   "state": "SA",
+   "lga": "Loxton Waikerie",
+   "median": 836,
+   "cagr5": -5.5,
+   "cagr10": 3.5,
+   "cagr20": 4.6
+  },
+  {
+   "state": "SA",
+   "lga": "Barossa",
+   "median": 17538,
+   "cagr5": 1.5,
+   "cagr10": 2.8,
+   "cagr20": 4.4
+  },
+  {
+   "state": "SA",
+   "lga": "Mid Murray",
+   "median": 2799,
+   "cagr5": 15.0,
+   "cagr10": 8.3,
+   "cagr20": 4.2
+  },
+  {
+   "state": "SA",
+   "lga": "Murray Bridge",
+   "median": 12455,
+   "cagr5": 29.4,
+   "cagr10": 23.2,
+   "cagr20": 12.0
+  },
+  {
+   "state": "SA",
+   "lga": "Light",
+   "median": 14990,
+   "cagr5": 3.6,
+   "cagr10": 5.6,
+   "cagr20": 3.8
+  },
+  {
+   "state": "SA",
+   "lga": "Mount Barker",
+   "median": 35386,
+   "cagr5": 16.6,
+   "cagr10": 6.9,
+   "cagr20": 4.7
+  },
+  {
+   "state": "SA",
+   "lga": "Southern Mallee",
+   "median": 3775,
+   "cagr5": 17.2,
+   "cagr10": 12.5,
+   "cagr20": 8.4
+  },
+  {
+   "state": "SA",
+   "lga": "Victor Harbor",
+   "median": 26621,
+   "cagr5": 10.7,
+   "cagr10": 4.2,
+   "cagr20": 6.4
+  },
+  {
+   "state": "SA",
+   "lga": "Yankalilla",
+   "median": 18947,
+   "cagr5": 5.4,
+   "cagr10": 5.4,
+   "cagr20": 4.2
+  },
+  {
+   "state": "SA",
+   "lga": "Flinders Ranges",
+   "median": 843,
+   "cagr5": -0.1,
+   "cagr10": 1.3,
+   "cagr20": 2.7
+  },
+  {
+   "state": "SA",
+   "lga": "Goyder",
+   "median": 2722,
+   "cagr5": 3.9,
+   "cagr10": 2.6,
+   "cagr20": 2.0
+  },
+  {
+   "state": "SA",
+   "lga": "Mount Remarkable",
+   "median": 7662,
+   "cagr5": 15.0,
+   "cagr10": 15.2,
+   "cagr20": 9.8
+  },
+  {
+   "state": "SA",
+   "lga": "Ceduna",
+   "median": 693,
+   "cagr5": 8.9,
+   "cagr10": 8.8,
+   "cagr20": 4.0
+  },
+  {
+   "state": "SA",
+   "lga": "Orroroo Carrieton",
+   "median": 1030,
+   "cagr5": 20.4,
+   "cagr10": -1.5,
+   "cagr20": 4.6
+  },
+  {
+   "state": "SA",
+   "lga": "Cleve",
+   "median": 3111,
+   "cagr5": 13.7,
+   "cagr10": 12.2,
+   "cagr20": 5.4
+  },
+  {
+   "state": "SA",
+   "lga": "Peterborough",
+   "median": 513,
+   "cagr5": -10.6,
+   "cagr10": 2.0,
+   "cagr20": -2.2
+  },
+  {
+   "state": "SA",
+   "lga": "Elliston",
+   "median": 2950,
+   "cagr5": 14.2,
+   "cagr10": 18.9,
+   "cagr20": 9.0
+  },
+  {
+   "state": "SA",
+   "lga": "Franklin Harbour",
+   "median": 715,
+   "cagr5": -5.3,
+   "cagr10": 1.1,
+   "cagr20": 3.7
+  },
+  {
+   "state": "SA",
+   "lga": "Kimba",
+   "median": 1961,
+   "cagr5": 7.1,
+   "cagr10": 10.3,
+   "cagr20": 4.4
+  },
+  {
+   "state": "SA",
+   "lga": "Adelaide Plains",
+   "median": 18490,
+   "cagr5": 15.0,
+   "cagr10": 6.3,
+   "cagr20": 6.3
+  },
+  {
+   "state": "SA",
+   "lga": "Barunga West",
+   "median": 9750,
+   "cagr5": 11.1,
+   "cagr10": 9.4,
+   "cagr20": 6.2
+  },
+  {
+   "state": "SA",
+   "lga": "Streaky Bay",
+   "median": 1626,
+   "cagr5": 21.0,
+   "cagr10": 21.1,
+   "cagr20": 8.2
+  },
+  {
+   "state": "SA",
+   "lga": "Copper Coast",
+   "median": 11674,
+   "cagr5": 9.6,
+   "cagr10": 14.8,
+   "cagr20": 6.0
+  },
+  {
+   "state": "SA",
+   "lga": "Tumby Bay",
+   "median": 8670,
+   "cagr5": 19.0,
+   "cagr10": 13.5,
+   "cagr20": 4.1
+  },
+  {
+   "state": "SA",
+   "lga": "Northern Areas",
+   "median": 11332,
+   "cagr5": 9.9,
+   "cagr10": 15.3,
+   "cagr20": 6.9
+  },
+  {
+   "state": "SA",
+   "lga": "Port Pirie",
+   "median": 5567,
+   "cagr5": -2.6,
+   "cagr10": 6.6,
+   "cagr20": 6.9
+  },
+  {
+   "state": "SA",
+   "lga": "Wakefield",
+   "median": 12150,
+   "cagr5": 21.3,
+   "cagr10": 18.9,
+   "cagr20": 8.5
+  },
+  {
+   "state": "SA",
+   "lga": "Yorke Peninsula",
+   "median": 14384,
+   "cagr5": 7.7,
+   "cagr10": 11.8,
+   "cagr20": 6.8
+  },
+  {
+   "state": "SA",
+   "lga": "Grant",
+   "median": 20442,
+   "cagr5": 6.2,
+   "cagr10": 10.8,
+   "cagr20": 5.0
+  },
+  {
+   "state": "SA",
+   "lga": "Kingston",
+   "median": 7953,
+   "cagr5": 0.7,
+   "cagr10": 9.6,
+   "cagr20": 5.5
+  },
+  {
+   "state": "SA",
+   "lga": "Robe",
+   "median": 15977,
+   "cagr5": 8.8,
+   "cagr10": 11.8,
+   "cagr20": 6.9
+  },
+  {
+   "state": "SA",
+   "lga": "Tatiara",
+   "median": 12291,
+   "cagr5": 23.6,
+   "cagr10": 18.6,
+   "cagr20": 8.0
+  },
+  {
+   "state": "SA",
+   "lga": "Wattle Range",
+   "median": 19524,
+   "cagr5": 11.9,
+   "cagr10": 13.6,
+   "cagr20": 5.7
+  },
+  {
+   "state": "WA",
+   "lga": "Cunderdin",
+   "median": 5932,
+   "cagr5": 16.9,
+   "cagr10": 10.9,
+   "cagr20": 5.8
+  },
+  {
+   "state": "WA",
+   "lga": "Dalwallinu",
+   "median": 2384,
+   "cagr5": 28.6,
+   "cagr10": 16.8,
+   "cagr20": 6.7
+  },
+  {
+   "state": "WA",
+   "lga": "Beverley",
+   "median": 9060,
+   "cagr5": 20.4,
+   "cagr10": 9.6,
+   "cagr20": 7.0
+  },
+  {
+   "state": "WA",
+   "lga": "Dowerin",
+   "median": 4582,
+   "cagr5": 43.5,
+   "cagr10": 7.5,
+   "cagr20": 7.7
+  },
+  {
+   "state": "WA",
+   "lga": "Brookton",
+   "median": 9999,
+   "cagr5": 18.7,
+   "cagr10": 12.0,
+   "cagr20": 9.9
+  },
+  {
+   "state": "WA",
+   "lga": "Kellerberrin",
+   "median": 2417,
+   "cagr5": 8.0,
+   "cagr10": 9.5,
+   "cagr20": 1.0
+  },
+  {
+   "state": "WA",
+   "lga": "Dandaragan",
+   "median": 9523,
+   "cagr5": 37.1,
+   "cagr10": 18.4,
+   "cagr20": 9.8
+  },
+  {
+   "state": "WA",
+   "lga": "Kondinin",
+   "median": 2702,
+   "cagr5": 30.7,
+   "cagr10": 12.8,
+   "cagr20": 6.8
+  },
+  {
+   "state": "WA",
+   "lga": "Goomalling",
+   "median": 16083,
+   "cagr5": 65.3,
+   "cagr10": 22.9,
+   "cagr20": 12.2
+  },
+  {
+   "state": "WA",
+   "lga": "Koorda",
+   "median": 915,
+   "cagr5": 6.7,
+   "cagr10": 5.9,
+   "cagr20": 3.6
+  },
+  {
+   "state": "WA",
+   "lga": "Moora",
+   "median": 3163,
+   "cagr5": 6.1,
+   "cagr10": 4.8,
+   "cagr20": 4.0
+  },
+  {
+   "state": "WA",
+   "lga": "Merredin",
+   "median": 3654,
+   "cagr5": 42.4,
+   "cagr10": 15.6,
+   "cagr20": 7.6
+  },
+  {
+   "state": "WA",
+   "lga": "Northam",
+   "median": 13217,
+   "cagr5": 16.1,
+   "cagr10": 13.4,
+   "cagr20": 6.5
+  },
+  {
+   "state": "WA",
+   "lga": "Toodyay",
+   "median": 9174,
+   "cagr5": 7.7,
+   "cagr10": 13.0,
+   "cagr20": 4.5
+  },
+  {
+   "state": "WA",
+   "lga": "Mount Marshall",
+   "median": 1295,
+   "cagr5": 35.2,
+   "cagr10": 12.4,
+   "cagr20": 6.8
+  },
+  {
+   "state": "WA",
+   "lga": "Mukinbudin",
+   "median": 1016,
+   "cagr5": 32.8,
+   "cagr10": 9.9,
+   "cagr20": 5.5
+  },
+  {
+   "state": "WA",
+   "lga": "Narembeen",
+   "median": 2317,
+   "cagr5": 43.2,
+   "cagr10": 15.6,
+   "cagr20": 6.8
+  },
+  {
+   "state": "WA",
+   "lga": "York",
+   "median": 10621,
+   "cagr5": 16.2,
+   "cagr10": 8.2,
+   "cagr20": 6.4
+  },
+  {
+   "state": "WA",
+   "lga": "Nungarin",
+   "median": 2065,
+   "cagr5": 21.5,
+   "cagr10": 17.2,
+   "cagr20": 6.6
+  },
+  {
+   "state": "WA",
+   "lga": "Perenjori",
+   "median": 2341,
+   "cagr5": 7.8,
+   "cagr10": 10.9,
+   "cagr20": 7.0
+  },
+  {
+   "state": "WA",
+   "lga": "Bruce Rock",
+   "median": 6358,
+   "cagr5": 31.7,
+   "cagr10": 23.5,
+   "cagr20": 8.6
+  },
+  {
+   "state": "WA",
+   "lga": "Trayning",
+   "median": 1939,
+   "cagr5": 6.3,
+   "cagr10": 7.5,
+   "cagr20": 4.1
+  },
+  {
+   "state": "WA",
+   "lga": "Corrigin",
+   "median": 7403,
+   "cagr5": 17.2,
+   "cagr10": 18.5,
+   "cagr20": 9.9
+  },
+  {
+   "state": "WA",
+   "lga": "Westonia",
+   "median": 1321,
+   "cagr5": null,
+   "cagr10": 5.8,
+   "cagr20": 6.4
+  },
+  {
+   "state": "WA",
+   "lga": "Cuballing",
+   "median": 11116,
+   "cagr5": 27.4,
+   "cagr10": 11.8,
+   "cagr20": 8.7
+  },
+  {
+   "state": "WA",
+   "lga": "Dumbleyung",
+   "median": 4386,
+   "cagr5": 28.2,
+   "cagr10": 11.2,
+   "cagr20": 9.7
+  },
+  {
+   "state": "WA",
+   "lga": "Yilgarn",
+   "median": 1195,
+   "cagr5": 7.0,
+   "cagr10": 13.9,
+   "cagr20": 5.1
+  },
+  {
+   "state": "WA",
+   "lga": "Katanning",
+   "median": 4989,
+   "cagr5": 12.5,
+   "cagr10": 7.9,
+   "cagr20": 5.7
+  },
+  {
+   "state": "WA",
+   "lga": "Kulin",
+   "median": 5808,
+   "cagr5": 38.3,
+   "cagr10": 22.8,
+   "cagr20": 10.6
+  },
+  {
+   "state": "WA",
+   "lga": "Lake Grace",
+   "median": 3437,
+   "cagr5": 23.6,
+   "cagr10": 13.8,
+   "cagr20": 8.0
+  },
+  {
+   "state": "WA",
+   "lga": "Albany",
+   "median": 15640,
+   "cagr5": 18.4,
+   "cagr10": 10.6,
+   "cagr20": 8.2
+  },
+  {
+   "state": "WA",
+   "lga": "Narrogin",
+   "median": 9667,
+   "cagr5": 20.7,
+   "cagr10": 12.9,
+   "cagr20": 8.2
+  },
+  {
+   "state": "WA",
+   "lga": "Boyup Brook",
+   "median": 12006,
+   "cagr5": 23.0,
+   "cagr10": 17.4,
+   "cagr20": 6.1
+  },
+  {
+   "state": "WA",
+   "lga": "Pingelly",
+   "median": 14718,
+   "cagr5": 27.7,
+   "cagr10": 17.0,
+   "cagr20": 11.6
+  },
+  {
+   "state": "WA",
+   "lga": "Quairading",
+   "median": 5931,
+   "cagr5": 18.8,
+   "cagr10": 14.3,
+   "cagr20": 7.4
+  },
+  {
+   "state": "WA",
+   "lga": "Cranbrook",
+   "median": 7447,
+   "cagr5": 18.4,
+   "cagr10": 14.5,
+   "cagr20": 6.4
+  },
+  {
+   "state": "WA",
+   "lga": "Wagin",
+   "median": 6732,
+   "cagr5": 30.1,
+   "cagr10": 0.9,
+   "cagr20": 7.4
+  },
+  {
+   "state": "WA",
+   "lga": "Esperance",
+   "median": 9974,
+   "cagr5": 31.5,
+   "cagr10": 17.2,
+   "cagr20": 8.6
+  },
+  {
+   "state": "WA",
+   "lga": "West Arthur",
+   "median": 7907,
+   "cagr5": 15.7,
+   "cagr10": 19.0,
+   "cagr20": 5.8
+  },
+  {
+   "state": "WA",
+   "lga": "Jerramungup",
+   "median": 5061,
+   "cagr5": 21.5,
+   "cagr10": 12.7,
+   "cagr20": 9.9
+  },
+  {
+   "state": "WA",
+   "lga": "Wickepin",
+   "median": 7619,
+   "cagr5": 19.9,
+   "cagr10": 12.6,
+   "cagr20": 10.2
+  },
+  {
+   "state": "WA",
+   "lga": "Kent",
+   "median": 3426,
+   "cagr5": 15.0,
+   "cagr10": 13.5,
+   "cagr20": 6.1
+  },
+  {
+   "state": "WA",
+   "lga": "Plantagenet",
+   "median": 10955,
+   "cagr5": 10.0,
+   "cagr10": 11.0,
+   "cagr20": 6.8
+  },
+  {
+   "state": "WA",
+   "lga": "Carnamah",
+   "median": 3250,
+   "cagr5": 39.6,
+   "cagr10": 7.6,
+   "cagr20": 8.1
+  },
+  {
+   "state": "WA",
+   "lga": "Chapman Valley",
+   "median": 5254,
+   "cagr5": 24.8,
+   "cagr10": 7.8,
+   "cagr20": 5.8
+  },
+  {
+   "state": "WA",
+   "lga": "Greater Geraldton",
+   "median": 5169,
+   "cagr5": 42.5,
+   "cagr10": 18.6,
+   "cagr20": 6.9
+  },
+  {
+   "state": "WA",
+   "lga": "Irwin",
+   "median": 4768,
+   "cagr5": 11.9,
+   "cagr10": 12.7,
+   "cagr20": 6.9
+  },
+  {
+   "state": "WA",
+   "lga": "Northampton",
+   "median": 1864,
+   "cagr5": 27.9,
+   "cagr10": 3.3,
+   "cagr20": 0.7
+  },
+  {
+   "state": "WA",
+   "lga": "Boddington",
+   "median": 9151,
+   "cagr5": -0.8,
+   "cagr10": 9.9,
+   "cagr20": 4.2
+  },
+  {
+   "state": "WA",
+   "lga": "Busselton",
+   "median": 26566,
+   "cagr5": 16.5,
+   "cagr10": 10.0,
+   "cagr20": 4.6
+  },
+  {
+   "state": "WA",
+   "lga": "Dardanup",
+   "median": 26863,
+   "cagr5": 17.3,
+   "cagr10": 2.8,
+   "cagr20": 4.3
+  },
+  {
+   "state": "WA",
+   "lga": "Denmark",
+   "median": 19042,
+   "cagr5": 19.2,
+   "cagr10": 7.5,
+   "cagr20": 5.2
+  },
+  {
+   "state": "WA",
+   "lga": "Harvey",
+   "median": 19546,
+   "cagr5": 11.0,
+   "cagr10": 7.4,
+   "cagr20": 5.9
+  },
+  {
+   "state": "WA",
+   "lga": "Manjimup",
+   "median": 17217,
+   "cagr5": 11.1,
+   "cagr10": 9.6,
+   "cagr20": 5.0
+  },
+  {
+   "state": "WA",
+   "lga": "Murray",
+   "median": 21550,
+   "cagr5": 15.3,
+   "cagr10": 7.9,
+   "cagr20": 4.1
+  },
+  {
+   "state": "WA",
+   "lga": "Waroona",
+   "median": 14475,
+   "cagr5": 11.1,
+   "cagr10": -0.7,
+   "cagr20": 1.5
+  }
+ ],
+ "bands": [
+  {
+   "state": "QLD",
+   "region": "Central",
+   "band_ha": "30-5,000",
+   "median": 1999,
+   "yoy": 184.4,
+   "cagr10": 20.0
+  },
+  {
+   "state": "QLD",
+   "region": "Central",
+   "band_ha": "5,000-10,000",
+   "median": 1228,
+   "yoy": 92.7,
+   "cagr10": 16.9
+  },
+  {
+   "state": "QLD",
+   "region": "Central",
+   "band_ha": "10,000-15,000",
+   "median": 865,
+   "yoy": 36.9,
+   "cagr10": 11.4
+  },
+  {
+   "state": "QLD",
+   "region": "Central",
+   "band_ha": "15,000+",
+   "median": 750,
+   "yoy": 18.0,
+   "cagr10": 22.9
+  },
+  {
+   "state": "QLD",
+   "region": "Central Highlands",
+   "band_ha": "30-200",
+   "median": 9748,
+   "yoy": -20.3,
+   "cagr10": 10.5
+  },
+  {
+   "state": "QLD",
+   "region": "Central Highlands",
+   "band_ha": "200-400",
+   "median": 7432,
+   "yoy": 16.4,
+   "cagr10": 11.6
+  },
+  {
+   "state": "QLD",
+   "region": "Central Highlands",
+   "band_ha": "400-600",
+   "median": 6231,
+   "yoy": 3.3,
+   "cagr10": 15.4
+  },
+  {
+   "state": "QLD",
+   "region": "Central Highlands",
+   "band_ha": "600+",
+   "median": 3690,
+   "yoy": -23.7,
+   "cagr10": 9.4
+  },
+  {
+   "state": "QLD",
+   "region": "Far North",
+   "band_ha": "30-50",
+   "median": 20460,
+   "yoy": 18.6,
+   "cagr10": 7.8
+  },
+  {
+   "state": "QLD",
+   "region": "Far North",
+   "band_ha": "50-100",
+   "median": 12189,
+   "yoy": -16.5,
+   "cagr10": 5.7
+  },
+  {
+   "state": "QLD",
+   "region": "Far North",
+   "band_ha": "100-150",
+   "median": 9344,
+   "yoy": -26.8,
+   "cagr10": 8.3
+  },
+  {
+   "state": "QLD",
+   "region": "Far North",
+   "band_ha": "150+",
+   "median": 11780,
+   "yoy": 177.6,
+   "cagr10": 20.4
+  },
+  {
+   "state": "QLD",
+   "region": "North",
+   "band_ha": "30-50",
+   "median": 20111,
+   "yoy": 3.9,
+   "cagr10": 7.8
+  },
+  {
+   "state": "QLD",
+   "region": "North",
+   "band_ha": "50-100",
+   "median": 14602,
+   "yoy": 5.2,
+   "cagr10": 7.1
+  },
+  {
+   "state": "QLD",
+   "region": "North",
+   "band_ha": "100-150",
+   "median": 8668,
+   "yoy": -36.7,
+   "cagr10": 1.8
+  },
+  {
+   "state": "QLD",
+   "region": "North",
+   "band_ha": "150+",
+   "median": 6798,
+   "yoy": 1.7,
+   "cagr10": 12.3
+  },
+  {
+   "state": "QLD",
+   "region": "South East",
+   "band_ha": "30-50",
+   "median": 24697,
+   "yoy": 11.8,
+   "cagr10": 9.6
+  },
+  {
+   "state": "QLD",
+   "region": "South East",
+   "band_ha": "50-100",
+   "median": 16333,
+   "yoy": 2.3,
+   "cagr10": 10.3
+  },
+  {
+   "state": "QLD",
+   "region": "South East",
+   "band_ha": "100-150",
+   "median": 11969,
+   "yoy": 17.2,
+   "cagr10": 11.5
+  },
+  {
+   "state": "QLD",
+   "region": "South East",
+   "band_ha": "150+",
+   "median": 6581,
+   "yoy": -9.7,
+   "cagr10": 7.9
+  },
+  {
+   "state": "NSW",
+   "region": "Central West",
+   "band_ha": "30-100",
+   "median": 14530,
+   "yoy": 7.5,
+   "cagr10": 9.4
+  },
+  {
+   "state": "NSW",
+   "region": "Central West",
+   "band_ha": "100-200",
+   "median": 8083,
+   "yoy": 2.2,
+   "cagr10": 10.5
+  },
+  {
+   "state": "NSW",
+   "region": "Central West",
+   "band_ha": "200-400",
+   "median": 4942,
+   "yoy": -22.7,
+   "cagr10": 9.4
+  },
+  {
+   "state": "NSW",
+   "region": "Central West",
+   "band_ha": "400+",
+   "median": 3292,
+   "yoy": -12.4,
+   "cagr10": 10.1
+  },
+  {
+   "state": "NSW",
+   "region": "Far West",
+   "band_ha": "30-2000",
+   "median": 2790,
+   "yoy": 239.4,
+   "cagr10": 15.0
+  },
+  {
+   "state": "NSW",
+   "region": "Far West",
+   "band_ha": "2000-4000",
+   "median": 971,
+   "yoy": -68.6,
+   "cagr10": 11.8
+  },
+  {
+   "state": "NSW",
+   "region": "Far West",
+   "band_ha": "4000-6000",
+   "median": 234,
+   "yoy": -50.2,
+   "cagr10": 2.5
+  },
+  {
+   "state": "NSW",
+   "region": "Far West",
+   "band_ha": "6000+",
+   "median": 399,
+   "yoy": 63.7,
+   "cagr10": 18.0
+  },
+  {
+   "state": "NSW",
+   "region": "Hunter",
+   "band_ha": "30-50",
+   "median": 22570,
+   "yoy": 10.1,
+   "cagr10": 8.6
+  },
+  {
+   "state": "NSW",
+   "region": "Hunter",
+   "band_ha": "50-100",
+   "median": 13340,
+   "yoy": -19.0,
+   "cagr10": 6.0
+  },
+  {
+   "state": "NSW",
+   "region": "Hunter",
+   "band_ha": "100-150",
+   "median": 10844,
+   "yoy": 31.3,
+   "cagr10": 6.3
+  },
+  {
+   "state": "NSW",
+   "region": "Hunter",
+   "band_ha": "150+",
+   "median": 5836,
+   "yoy": -0.4,
+   "cagr10": 10.4
+  },
+  {
+   "state": "NSW",
+   "region": "North Coast",
+   "band_ha": "30-50",
+   "median": 18786,
+   "yoy": 5.9,
+   "cagr10": 8.5
+  },
+  {
+   "state": "NSW",
+   "region": "North Coast",
+   "band_ha": "50-100",
+   "median": 14442,
+   "yoy": 21.2,
+   "cagr10": 9.7
+  },
+  {
+   "state": "NSW",
+   "region": "North Coast",
+   "band_ha": "100-150",
+   "median": 10551,
+   "yoy": 23.1,
+   "cagr10": 12.2
+  },
+  {
+   "state": "NSW",
+   "region": "North Coast",
+   "band_ha": "150+",
+   "median": 3333,
+   "yoy": -0.4,
+   "cagr10": 7.2
+  },
+  {
+   "state": "VIC",
+   "region": "Central",
+   "band_ha": "30-50",
+   "median": 19301,
+   "yoy": 16.1,
+   "cagr10": 13.2
+  },
+  {
+   "state": "VIC",
+   "region": "Central",
+   "band_ha": "50-100",
+   "median": 12264,
+   "yoy": -20.5,
+   "cagr10": 10.0
+  },
+  {
+   "state": "VIC",
+   "region": "Central",
+   "band_ha": "100-150",
+   "median": 6523,
+   "yoy": -17.8,
+   "cagr10": 11.3
+  },
+  {
+   "state": "VIC",
+   "region": "Central",
+   "band_ha": "150+",
+   "median": 7718,
+   "yoy": 16.4,
+   "cagr10": 15.3
+  },
+  {
+   "state": "VIC",
+   "region": "East Gippsland",
+   "band_ha": "30-50",
+   "median": 19637,
+   "yoy": 23.9,
+   "cagr10": 10.1
+  },
+  {
+   "state": "VIC",
+   "region": "East Gippsland",
+   "band_ha": "50-100",
+   "median": 14373,
+   "yoy": 10.7,
+   "cagr10": 8.7
+  },
+  {
+   "state": "VIC",
+   "region": "East Gippsland",
+   "band_ha": "100-150",
+   "median": 9775,
+   "yoy": 2.8,
+   "cagr10": 11.5
+  },
+  {
+   "state": "VIC",
+   "region": "East Gippsland",
+   "band_ha": "150+",
+   "median": 7635,
+   "yoy": 83.5,
+   "cagr10": 12.1
+  },
+  {
+   "state": "VIC",
+   "region": "Goulburn",
+   "band_ha": "30-50",
+   "median": 19378,
+   "yoy": -7.7,
+   "cagr10": 10.3
+  },
+  {
+   "state": "VIC",
+   "region": "Goulburn",
+   "band_ha": "50-100",
+   "median": 15360,
+   "yoy": 5.2,
+   "cagr10": 11.6
+  },
+  {
+   "state": "VIC",
+   "region": "Goulburn",
+   "band_ha": "100-150",
+   "median": 11588,
+   "yoy": 7.7,
+   "cagr10": 11.6
+  },
+  {
+   "state": "VIC",
+   "region": "Goulburn",
+   "band_ha": "150+",
+   "median": 10041,
+   "yoy": 3.6,
+   "cagr10": 10.9
+  },
+  {
+   "state": "VIC",
+   "region": "Mallee",
+   "band_ha": "30-200",
+   "median": 5566,
+   "yoy": -30.4,
+   "cagr10": 12.4
+  },
+  {
+   "state": "VIC",
+   "region": "Mallee",
+   "band_ha": "200-400",
+   "median": 5364,
+   "yoy": 17.3,
+   "cagr10": 15.4
+  },
+  {
+   "state": "VIC",
+   "region": "Mallee",
+   "band_ha": "400-600",
+   "median": 6091,
+   "yoy": -11.0,
+   "cagr10": 19.4
+  },
+  {
+   "state": "VIC",
+   "region": "Mallee",
+   "band_ha": "600+",
+   "median": 3645,
+   "yoy": 36.2,
+   "cagr10": 17.7
+  },
+  {
+   "state": "VIC",
+   "region": "Ovens Murray",
+   "band_ha": "30-50",
+   "median": 20154,
+   "yoy": -10.9,
+   "cagr10": 11.0
+  },
+  {
+   "state": "VIC",
+   "region": "Ovens Murray",
+   "band_ha": "50-100",
+   "median": 17650,
+   "yoy": 12.1,
+   "cagr10": 11.5
+  },
+  {
+   "state": "VIC",
+   "region": "Ovens Murray",
+   "band_ha": "100-150",
+   "median": 14048,
+   "yoy": 4.7,
+   "cagr10": 12.2
+  },
+  {
+   "state": "VIC",
+   "region": "Ovens Murray",
+   "band_ha": "150+",
+   "median": 9806,
+   "yoy": -38.3,
+   "cagr10": 10.5
+  },
+  {
+   "state": "TAS",
+   "region": "North West",
+   "band_ha": "15-40",
+   "median": 24802,
+   "yoy": -18.4,
+   "cagr10": 4.6
+  },
+  {
+   "state": "TAS",
+   "region": "North West",
+   "band_ha": "40-80",
+   "median": 27069,
+   "yoy": 7.5,
+   "cagr10": 8.4
+  },
+  {
+   "state": "TAS",
+   "region": "North West",
+   "band_ha": "80-120",
+   "median": 11867,
+   "yoy": -52.1,
+   "cagr10": -1.8
+  },
+  {
+   "state": "TAS",
+   "region": "North West",
+   "band_ha": "120+",
+   "median": 23810,
+   "yoy": -20.0,
+   "cagr10": 9.9
+  },
+  {
+   "state": "TAS",
+   "region": "Northern",
+   "band_ha": "15-40",
+   "median": 25290,
+   "yoy": 4.1,
+   "cagr10": 10.6
+  },
+  {
+   "state": "TAS",
+   "region": "Northern",
+   "band_ha": "40-80",
+   "median": 16643,
+   "yoy": -15.3,
+   "cagr10": 5.2
+  },
+  {
+   "state": "TAS",
+   "region": "Northern",
+   "band_ha": "80-120",
+   "median": 11010,
+   "yoy": -56.4,
+   "cagr10": 0.4
+  },
+  {
+   "state": "TAS",
+   "region": "Northern",
+   "band_ha": "120+",
+   "median": 12056,
+   "yoy": 67.2,
+   "cagr10": 7.4
+  },
+  {
+   "state": "TAS",
+   "region": "South",
+   "band_ha": "15-40",
+   "median": 24377,
+   "yoy": 4.1,
+   "cagr10": 9.6
+  },
+  {
+   "state": "TAS",
+   "region": "South",
+   "band_ha": "40-80",
+   "median": 8153,
+   "yoy": -47.7,
+   "cagr10": 4.3
+  },
+  {
+   "state": "TAS",
+   "region": "South",
+   "band_ha": "80-120",
+   "median": 5934,
+   "yoy": -5.3,
+   "cagr10": 6.6
+  },
+  {
+   "state": "TAS",
+   "region": "South",
+   "band_ha": "120+",
+   "median": 5730,
+   "yoy": -6.6,
+   "cagr10": 7.6
+  },
+  {
+   "state": "SA",
+   "region": "Adelaide & Fleurieu",
+   "band_ha": "30-100",
+   "median": 29672,
+   "yoy": 21.5,
+   "cagr10": 7.5
+  },
+  {
+   "state": "SA",
+   "region": "Adelaide & Fleurieu",
+   "band_ha": "100-200",
+   "median": 18124,
+   "yoy": 55.0,
+   "cagr10": 7.5
+  },
+  {
+   "state": "SA",
+   "region": "Adelaide & Fleurieu",
+   "band_ha": "200-300",
+   "median": 13452,
+   "yoy": -16.8,
+   "cagr10": 7.4
+  },
+  {
+   "state": "SA",
+   "region": "Adelaide & Fleurieu",
+   "band_ha": "300+",
+   "median": 8183,
+   "yoy": -59.0,
+   "cagr10": 7.2
+  },
+  {
+   "state": "SA",
+   "region": "Eyre Peninsula",
+   "band_ha": "30-300",
+   "median": 6698,
+   "yoy": 121.5,
+   "cagr10": 13.0
+  },
+  {
+   "state": "SA",
+   "region": "Eyre Peninsula",
+   "band_ha": "300-600",
+   "median": 3912,
+   "yoy": 11.4,
+   "cagr10": 10.3
+  },
+  {
+   "state": "SA",
+   "region": "Eyre Peninsula",
+   "band_ha": "600-900",
+   "median": 1340,
+   "yoy": -40.7,
+   "cagr10": 5.8
+  },
+  {
+   "state": "SA",
+   "region": "Eyre Peninsula",
+   "band_ha": "900+",
+   "median": 872,
+   "yoy": 29.1,
+   "cagr10": 6.6
+  },
+  {
+   "state": "SA",
+   "region": "Kangaroo Island",
+   "band_ha": "30-100",
+   "median": 7897,
+   "yoy": -20.4,
+   "cagr10": 7.4
+  },
+  {
+   "state": "SA",
+   "region": "Kangaroo Island",
+   "band_ha": "100-200",
+   "median": 6170,
+   "yoy": 56.2,
+   "cagr10": 13.5
+  },
+  {
+   "state": "SA",
+   "region": "Kangaroo Island",
+   "band_ha": "200-300",
+   "median": 7419,
+   "yoy": 2.9,
+   "cagr10": 15.1
+  },
+  {
+   "state": "SA",
+   "region": "Kangaroo Island",
+   "band_ha": "300+",
+   "median": 7860,
+   "yoy": -7.5,
+   "cagr10": 15.7
+  },
+  {
+   "state": "SA",
+   "region": "Lower South East",
+   "band_ha": "30-100",
+   "median": 17244,
+   "yoy": -20.9,
+   "cagr10": 11.0
+  },
+  {
+   "state": "SA",
+   "region": "Lower South East",
+   "band_ha": "100-200",
+   "median": 17058,
+   "yoy": -5.1,
+   "cagr10": 14.4
+  },
+  {
+   "state": "SA",
+   "region": "Lower South East",
+   "band_ha": "200-300",
+   "median": 12520,
+   "yoy": -20.4,
+   "cagr10": 12.4
+  },
+  {
+   "state": "SA",
+   "region": "Lower South East",
+   "band_ha": "300+",
+   "median": 9421,
+   "yoy": -11.9,
+   "cagr10": 14.2
+  },
+  {
+   "state": "SA",
+   "region": "Murray & Mallee",
+   "band_ha": "30-100",
+   "median": 9088,
+   "yoy": 8.5,
+   "cagr10": 15.6
+  },
+  {
+   "state": "SA",
+   "region": "Murray & Mallee",
+   "band_ha": "100-200",
+   "median": 2385,
+   "yoy": -17.5,
+   "cagr10": 9.2
+  },
+  {
+   "state": "SA",
+   "region": "Murray & Mallee",
+   "band_ha": "200-300",
+   "median": 3937,
+   "yoy": -4.3,
+   "cagr10": 9.1
+  },
+  {
+   "state": "SA",
+   "region": "Murray & Mallee",
+   "band_ha": "300+",
+   "median": 2607,
+   "yoy": 24.0,
+   "cagr10": 12.7
+  },
+  {
+   "state": "WA",
+   "region": "Avon-Midland",
+   "band_ha": "50-100",
+   "median": 11012,
+   "yoy": 4.9,
+   "cagr10": 10.6
+  },
+  {
+   "state": "WA",
+   "region": "Avon-Midland",
+   "band_ha": "100-200",
+   "median": 11091,
+   "yoy": 2.7,
+   "cagr10": 13.1
+  },
+  {
+   "state": "WA",
+   "region": "Avon-Midland",
+   "band_ha": "200-400",
+   "median": 10056,
+   "yoy": -1.8,
+   "cagr10": 12.9
+  },
+  {
+   "state": "WA",
+   "region": "Avon-Midland",
+   "band_ha": "400+",
+   "median": 6405,
+   "yoy": 75.1,
+   "cagr10": 12.3
+  },
+  {
+   "state": "WA",
+   "region": "Central",
+   "band_ha": "50-200",
+   "median": 9869,
+   "yoy": 29.1,
+   "cagr10": 12.2
+  },
+  {
+   "state": "WA",
+   "region": "Central",
+   "band_ha": "200-400",
+   "median": 6957,
+   "yoy": -26.0,
+   "cagr10": 14.1
+  },
+  {
+   "state": "WA",
+   "region": "Central",
+   "band_ha": "400-600",
+   "median": 6215,
+   "yoy": 1.3,
+   "cagr10": 15.6
+  },
+  {
+   "state": "WA",
+   "region": "Central",
+   "band_ha": "600+",
+   "median": 4896,
+   "yoy": 49.2,
+   "cagr10": 16.8
+  },
+  {
+   "state": "WA",
+   "region": "Great Eastern",
+   "band_ha": "50-300",
+   "median": 3390,
+   "yoy": 44.0,
+   "cagr10": 10.4
+  },
+  {
+   "state": "WA",
+   "region": "Great Eastern",
+   "band_ha": "300-600",
+   "median": 2097,
+   "yoy": 10.4,
+   "cagr10": 10.2
+  },
+  {
+   "state": "WA",
+   "region": "Great Eastern",
+   "band_ha": "600-900",
+   "median": 1964,
+   "yoy": 29.6,
+   "cagr10": 14.4
+  },
+  {
+   "state": "WA",
+   "region": "Great Eastern",
+   "band_ha": "900+",
+   "median": 1401,
+   "yoy": 6.5,
+   "cagr10": 10.2
+  },
+  {
+   "state": "WA",
+   "region": "Great Southern",
+   "band_ha": "50-200",
+   "median": 10235,
+   "yoy": 17.1,
+   "cagr10": 11.5
+  },
+  {
+   "state": "WA",
+   "region": "Great Southern",
+   "band_ha": "200-400",
+   "median": 13541,
+   "yoy": 72.6,
+   "cagr10": 18.8
+  },
+  {
+   "state": "WA",
+   "region": "Great Southern",
+   "band_ha": "400-600",
+   "median": 10388,
+   "yoy": 29.4,
+   "cagr10": 17.9
+  },
+  {
+   "state": "WA",
+   "region": "Great Southern",
+   "band_ha": "600+",
+   "median": 5788,
+   "yoy": -14.4,
+   "cagr10": 14.7
+  },
+  {
+   "state": "WA",
+   "region": "Northern",
+   "band_ha": "50-300",
+   "median": 6638,
+   "yoy": 15.8,
+   "cagr10": 11.7
+  },
+  {
+   "state": "WA",
+   "region": "Northern",
+   "band_ha": "300-600",
+   "median": 4395,
+   "yoy": -3.9,
+   "cagr10": 7.8
+  },
+  {
+   "state": "WA",
+   "region": "Northern",
+   "band_ha": "600-900",
+   "median": 5104,
+   "yoy": 89.4,
+   "cagr10": 23.8
+  },
+  {
+   "state": "WA",
+   "region": "Northern",
+   "band_ha": "900+",
+   "median": 2252,
+   "yoy": -42.2,
+   "cagr10": 5.4
+  },
+  {
+   "state": "QLD",
+   "region": "Southern Coastal",
+   "band_ha": "30-50",
+   "median": 18861,
+   "yoy": 18.0,
+   "cagr10": 12.8
+  },
+  {
+   "state": "QLD",
+   "region": "Southern Coastal",
+   "band_ha": "50-100",
+   "median": 12175,
+   "yoy": 7.8,
+   "cagr10": 9.0
+  },
+  {
+   "state": "QLD",
+   "region": "Southern Coastal",
+   "band_ha": "100-150",
+   "median": 8309,
+   "yoy": 9.3,
+   "cagr10": 8.8
+  },
+  {
+   "state": "QLD",
+   "region": "Southern Coastal",
+   "band_ha": "150+",
+   "median": 4510,
+   "yoy": 5.8,
+   "cagr10": 11.9
+  },
+  {
+   "state": "QLD",
+   "region": "West",
+   "band_ha": "30-10,000",
+   "median": 712,
+   "yoy": -61.3,
+   "cagr10": 23.1
+  },
+  {
+   "state": "QLD",
+   "region": "West",
+   "band_ha": "10,000-20,000",
+   "median": 242,
+   "yoy": -64.2,
+   "cagr10": 5.7
+  },
+  {
+   "state": "QLD",
+   "region": "West",
+   "band_ha": "20,000-30,000",
+   "median": 263,
+   "yoy": 32.3,
+   "cagr10": 13.7
+  },
+  {
+   "state": "QLD",
+   "region": "West",
+   "band_ha": "30,000+",
+   "median": 203,
+   "yoy": 21.8,
+   "cagr10": 15.8
+  },
+  {
+   "state": "QLD",
+   "region": "Western Downs",
+   "band_ha": "30-100",
+   "median": 5315,
+   "yoy": -38.9,
+   "cagr10": 4.8
+  },
+  {
+   "state": "QLD",
+   "region": "Western Downs",
+   "band_ha": "100-200",
+   "median": 6982,
+   "yoy": -14.5,
+   "cagr10": 10.8
+  },
+  {
+   "state": "QLD",
+   "region": "Western Downs",
+   "band_ha": "200-400",
+   "median": 7563,
+   "yoy": 70.6,
+   "cagr10": 12.3
+  },
+  {
+   "state": "QLD",
+   "region": "Western Downs",
+   "band_ha": "400+",
+   "median": 3364,
+   "yoy": -0.5,
+   "cagr10": 13.4
+  },
+  {
+   "state": "NSW",
+   "region": "Riverina Murray",
+   "band_ha": "30-50",
+   "median": 17194,
+   "yoy": 10.8,
+   "cagr10": 15.8
+  },
+  {
+   "state": "NSW",
+   "region": "Riverina Murray",
+   "band_ha": "50-150",
+   "median": 12283,
+   "yoy": -7.5,
+   "cagr10": 13.8
+  },
+  {
+   "state": "NSW",
+   "region": "Riverina Murray",
+   "band_ha": "150-250",
+   "median": 9523,
+   "yoy": -17.6,
+   "cagr10": 13.1
+  },
+  {
+   "state": "NSW",
+   "region": "Riverina Murray",
+   "band_ha": "250+",
+   "median": 6668,
+   "yoy": 15.3,
+   "cagr10": 12.8
+  },
+  {
+   "state": "NSW",
+   "region": "South East",
+   "band_ha": "30-50",
+   "median": 20704,
+   "yoy": 12.5,
+   "cagr10": 10.4
+  },
+  {
+   "state": "NSW",
+   "region": "South East",
+   "band_ha": "50-150",
+   "median": 11737,
+   "yoy": -1.5,
+   "cagr10": 9.4
+  },
+  {
+   "state": "NSW",
+   "region": "South East",
+   "band_ha": "150-250",
+   "median": 8451,
+   "yoy": -15.5,
+   "cagr10": 14.1
+  },
+  {
+   "state": "NSW",
+   "region": "South East",
+   "band_ha": "250+",
+   "median": 3924,
+   "yoy": -21.9,
+   "cagr10": 7.9
+  },
+  {
+   "state": "VIC",
+   "region": "South West",
+   "band_ha": "30-50",
+   "median": 18446,
+   "yoy": -14.6,
+   "cagr10": 9.3
+  },
+  {
+   "state": "VIC",
+   "region": "South West",
+   "band_ha": "50-100",
+   "median": 18291,
+   "yoy": 0.0,
+   "cagr10": 10.7
+  },
+  {
+   "state": "VIC",
+   "region": "South West",
+   "band_ha": "100-150",
+   "median": 16639,
+   "yoy": -10.2,
+   "cagr10": 11.8
+  },
+  {
+   "state": "VIC",
+   "region": "South West",
+   "band_ha": "150+",
+   "median": 13126,
+   "yoy": -16.5,
+   "cagr10": 10.4
+  },
+  {
+   "state": "VIC",
+   "region": "Wimmera",
+   "band_ha": "30-100",
+   "median": 15045,
+   "yoy": 16.7,
+   "cagr10": 18.7
+  },
+  {
+   "state": "VIC",
+   "region": "Wimmera",
+   "band_ha": "100-200",
+   "median": 10855,
+   "yoy": -1.9,
+   "cagr10": 14.5
+  },
+  {
+   "state": "VIC",
+   "region": "Wimmera",
+   "band_ha": "200-300",
+   "median": 7307,
+   "yoy": -7.6,
+   "cagr10": 12.9
+  },
+  {
+   "state": "VIC",
+   "region": "Wimmera",
+   "band_ha": "300+",
+   "median": 4554,
+   "yoy": -42.4,
+   "cagr10": 9.6
+  },
+  {
+   "state": "SA",
+   "region": "North",
+   "band_ha": "30-100",
+   "median": 4942,
+   "yoy": -15.8,
+   "cagr10": 2.1
+  },
+  {
+   "state": "SA",
+   "region": "North",
+   "band_ha": "100-200",
+   "median": 2188,
+   "yoy": -5.0,
+   "cagr10": 4.7
+  },
+  {
+   "state": "SA",
+   "region": "North",
+   "band_ha": "200-300",
+   "median": 2812,
+   "yoy": -21.1,
+   "cagr10": 7.2
+  },
+  {
+   "state": "SA",
+   "region": "North",
+   "band_ha": "300+",
+   "median": 656,
+   "yoy": -64.9,
+   "cagr10": 3.3
+  },
+  {
+   "state": "SA",
+   "region": "Yorke & Mid-North",
+   "band_ha": "30-100",
+   "median": 15463,
+   "yoy": 3.1,
+   "cagr10": 7.5
+  },
+  {
+   "state": "SA",
+   "region": "Yorke & Mid-North",
+   "band_ha": "100-200",
+   "median": 11604,
+   "yoy": -16.4,
+   "cagr10": 14.0
+  },
+  {
+   "state": "SA",
+   "region": "Yorke & Mid-North",
+   "band_ha": "200-300",
+   "median": 12496,
+   "yoy": -3.0,
+   "cagr10": 16.9
+  },
+  {
+   "state": "SA",
+   "region": "Yorke & Mid-North",
+   "band_ha": "300+",
+   "median": 7482,
+   "yoy": 29.5,
+   "cagr10": 18.6
+  },
+  {
+   "state": "WA",
+   "region": "South West",
+   "band_ha": "50-80",
+   "median": 19546,
+   "yoy": 5.4,
+   "cagr10": 7.2
+  },
+  {
+   "state": "WA",
+   "region": "South West",
+   "band_ha": "80-120",
+   "median": 17617,
+   "yoy": 51.1,
+   "cagr10": 8.3
+  },
+  {
+   "state": "WA",
+   "region": "South West",
+   "band_ha": "120-160",
+   "median": 18597,
+   "yoy": 23.6,
+   "cagr10": 15.9
+  },
+  {
+   "state": "WA",
+   "region": "South West",
+   "band_ha": "160+",
+   "median": 17633,
+   "yoy": 28.3,
+   "cagr10": 10.8
+  }
+ ]
+}

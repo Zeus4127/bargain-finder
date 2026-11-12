@@ -1,0 +1,479 @@
+<title>Acreage Finder</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Every rural block over 100 acres for sale in Australia, priced against similar blocks: fair price, opening offer and walk-away price.">
+<style>
+/* Layout: Bargain Finder frame. Sticky title bar, tab row, then one column of ranked cards; chart and guides in their own tabs. */
+:root{--bg:#F5F6F2;--surface:#FFFFFF;--ink:#1A2620;--muted:#5A6862;--line:#DCE3DE;--accent:#1F6F5C;--accent-soft:#E1F0EA;
+ --ok:#26734A;--ok-soft:#E4F3EA;--good:#3F7F2A;--good-soft:#EBF4E1;--warn:#9A5B00;--warn-soft:#FDF2DF;--stop:#A3262D;--stop-soft:#FBE7E8;--info:#2D5F8A;--info-soft:#E6EFF7;--head:#E8F1EC;--sun:#F3B53F;--sun-ink:#2A1D00;
+ --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101815;--surface:#18231F;--ink:#E3ECE7;--muted:#9AAAA2;--line:#2A3934;--accent:#5CC2A6;--accent-soft:#163A30;--ok:#71CF9B;--ok-soft:#163323;--good:#A8D77F;--good-soft:#22301A;--warn:#F0B35A;--warn-soft:#33270F;--stop:#F08389;--stop-soft:#3A1A1D;--info:#8DB9E2;--info-soft:#172634;--head:#14211C;--sun:#C98E1E;--sun-ink:#1A1200;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101815;--surface:#18231F;--ink:#E3ECE7;--muted:#9AAAA2;--line:#2A3934;--accent:#5CC2A6;--accent-soft:#163A30;--ok:#71CF9B;--ok-soft:#163323;--good:#A8D77F;--good-soft:#22301A;--warn:#F0B35A;--warn-soft:#33270F;--stop:#F08389;--stop-soft:#3A1A1D;--info:#8DB9E2;--info-soft:#172634;--head:#14211C;--sun:#C98E1E;--sun-ink:#1A1200;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.45;color:var(--ink);background:var(--bg);-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.topin{max-width:960px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.bar1{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bar1 h1{font-size:20px;margin:0}
+.live{display:flex;align-items:center;gap:6px;font:600 13px var(--mono);color:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:6px}
+.tabs button{background:none;border:none;border-bottom:3px solid transparent;padding:10px 12px;font-weight:600;font-size:15px;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+main{max-width:960px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 60px}
+.hero{margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:20px max(18px,env(safe-area-inset-left,0px));color:#fff;background:radial-gradient(120% 90% at 100% 0%,#145A47 0%,transparent 60%),radial-gradient(90% 80% at 0% 100%,#C88A1C 0%,transparent 55%),linear-gradient(160deg,#155C49,#14574A 70%)}
+.hero .ey{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#FFE29A}
+.hero h2{font-size:clamp(24px,5vw,32px);line-height:1.1;margin:8px 0;text-wrap:balance}
+.hero h2 em{font-style:normal;color:#FFE29A}
+.hero p{margin:0;opacity:.95;max-width:62ch}
+.facts{margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));background:var(--sun);color:var(--sun-ink);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:12px}
+.facts div{text-align:center;display:grid;gap:2px;min-width:0}
+.facts b{font:800 21px/1 var(--mono)}
+.facts small{font-size:12px;font-weight:600;line-height:1.2}
+@media (max-width:520px){.facts{grid-template-columns:repeat(2,1fr);row-gap:10px}}
+section.view{display:grid;gap:14px;padding-top:16px}
+h3{margin:0;font-size:18px;text-wrap:balance}
+.what{font-size:14px;color:var(--muted);margin:0}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.filters label{display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600}
+.filters select,.filters input[type=search]{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:600;min-height:38px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.chk{display:flex!important;grid-auto-flow:column;align-items:center;gap:6px;font-size:14px!important;color:var(--ink)!important;min-height:40px}
+.count{font-size:13px;color:var(--muted);margin-left:auto}
+.list{display:grid;gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px}
+.chead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}
+.chead h4{margin:2px 0 0;font-size:16px}
+.loc{font-size:13px;color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:5px}
+.pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.v-great{background:var(--ok-soft);color:var(--ok)}.v-good{background:var(--good-soft);color:var(--good)}.v-fair{background:var(--info-soft);color:var(--info)}.v-high{background:var(--warn-soft);color:var(--warn)}.v-over,.v-gone{background:var(--stop-soft);color:var(--stop)}.v-none{background:var(--head);color:var(--muted)}
+.st{background:var(--accent-soft);color:var(--accent)}
+.ask{text-align:right}
+.ask b{font:700 18px var(--mono);display:block}
+.ask small{font-size:12px;color:var(--muted)}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;background:var(--bg);border-radius:10px;padding:8px}
+.nums div{display:grid;gap:1px;min-width:0}
+.nums small{font-size:11.5px;color:var(--muted);font-weight:600}
+.nums span{font:600 14px var(--mono)}
+@media (max-width:460px){.nums{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12.5px;padding:3px 8px;border-radius:8px;background:var(--ok-soft);color:var(--ok)}
+.tag.bad{background:var(--stop-soft);color:var(--stop)}
+.desc{font-size:13.5px;color:var(--muted);margin:0}
+.links{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;align-items:center}
+a{color:var(--accent)}
+.more{border:none;background:none;color:var(--accent);font-weight:600;padding:0}
+.why{font-size:13.5px;margin:0;padding-left:18px;display:grid;gap:3px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg);resize:vertical}
+.btn{background:var(--accent);color:var(--surface);border:none;border-radius:12px;padding:12px 18px;font-weight:700;min-height:46px}
+.btn.ghost{background:var(--accent-soft);color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.grid2 label{display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600}
+.grid2 input,.grid2 select{padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:42px;width:100%}
+.result{display:grid;gap:10px}
+.big{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.big div{background:var(--bg);border-radius:12px;padding:10px;display:grid;gap:2px}
+.big small{font-size:12px;color:var(--muted);font-weight:600}
+.big b{font:700 20px var(--mono)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td.r,th.r{text-align:right}
+tr:last-child td{border-bottom:none}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:5px;font-size:14.5px}
+.tip{background:var(--warn-soft);border-radius:12px;padding:12px 14px;font-size:14px}
+.empty{padding:26px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;background:var(--surface)}
+footer{font-size:12.5px;color:var(--muted);padding-top:24px}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--accent)}}
+</style>
+
+<header class="top"><div class="topin">
+  <div class="bar1"><h1>Acreage Finder</h1><span class="live"><span class="dot"></span><span id="scanned">loading…</span></span></div>
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-v="deals" aria-selected="true">Deals</button>
+    <button role="tab" data-v="check">Check a listing</button>
+    <button role="tab" data-v="all">All listings</button>
+    <button role="tab" data-v="growth">Growth</button>
+    <button role="tab" data-v="guide">Price guide</button>
+    <button role="tab" data-v="buy">Before you buy</button>
+  </nav>
+</div></header>
+
+<main>
+<section class="view" id="v-deals">
+  <div class="hero"><div class="ey">All of Australia · 100 acres and up</div>
+    <h2>Is this block a <em>bargain</em>?</h2>
+    <p>Every rural block over 100 acres for sale on Farmbuy, priced against similar blocks nearby. Each one gets a fair price, an offer to open with, and a price to walk away at.</p></div>
+  <div class="facts" id="facts"></div>
+  <div class="filters">
+    <div style="display:grid;gap:3px"><span style="font-size:12px;color:var(--muted);font-weight:600">State</span><div class="chips" id="dstate"></div></div>
+    <label for="dmax">Most I'll pay<select id="dmax"><option value="150000">$150k</option><option value="200000">$200k</option><option value="250000">$250k</option><option value="300000" selected>$300k</option><option value="400000">$400k</option><option value="500000">$500k</option><option value="750000">$750k</option><option value="1000000">$1M</option></select></label>
+    <label for="dmin">At least<select id="dmin"><option value="100" selected>100 ac</option><option value="200">200 ac</option><option value="500">500 ac</option><option value="1000">1,000 ac</option></select></label>
+    <label class="chk" for="dhouse"><input type="checkbox" id="dhouse"> Has a house</label>
+    <label class="chk" for="dclean"><input type="checkbox" id="dclean"> No covenants or lease</label>
+  </div>
+  <h3>Best deals right now</h3>
+  <p class="what">Ranked by how far under its fair price each block is, with a boost for quality (water, power, a house, good access). Under-offer and sold blocks are left out.</p>
+  <div class="list" id="dlist"></div>
+  <div class="panel chart"><h3>Value vs quality</h3>
+    <p class="what">Each dot is a block within your filters. Further right means cheaper than its fair price. Higher means better quality. The top-right box holds the best buys. Tap a dot to open it.</p>
+    <div id="chart"></div>
+    <div class="legend"><span><i style="background:var(--ok)"></i>Great or good deal</span><span><i style="background:var(--info)"></i>Fair price</span><span><i style="background:var(--warn)"></i>A bit high</span><span><i style="background:var(--stop)"></i>Overpriced</span></div>
+  </div>
+</section>
+
+<section class="view" id="v-check" hidden>
+  <h3>Check a listing</h3>
+  <p class="what">Copy the words from any listing (Domain, realestate.com.au, Gumtree, Facebook) and paste them here. I'll read the size, price and town, then price it against the blocks in this scan.</p>
+  <textarea id="paste" placeholder="e.g. 160 acres bush block, Inglewood QLD 4387. Two dams, shed, power to boundary. $265,000"></textarea>
+  <div class="row"><button class="btn" id="readBtn" type="button">Read listing</button><button class="btn ghost" id="sampleBtn" type="button">Try an example</button></div>
+  <div class="grid2">
+    <label for="cAcres">Acres<input id="cAcres" inputmode="decimal" placeholder="160"></label>
+    <label for="cPrice">Asking $<input id="cPrice" inputmode="numeric" placeholder="265000"></label>
+    <label for="cState">State<select id="cState"></select></label>
+    <label for="cPc">Postcode<input id="cPc" inputmode="numeric" placeholder="4387"></label>
+  </div>
+  <div class="row" id="cFeat"></div>
+  <button class="btn" id="checkBtn" type="button">Check it</button>
+  <div class="result panel" id="cResult" hidden></div>
+</section>
+
+<section class="view" id="v-all" hidden>
+  <h3>All listings</h3>
+  <div class="filters">
+    <label for="aq">Search<input type="search" id="aq" placeholder="town, postcode, agent"></label>
+    <label for="as">State<select id="as"><option value="">All</option></select></label>
+    <label for="av">Verdict<select id="av"><option value="">Any</option><option value="great">Great deal</option><option value="good">Good deal</option><option value="fair">Fair price</option><option value="high">A bit high</option><option value="over">Overpriced</option><option value="none">No price shown</option></select></label>
+    <label for="amax">Max price<select id="amax"><option value="0">Any</option><option value="200000">$200k</option><option value="300000">$300k</option><option value="500000">$500k</option><option value="1000000">$1M</option></select></label>
+    <label for="asort">Sort<select id="asort"><option value="ratio">Best value</option><option value="p">Cheapest</option><option value="ppa">$ per acre</option><option value="a">Biggest</option><option value="q">Best quality</option></select></label>
+    <label class="chk" for="agone"><input type="checkbox" id="agone"> Show under offer / sold</label>
+    <span class="count" id="acount"></span>
+  </div>
+  <div class="list" id="alist"></div>
+  <button class="btn ghost" id="amore" type="button" hidden>Show more</button>
+</section>
+
+<section class="view" id="v-growth" hidden>
+  <h3>How much has farmland gone up?</h3>
+  <p class="what">Median sale price of farms over about 30 ha (75 acres) for each state, region and council, from every farm sale in Australia (Bendigo Bank Agribusiness, Australian Farmland Values 2026 and 2025). Prices are per acre and include houses and sheds on the land.</p>
+  <div class="facts" id="gfacts" style="margin:0;border-radius:14px"></div>
+  <div class="panel"><h3>Price per acre since 2004</h3>
+    <p class="what">Rebuilt from each state's 5, 10 and 20-year growth rates in the last two reports, so it shows the shape of the climb, not every year's wiggle.</p>
+    <div class="chips" id="gchips"></div>
+    <div id="gchart" class="chart"></div></div>
+  <div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Median $/acre 2025</th><th class="r">Last year</th><th class="r">5 yrs, per year</th><th class="r">10 yrs, per year</th><th class="r">20 yrs, per year</th><th class="r">$100k in 2005 is now</th></tr></thead><tbody id="gstates"></tbody></table></div>
+  <div class="panel"><h3>What could a block be worth later?</h3>
+    <p class="what">Three what-ifs, not a forecast. Farmland growth has slowed hard: 2.8% in 2025, the lowest in 12 years, and Rabobank expects about 2% in 2026.</p>
+    <div class="grid2">
+      <label for="fPrice">Price you pay $<input id="fPrice" inputmode="numeric" value="250000"></label>
+      <label for="fYears">Years you hold it<select id="fYears"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
+      <label for="fRegion">Region<select id="fRegion"></select></label>
+    </div>
+    <div class="big" id="fOut"></div>
+    <p class="what" id="fNote"></p></div>
+  <div class="panel"><h3>Regions</h3>
+    <div class="row"><label for="rState" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">State<select id="rState" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="">All</option></select></label>
+    <label for="rSort" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Sort<select id="rSort" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="cagr20">20-year growth</option><option value="cagr10">10-year growth</option><option value="cagr5">5-year growth</option><option value="yoy">Last year</option><option value="median">Cheapest per acre</option></select></label></div>
+    <div class="tablewrap"><table><thead><tr><th>Region</th><th>State</th><th class="r">$/acre 2025</th><th class="r">Last year</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th></tr></thead><tbody id="rtable"></tbody></table></div>
+    <p class="what">Growth is the average per year (compound). Tap a region to see growth by farm size.</p>
+    <div id="bands"></div></div>
+  <div class="panel"><h3>Councils</h3>
+    <label for="lq" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Find a council (e.g. Western Downs, Tenterfield, Southern Mallee)<input id="lq" type="search" style="padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:42px" placeholder="council name"></label>
+    <div class="tablewrap"><table><thead><tr><th>Council</th><th>State</th><th class="r">$/acre 2025</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th><th class="r">$100k 20 yrs ago is now</th></tr></thead><tbody id="ltable"></tbody></table></div>
+    <p class="what">Councils with few sales jump around from year to year. Trust the 10 and 20-year figures more than the 5-year one.</p></div>
+  <div class="panel"><h3>Every single sale</h3><ul class="plain">
+    <li><b>NSW</b> publishes every property sale since 2001 free, with land size (Valuer General "bulk property sales information"). Its site blocks automated downloads, so download the yearly files in a browser and send them to me. I can then pull out every 100+ acre sale and work out real growth by district.</li>
+    <li><b>Other states</b> sell their sales records: WA Landgate (about $7 per property report), SA Land Services, QLD and VIC through licensed brokers, TAS through theLIST. Cotality (RP Data) or Pricefinder give every state with land size for roughly $175–$280 a month.</li></ul></div>
+</section>
+
+<section class="view" id="v-guide" hidden>
+  <h3>Price guide by state</h3>
+  <p class="what">Typical asking prices for 100+ acre blocks in this scan, by kind of land. Bare bush is usually far cheaper per acre than farmland or a block with a house.</p>
+  <div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Listings</th><th class="r">Median $/acre</th><th class="r">Median price</th><th class="r">Under $300k</th><th class="r">$/acre bush</th><th class="r">$/acre farm</th><th class="r">$/acre with house</th></tr></thead><tbody id="gtable"></tbody></table></div>
+  <div class="panel"><h3>How the fair price works</h3>
+    <ul class="plain">
+      <li>Each block is compared with up to 12 of the most similar blocks for sale: same postcode district first (then the wider area, then the state), similar size, and the same kind of land: bare bush, working farm, bare lifestyle block, or a block with a house.</li>
+      <li>Each comparison block's price is scaled to this block's size (bigger blocks cost more in total but less per acre), and the middle value is the fair price. Stations over 20,000 acres are left out, because they trade as a different market.</li>
+      <li>Then the block's own details: creek or river frontage adds 5%, power 4%. A covenant takes off 25%, no right to build 30%, leasehold 20%, doubtful access 15%, flood-prone 7%.</li>
+      <li><b>Verdict:</b> 25%+ under fair price is a great deal, 8–25% under is good, within ±10% is fair, 10–30% over is a bit high, more than 30% over is overpriced.</li>
+      <li><b>Opening offer</b> = 88% of the lower of asking and fair price. <b>Walk away</b> above fair price plus 5%.</li>
+      <li>These are estimates from asking prices, not sold prices. A building and pest report, a title search and a look in person come first.</li>
+    </ul></div>
+</section>
+
+<section class="view" id="v-buy" hidden>
+  <h3>Before you buy</h3>
+  <div class="tip">Never pay a deposit to hold land you haven't walked. Get a solicitor or conveyancer to do the title search before you sign.</div>
+  <div class="panel"><h3>Ask the agent</h3><ul class="plain">
+    <li>Is it still available? Has the price come down?</li>
+    <li>Freehold or leasehold? (Western Lands lease in NSW, pastoral lease in WA, NT and SA)</li>
+    <li>Is there registered legal road access, or only a track through a neighbour?</li>
+    <li>Can I build a house? Is there a dwelling entitlement or a planning permit?</li>
+    <li>Any covenant, Heritage Agreement or conservation agreement on the title?</li>
+    <li>What did it last sell for, and when? Will they do vendor finance?</li></ul></div>
+  <div class="panel"><h3>Check it yourself</h3><ul class="plain">
+    <li>Flood and bushfire maps on the council's planning map, and the bushfire (BAL) rating.</li>
+    <li>Vegetation rules: QLD vegetation management maps, SA Native Vegetation Act, NSW biodiversity values map.</li>
+    <li>Mining, gas or petroleum leases over the land: QLD Globe, MinView (NSW), GeoVIEW.WA, SARIG (SA).</li>
+    <li>Water: bores, dams, rainfall, and whether a licence is needed.</li>
+    <li>Distance to power, mobile coverage, the nearest town, hospital and school bus.</li>
+    <li>Yearly council rates. Some Heritage Agreement land pays none.</li></ul></div>
+  <div class="panel"><h3>Where else to look</h3><ul class="plain">
+    <li>Domain and realestate.com.au rural sections block automatic scanning. Use the Check a listing tab for anything you find there.</li>
+    <li>Council sales of land for unpaid rates (Walgett and Central Darling in NSW run these).</li>
+    <li>Trust for Nature (VIC) and the NSW Biodiversity Conservation Trust sell covenanted bush below market.</li></ul></div>
+</section>
+<footer id="foot"></footer>
+</main>
+
+<script src="acreage-data.js"></script>
+<script src="history-data.js"></script>
+<script>
+(function(){
+const D=window.ACREAGE_DATA||{listings:[],guide:{},model:{}};
+const L=D.listings;
+const STATES=["QLD","NSW","VIC","SA","WA","NT","TAS"];
+const VN={great:"Great deal",good:"Good deal",fair:"Fair price",high:"A bit high",over:"Overpriced",none:"No price shown",gone:"Under offer / sold"};
+const FEAT={house:"House or cabin",dam:"Dam",bore:"Bore",creek:"Creek or river",power:"Power",solar:"Solar",shed:"Shed",fenced:"Fenced",bitumen:"Sealed road",rain:"Good rainfall",vendor:"Vendor finance"};
+const FLAG={covenant:"Covenant / conservation agreement",nobuild:"No house allowed",lease:"Leasehold",access:"Check legal access",flood:"Flood-prone",remote:"Off-grid, no services",gas:"Gas wells",station:"Pastoral station: priced on its own"};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money=n=>n==null?"–":"$"+Math.round(n).toLocaleString("en-AU");
+const short=n=>n==null?"–":n>=1e6?"$"+(n/1e6).toFixed(n>=1e7?0:2).replace(/\.?0+$/,"")+"M":"$"+Math.round(n/1e3)+"k";
+const acres=a=>(a>=1000?Math.round(a).toLocaleString("en-AU"):(+a.toFixed(1)))+" ac";
+const gone=x=>x.uo||x.sold;
+const byId={};L.forEach(x=>byId[x.id]=x);
+const vkey=x=>gone(x)?"gone":(x.v||"none");
+// value score: discount from fair + quality
+const score=x=>x.ratio?(1-x.ratio)*100+(x.q-50)*0.35:-999;
+
+let pref={dst:"All",dmax:"300000",dmin:"100",dhouse:false,dclean:false,tab:"deals"};
+try{Object.assign(pref,JSON.parse(localStorage.getItem("acreage-pref")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("acreage-pref",JSON.stringify(pref))}catch(e){}};
+
+// header + facts
+if(D.scanned){const d=new Date(D.scanned);$("scanned").textContent=L.length+" blocks · scanned "+d.toLocaleDateString("en-AU",{day:"numeric",month:"short"})}else $("scanned").textContent="no scan data";
+const live=L.filter(x=>x.p&&!gone(x));
+const deals=live.filter(x=>x.v==="great"||x.v==="good");
+$("facts").innerHTML=[[L.length,"blocks over 100 ac"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"good or great deals"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
+function median(a){if(!a.length)return null;a=[...a].sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2}
+$("facts").lastChild.querySelector("b").textContent=live.length?"$"+Math.round(median(live.map(x=>x.p/x.a))).toLocaleString("en-AU"):"–";
+
+// tabs
+const tabs=[...$("tabs").children];
+function show(v){tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));document.querySelectorAll("section.view").forEach(s=>s.hidden=s.id!=="v-"+v);pref.tab=v;save();if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}
+tabs.forEach(b=>b.onclick=()=>{show(b.dataset.v);window.scrollTo(0,0)});
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(tabs.some(b=>b.dataset.v===h))show(h)});
+
+// card
+function why(x){
+  const r=[];
+  if(x.ratio){const pct=Math.round((1-x.ratio)*100);r.push(pct>=0?`Asking is ${pct}% under the fair price of ${money(x.fair)}.`:`Asking is ${-pct}% over the fair price of ${money(x.fair)}.`)}
+  if(!x.fair){r.push("This is a big pastoral station. Stations trade as their own market, so there is no fair price for it here.");return r}
+  const lv={district:"in the same postcode district",area:"in the wider area",state:"across "+x.s}[x.lvl]||"";
+  r.push(`Fair price is the middle of ${x.comps} similar ${KN[kindOf(x)]||"blocks"} ${lv}, each scaled to this block's size.`);
+  const cn=(x.cids||[]).map(i=>byId[i]).filter(Boolean).slice(0,4);
+  if(cn.length)r.push("Compared with: "+cn.map(c=>`${c.sub} ${acres(c.a)} ${short(c.p)}`).join("; ")+".");
+  if(x.house)r.push("Priced as a block with a house. Land with a house lists for a lot more than bare land of the same size.");
+  (x.flags||[]).forEach(f=>{const m={covenant:"Covenant takes about 25% off: you can't clear it, and building may be limited.",nobuild:"No right to build takes about 30% off.",lease:"Leasehold takes about 20% off: you pay rent and need approval to sell.",access:"Access needs checking: a block without legal road access is worth much less.",flood:"Flood-prone land is worth a little less. Check the flood maps.",remote:"No services: budget for solar, water tanks and a long drive.",gas:"Gas wells bring traffic and easements, but some pay yearly compensation."}[f];if(m)r.push(m)});
+  if(x.desc==null)r.push("I couldn't read this listing's page, so its features are unknown.");
+  return r;
+}
+function card(x){
+  const vk=vkey(x);
+  const t=(x.feats||[]).map(f=>`<span class="tag">${FEAT[f]||f}</span>`).join("")+(x.flags||[]).map(f=>`<span class="tag bad">${FLAG[f]||f}</span>`).join("");
+  const name=x.addr.replace(/,?\s*(QLD|NSW|VIC|SA|WA|TAS|NT)\s*\d{4}$/,"")||x.sub;
+  return `<article class="card">
+  <div class="chead"><div style="min-width:0"><div class="pills"><span class="pill v-${vk}">${VN[vk]}${gone(x)&&x.v?" · was "+VN[x.v].toLowerCase():""}</span><span class="pill st">${x.s}</span>${x.type?`<span class="pill v-none">${esc(x.type.split(",")[0])}</span>`:""}</div>
+    <h4>${esc(name)}</h4><div class="loc">${esc(x.sub)} ${x.s} ${esc(x.pc)}${x.ag?" · "+esc(x.ag):""}</div></div>
+    <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
+  <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Fair price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
+  ${t?`<div class="tags">${t}</div>`:""}
+  ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
+  <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>
+  <ul class="why" hidden>${why(x).map(w=>`<li>${esc(w)}</li>`).join("")}</ul>
+  </article>`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest(".more");if(!b)return;const u=b.closest(".card").querySelector(".why");u.hidden=!u.hidden;b.textContent=u.hidden?"Why this verdict?":"Hide reasons"});
+
+// deals view
+const ds=$("dstate");["All",...STATES].forEach(s=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=s;b.onclick=()=>{pref.dst=s;renderDeals()};ds.appendChild(b)});
+["dmax","dmin"].forEach(k=>{$(k).value=pref[k];$(k).onchange=()=>{pref[k]=$(k).value;renderDeals()}});
+["dhouse","dclean"].forEach(k=>{$(k).checked=pref[k];$(k).onchange=()=>{pref[k]=$(k).checked;renderDeals()}});
+function dealPool(){return live.filter(x=>(pref.dst==="All"||x.s===pref.dst)&&x.p<=+pref.dmax&&x.a>=+pref.dmin&&(!pref.dhouse||(x.feats||[]).includes("house"))&&(!pref.dclean||!(x.flags||[]).some(f=>["covenant","nobuild","lease"].includes(f))))}
+function renderDeals(){
+  save();[...ds.children].forEach(b=>b.setAttribute("aria-pressed",b.textContent===pref.dst));
+  const pool=dealPool();const top=[...pool].sort((a,b)=>score(b)-score(a)).slice(0,25);
+  $("dlist").innerHTML=top.length?top.map(card).join(""):'<div class="empty">Nothing matches. Try a higher price, a smaller minimum size, or another state.</div>';
+  chart(pool);
+}
+function chart(pool){
+  const W=640,H=340,P={l:44,r:14,t:14,b:38};
+  const xs=pool.map(x=>Math.max(-60,Math.min(60,(1-x.ratio)*100)));
+  const xmin=-60,xmax=60,ymin=0,ymax=100;
+  const X=v=>P.l+(v-xmin)/(xmax-xmin)*(W-P.l-P.r),Y=v=>H-P.b-(v-ymin)/(ymax-ymin)*(H-P.t-P.b);
+  const col={great:"var(--ok)",good:"var(--ok)",fair:"var(--info)",high:"var(--warn)",over:"var(--stop)"};
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Value versus quality scatter">`;
+  s+=`<rect x="${X(8)}" y="${Y(100)}" width="${X(60)-X(8)}" height="${Y(55)-Y(100)}" fill="var(--ok-soft)" rx="6"/>`;
+  [-60,-30,0,30,60].forEach(v=>{s+=`<line x1="${X(v)}" x2="${X(v)}" y1="${P.t}" y2="${H-P.b}" stroke="var(--line)" ${v===0?'stroke-width="1.5"':""}/><text x="${X(v)}" y="${H-P.b+16}" text-anchor="middle" font-size="11" fill="var(--muted)">${v>0?v+"% under":v<0?(-v)+"% over":"fair"}</text>`});
+  [0,25,50,75,100].forEach(v=>{s+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-dasharray="2 4"/><text x="${P.l-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`});
+  s+=`<text x="${(W+P.l)/2}" y="${H-4}" text-anchor="middle" font-size="12" fill="var(--muted)">Asking price vs fair price</text><text x="12" y="${(H-P.b)/2}" transform="rotate(-90 12 ${(H-P.b)/2})" text-anchor="middle" font-size="12" fill="var(--muted)">Quality</text>`;
+  s+=`<text x="${X(34)}" y="${Y(96)}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ok)">Best buys</text>`;
+  pool.forEach((x,i)=>{s+=`<a href="${esc(x.u)}" target="_blank" rel="noopener"><circle cx="${X(xs[i]).toFixed(1)}" cy="${Y(x.q).toFixed(1)}" r="5" fill="${col[x.v]||"var(--muted)"}" fill-opacity=".75" stroke="var(--surface)"><title>${esc(x.sub)} ${x.s} · ${acres(x.a)} · ${short(x.p)} · ${VN[x.v]}</title></circle></a>`});
+  $("chart").innerHTML=s+"</svg>";
+}
+
+// all listings
+const asel=$("as");STATES.forEach(s=>asel.insertAdjacentHTML("beforeend",`<option>${s}</option>`));
+let alimit=40;
+["aq","as","av","amax","asort","agone"].forEach(k=>$(k).addEventListener(k==="aq"?"input":"change",()=>{alimit=40;renderAll()}));
+$("amore").onclick=()=>{alimit+=40;renderAll()};
+function renderAll(){
+  const q=$("aq").value.trim().toLowerCase(),st=$("as").value,v=$("av").value,mx=+$("amax").value,so=$("asort").value,g=$("agone").checked;
+  let r=L.filter(x=>(!st||x.s===st)&&(!v||(v==="none"?!x.p:x.v===v))&&(!mx||(x.p&&x.p<=mx))&&(g||!gone(x))&&(!q||(x.addr+" "+x.sub+" "+x.pc+" "+x.ag).toLowerCase().includes(q)));
+  const k={ratio:(a,b)=>score(b)-score(a),p:(a,b)=>(a.p||9e9)-(b.p||9e9),ppa:(a,b)=>(a.ppa||9e9)-(b.ppa||9e9),a:(a,b)=>b.a-a.a,q:(a,b)=>b.q-a.q}[so];
+  r.sort(k);$("acount").textContent=r.length.toLocaleString("en-AU")+" blocks";
+  $("alist").innerHTML=r.length?r.slice(0,alimit).map(card).join(""):'<div class="empty">No blocks match those filters.</div>';
+  $("amore").hidden=r.length<=alimit;
+}
+
+// guide
+const M=D.model||{b:.4,h:.45};
+const FARM=["Cropping","Livestock","Mixed Farming","Dairy","Horticulture","Viticulture","Specialist"];
+const kindOf=x=>x.house?"house":(x.feats||[]).includes("bush")?"bush":FARM.some(t=>(x.type||"").includes(t))?"farm":"life";
+const pool=L.filter(x=>x.p&&x.a<20000&&!x.sold);
+function compsFor(subj){
+  const a=subj.a,sk=subj.kind;
+  const levels=[[c=>c.pc.slice(0,3)===subj.pc.slice(0,3),1/3,3,"district"],[c=>c.pc.slice(0,2)===subj.pc.slice(0,2),1/4,4,"area"],[c=>c.s===subj.s,1/4,4,"state"]];
+  for(const [t,lo,hi,name] of levels){
+    const cs=pool.filter(c=>c.id!==subj.id&&t(c)&&c.a/a>=lo&&c.a/a<=hi);
+    const same=cs.filter(c=>kindOf(c)===sk);const use=same.length>=4?same:cs;const matched=same.length>=4;
+    if(use.length>=4||name==="state"){
+      const key=c=>Math.abs(Math.log(c.a/a))+(c.house===subj.house?0:.4)+(c.pc.slice(0,3)===subj.pc.slice(0,3)?0:.3)+(kindOf(c)===sk?0:.5);
+      return {cs:[...use].sort((x,y)=>key(x)-key(y)).slice(0,12),level:name,matched};
+    }
+  }
+  return {cs:[],level:"state"};
+}
+const KN={house:"blocks with a house",bush:"bare bush blocks",farm:"working farms",life:"bare lifestyle blocks"};
+$("gtable").innerHTML=STATES.filter(s=>D.guide&&D.guide[s]).map(s=>{const g=D.guide[s];const med=k=>{const v=L.filter(x=>x.s===s&&x.p&&!x.sold&&x.a<20000&&kindOf(x)===k).map(x=>x.p/x.a);return v.length>=3?money(median(v)):"–"};return `<tr><td>${s}</td><td class="r num">${g.n}</td><td class="r num">${money(g.med_ppa)}</td><td class="r num">${short(g.med_price)}</td><td class="r num">${g.under300}</td><td class="r num">${med("bush")}</td><td class="r num">${med("farm")}</td><td class="r num">${med("house")}</td></tr>`}).join("");
+
+// check a listing
+const cs=$("cState");STATES.forEach(s=>cs.insertAdjacentHTML("beforeend",`<option>${s}</option>`));
+const CF={house:"House or cabin",bush:"Bush block (not cleared)",creek:"Creek or river",power:"Power",covenant:"Covenant",nobuild:"No house allowed",lease:"Leasehold",access:"Doubtful access",flood:"Flood-prone"};
+$("cFeat").innerHTML=Object.entries(CF).map(([k,l])=>`<label class="chk" for="cf-${k}"><input type="checkbox" id="cf-${k}"> ${l}</label>`).join("");
+const RX={bush:/bush ?block|bushland|\bscrub\b|timbered|uncleared|native (bush|vegetation)|mallee/i,house:/\b(\d\s*bed(room)?s?|homestead|dwelling|cottage|cabin|farmhouse|existing (home|house))\b/i,creek:/creek|river|spring[- ]fed|permanent water/i,power:/power (connected|on site|available|to (the )?boundary)|mains power|grid power/i,covenant:/covenant|heritage agreement|conservation agreement|trust for nature/i,nobuild:/no (dwelling|building|house) (entitlement|rights|permit)|cannot build/i,lease:/leasehold|western lands lease|pastoral lease/i,access:/no legal access|via (a )?neighbou?r|right of way|unformed road/i,flood:/flood[- ]prone|subject to flood|flood ?plain/i};
+const PC={"2":"NSW","3":"VIC","4":"QLD","5":"SA","6":"WA","7":"TAS","0":"NT"};
+function readPaste(){
+  const t=$("paste").value;if(!t.trim())return;
+  const m=t.match(/(\d[\d,]*(?:\.\d+)?)\s*(acres?|ac\b|hectares?|ha\b)/i);
+  if(m){let v=+m[1].replace(/,/g,"");if(/^h/i.test(m[2]))v*=2.471;$("cAcres").value=Math.round(v*10)/10}
+  let best=null;for(const p of t.matchAll(/\$\s?(\d[\d,]*(?:\.\d+)?)\s*(k|m|mil|million)?\b/gi)){let n=+p[1].replace(/,/g,"");if(p[2])n*=/^k/i.test(p[2])?1e3:1e6;if(n>=20000&&n<=6e7&&!/per\s*(acre|ha|week)/i.test(t.slice(p.index,p.index+25)))best=best==null?n:Math.min(best,n)}
+  if(best)$("cPrice").value=Math.round(best);
+  const s=t.match(/\b(QLD|NSW|VIC|SA|WA|TAS|NT)\b\s*(\d{4})?/i);if(s){$("cState").value=s[1].toUpperCase();if(s[2])$("cPc").value=s[2]}
+  else{const p=t.match(/\b([02-7]\d{3})\b/);if(p){$("cPc").value=p[1];$("cState").value=PC[p[1][0]]||"QLD"}}
+  Object.keys(CF).forEach(k=>$("cf-"+k).checked=RX[k].test(t));
+  check();
+}
+$("readBtn").onclick=readPaste;
+$("sampleBtn").onclick=()=>{$("paste").value="160 acre bush block near Inglewood QLD 4387. Two dams, machinery shed, power to the boundary, bitumen road. Timbered country, great for weekend camping. $265,000";readPaste()};
+$("checkBtn").onclick=check;
+function fairFor(st,pc,a,f){
+  const subj={id:"_check",s:st,pc:(pc||"000"),a:a,house:!!f.house,feats:f.bush?["bush"]:[],type:""};subj.kind=kindOf(subj);
+  const {cs,level,matched}=compsFor(subj);if(cs.length<3)return null;
+  const hs=subj.house?1:0;
+  let v=median(cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-(c.house?1:0)))));
+  const mult={creek:1.05,power:1.04,covenant:.75,nobuild:.70,lease:.80,access:.85,flood:.93};
+  Object.keys(mult).forEach(k=>{if(f[k])v*=mult[k]});
+  return {fair:v,n:cs.length,level,cs,kind:matched?subj.kind:null};
+}
+function check(){
+  const a=+$("cAcres").value,p=+$("cPrice").value,s=$("cState").value,pc=($("cPc").value||"").trim();
+  const box=$("cResult");box.hidden=false;
+  if(!a||!p){box.innerHTML='<p>Enter the acres and the asking price (or paste the listing and tap Read listing).</p>';return}
+  const f={};Object.keys(CF).forEach(k=>f[k]=$("cf-"+k).checked);
+  const r=fairFor(s,pc||"000",a,f);if(!r){box.innerHTML="<p>No scan data for that state yet.</p>";return}
+  const ratio=p/r.fair,v=ratio<=.75?"great":ratio<=.92?"good":ratio<=1.1?"fair":ratio<=1.3?"high":"over";
+  const pct=Math.round((1-ratio)*100);
+  const near=r.cs.slice(0,6);
+  box.innerHTML=`<div class="pills"><span class="pill v-${v}" style="font-size:14px">${VN[v]}</span><span class="pill st">${s}${pc?" "+esc(pc):""}</span></div>
+  <div class="big"><div><small>Asking</small><b>${short(p)}</b></div><div><small>Fair price</small><b>${short(r.fair)}</b></div><div><small>Opening offer</small><b>${short(Math.min(p,r.fair)*.88)}</b></div><div><small>Walk away above</small><b>${short(Math.min(p,r.fair*1.05))}</b></div></div>
+  <p style="margin:0">${pct>=0?`Asking is <b>${pct}% under</b> what similar blocks are listed for.`:`Asking is <b>${-pct}% over</b> what similar blocks are listed for.`} That's ${money(p/a)}/acre for ${acres(a)}. Compared with ${r.n} ${r.kind?KN[r.kind]:"blocks of mixed kinds (too few "+KN[kindOf({house:f.house,feats:f.bush?["bush"]:[]})]+" nearby)"} ${r.level==="district"?"in the same postcode district":r.level==="area"?"in the wider area (same first two postcode digits)":"across "+s} of a similar size.</p>
+  ${near.length?`<h3 style="font-size:15px">The blocks it was compared with</h3><ul class="plain">${near.map(x=>`<li><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.sub)} ${x.pc}</a>: ${acres(x.a)} for ${short(x.p)} (${money(x.ppa)}/ac, ${VN[x.v].toLowerCase()})</li>`).join("")}</ul>`:""}`;
+}
+
+$("foot").innerHTML=`Listings from Farmbuy.com, scanned ${D.scanned?new Date(D.scanned).toLocaleString("en-AU"):"–"}. Fair prices are estimates from asking prices of similar blocks, not valuations. Features are read from listing text and can be wrong. Not financial or legal advice.`;
+
+
+// growth
+(function(){
+const H=window.HISTORY_DATA;if(!H)return;
+const HA=2.471,pa=v=>v/HA,pc=v=>v==null?"–":(v>0?"+":"")+v.toFixed(1)+"%";
+const cls=v=>v==null?"":v>=8?'style="color:var(--ok);font-weight:700"':v<0?'style="color:var(--stop)"':"";
+const st=H.regions.filter(r=>r.is_state);const ORDER=["QLD","NSW","VIC","SA","WA","TAS","NT"];st.sort((a,b)=>ORDER.indexOf(a.state)-ORDER.indexOf(b.state));
+const N=H.national;
+$("gfacts").innerHTML=[[money(pa(N.median)),"median per acre, 2025"],[pc(N.yoy),"growth in 2025 (12-year low)"],[N.cagr20+"%","a year over 20 years"],["×"+(Math.pow(1+N.cagr20/100,20)).toFixed(1),"what land cost in 2005"]].map(f=>`<div><b>${f[0]}</b><small>${f[1]}</small></div>`).join("");
+$("gstates").innerHTML=st.map(r=>`<tr><td>${r.name}</td><td class="r num">${money(pa(r.median))}</td><td class="r num" ${cls(r.yoy)}>${pc(r.yoy)}</td><td class="r num" ${cls(r.cagr5)}>${pc(r.cagr5)}</td><td class="r num" ${cls(r.cagr10)}>${pc(r.cagr10)}</td><td class="r num" ${cls(r.cagr20)}>${pc(r.cagr20)}</td><td class="r num">${r.cagr20!=null?short(100000*Math.pow(1+r.cagr20/100,20)):"–"}</td></tr>`).join("");
+const COL={QLD:"#C2410C",NSW:"#1F6F5C",VIC:"#2D5F8A",SA:"#9A5B00",WA:"#7C3AED",TAS:"#0E7490",NT:"#A3262D"};
+let on=new Set(["QLD","NSW","VIC","SA","WA","TAS"]);
+const gc=$("gchips");ORDER.forEach(s=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=s;b.onclick=()=>{on.has(s)?on.delete(s):on.add(s);draw()};gc.appendChild(b)});
+function draw(){
+  [...gc.children].forEach(b=>b.setAttribute("aria-pressed",on.has(b.textContent)));
+  const W=640,Hh=300,P={l:56,r:46,t:12,b:30},x0=2004,x1=2025;
+  const series=st.filter(r=>on.has(r.state)).map(r=>({s:r.state,pts:Object.entries(r.path).map(([y,v])=>[+y,pa(v)]).sort((a,b)=>a[0]-b[0])}));
+  const ymax=Math.max(1000,...series.flatMap(s=>s.pts.map(p=>p[1])))*1.08;
+  const X=y=>P.l+(y-x0)/(x1-x0)*(W-P.l-P.r),Y=v=>Hh-P.b-v/ymax*(Hh-P.t-P.b);
+  const step=ymax>8000?2000:ymax>4000?1000:500;
+  let g=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Median farmland price per acre by state">`;
+  for(let v=0;v<=ymax;v+=step)g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${P.l-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">$${(v/1000).toFixed(v%1000?1:0)}k</text>`;
+  [2004,2008,2012,2016,2020,2025].forEach(y=>g+=`<text x="${X(y)}" y="${Hh-10}" text-anchor="middle" font-size="11" fill="var(--muted)">${y}</text>`);
+  series.forEach(se=>{const d=se.pts.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)).join(" ");g+=`<path d="${d}" fill="none" stroke="${COL[se.s]}" stroke-width="2.2"/>`;se.pts.forEach(p=>g+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3" fill="${COL[se.s]}"><title>${se.s} ${p[0]}: ${money(p[1])}/acre</title></circle>`);const l=se.pts[se.pts.length-1];g+=`<text x="${X(l[0])+6}" y="${Y(l[1])+4}" font-size="11" font-weight="700" fill="${COL[se.s]}">${se.s}</text>`});
+  $("gchart").innerHTML=g+"</svg>";
+}
+draw();
+// regions
+const rs=$("rState");ORDER.forEach(s=>rs.insertAdjacentHTML("beforeend",`<option>${s}</option>`));
+function regs(){
+  const f=rs.value,k=$("rSort").value;
+  let r=H.regions.filter(x=>!x.is_state&&(!f||x.state===f));
+  r.sort((a,b)=>k==="median"?a.median-b.median:(b[k]??-99)-(a[k]??-99));
+  $("rtable").innerHTML=r.map(x=>`<tr data-r="${esc(x.state+"|"+x.name)}" style="cursor:pointer"><td><button type="button" class="more" data-band="${esc(x.state+"|"+x.name)}">${esc(x.name)}</button></td><td>${x.state}</td><td class="r num">${money(pa(x.median))}</td><td class="r num" ${cls(x.yoy)}>${pc(x.yoy)}</td><td class="r num" ${cls(x.cagr5)}>${pc(x.cagr5)}</td><td class="r num" ${cls(x.cagr10)}>${pc(x.cagr10)}</td><td class="r num" ${cls(x.cagr20)}>${pc(x.cagr20)}</td></tr>`).join("");
+}
+rs.onchange=regs;$("rSort").onchange=regs;regs();
+document.addEventListener("click",e=>{const b=e.target.closest("[data-band]");if(!b)return;const [s,n]=b.dataset.band.split("|");
+  const bs=H.bands.filter(x=>x.state===s&&x.region.toUpperCase()===n.toUpperCase());
+  $("bands").innerHTML=bs.length?`<h3 style="font-size:15px;margin-top:6px">${esc(n)} (${s}) by farm size</h3><div class="tablewrap"><table><thead><tr><th>Farm size</th><th class="r">≈ acres</th><th class="r">$/acre 2025</th><th class="r">Last year</th><th class="r">10 yrs, per year</th></tr></thead><tbody>${bs.map(x=>{const m=x.band_ha.match(/(\d[\d,]*)\D*(\d[\d,]*)?/);const lo=m?+m[1].replace(/,/g,""):0,hi=m&&m[2]?+m[2].replace(/,/g,""):null;return `<tr><td>${esc(x.band_ha)} ha</td><td class="r num">${Math.round(lo*HA).toLocaleString("en-AU")}${hi?"–"+Math.round(hi*HA).toLocaleString("en-AU"):"+"}</td><td class="r num">${money(pa(x.median))}</td><td class="r num" ${cls(x.yoy)}>${pc(x.yoy)}</td><td class="r num" ${cls(x.cagr10)}>${pc(x.cagr10)}</td></tr>`}).join("")}</tbody></table></div>`:`<p class="what">No farm-size breakdown for ${esc(n)}.</p>`;
+  $("bands").scrollIntoView({behavior:"smooth",block:"nearest"});});
+// councils
+function lg(){const q=$("lq").value.trim().toLowerCase();let r=H.lgas.filter(x=>!q||x.lga.toLowerCase().includes(q));r.sort((a,b)=>(b.cagr20??-99)-(a.cagr20??-99));
+  $("ltable").innerHTML=r.slice(0,q?60:25).map(x=>`<tr><td>${esc(x.lga)}</td><td>${x.state}</td><td class="r num">${money(pa(x.median))}</td><td class="r num" ${cls(x.cagr5)}>${pc(x.cagr5)}</td><td class="r num" ${cls(x.cagr10)}>${pc(x.cagr10)}</td><td class="r num" ${cls(x.cagr20)}>${pc(x.cagr20)}</td><td class="r num">${x.cagr20!=null?short(100000*Math.pow(1+x.cagr20/100,20)):"–"}</td></tr>`).join("")+(q?"":`<tr><td colspan="7" class="muted">Top 25 by 20-year growth. Search to see any of the ${H.lgas.length} councils.</td></tr>`)}
+$("lq").oninput=lg;lg();
+// future
+const fr=$("fRegion");H.regions.filter(r=>r.cagr10!=null||r.cagr20!=null).sort((a,b)=>(a.is_state?0:1)-(b.is_state?0:1)||a.state.localeCompare(b.state)).forEach(r=>fr.insertAdjacentHTML("beforeend",`<option value="${esc(r.state+"|"+r.name)}">${r.is_state?r.name+" (whole state)":r.name+", "+r.state}</option>`));
+function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr.value.split("|");const r=H.regions.find(x=>x.state===s&&x.name===n)||N;
+  const sc=[["Slow",H.outlook.rabobank_2026,"Rabobank's 2026 outlook, about 2% a year"],["Long-run",r.cagr20??N.cagr20,"this region's 20-year average"],["Recent",r.cagr10??r.cagr20??N.cagr20,"this region's last 10 years, boom included"]];
+  $("fOut").innerHTML=sc.map(([t,g,why])=>`<div><small>${t}: ${g.toFixed(1)}%/yr</small><b>${short(p*Math.pow(1+g/100,y))}</b><small>${why}</small></div>`).join("");
+  $("fNote").textContent=`These are prices before costs. Rates, stamp duty (about 4–5% to buy), agent fees (2–3% to sell) and inflation of about 2.5–3% a year all come off. Land with nothing on it often grows slower than the farm medians above, and ABARES puts hobby-farm growth at about ${H.outlook.abares_10yr_hobby}% a year over 10 years.`;}
+["fPrice","fYears","fRegion"].forEach(k=>$(k).addEventListener("input",fut));fut();
+})();
+
+renderDeals();renderAll();
+const h=location.hash.slice(1);show(tabs.some(b=>b.dataset.v===h)?h:(pref.tab||"deals"));
+})();
+</script>
