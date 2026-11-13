@@ -218,6 +218,7 @@ def wa_planning(lat, lng):
     return out
 
 # ---- fair-price model --------------------------------------------------------
+ASK_TO_SALE = float(os.environ.get("ACREAGE_ASK_TO_SALE", "0.82"))
 STATION_ACRES = 20_000   # bigger holdings are mostly pastoral stations: priced as their own market
 
 def solve(XtX, Xty):
@@ -308,7 +309,8 @@ def price_one(r, model, pool):
     cs, level = comps_for(r, pool, model)
     if len(cs) < 3: return None, [], level
     hs = 1.0 if r.get("house") else 0.0
-    implied = [c["p"] * (r["a"] / c["a"]) ** model["b"] * math.exp(model["h"] * (hs - float(c["house"]))) for c in cs]
+    # asking prices sit above what blocks sell for; scale them down (tuned with backtest.py)
+    implied = [c["p"] * (1.0 if c.get("is_sold") else ASK_TO_SALE) * (r["a"] / c["a"]) ** model["b"] * math.exp(model["h"] * (hs - float(c["house"]))) for c in cs]
     fair = statistics.median(implied)
     r["_lo"], r["_hi"] = pctl(implied, 0.25), pctl(implied, 0.75)
     f = set(r.get("feats", [])); g = set(r.get("flags", []))
@@ -620,6 +622,32 @@ def finish(rows, scanned, keep_prev=True):
     for r in rows:
         ck = catches.get(str(r["id"]))
         if ck: r["chk"] = {k: v for k, v in ck.items() if k != "v" and v}
+    # roughly when each Farmbuy block was listed (build_listed.py), and how many times its price was cut
+    try: curve = json.load(open(os.path.join(HERE, "listed-curve.json")))
+    except Exception: curve = []
+    try: hist = json.load(open(os.path.join(HERE, "listings-history.json")))
+    except Exception: hist = {}
+    try: fps = json.load(open(os.path.join(HERE, "fp-sale-cache.json")))
+    except Exception: fps = {}
+    import bisect
+    cids = [c[0] for c in curve]
+    today = scanned[:10]
+    for r in rows:
+        sid = str(r["id"]); listed = None
+        if sid.isdigit() and cids:
+            i = bisect.bisect_left(cids, int(sid))
+            if i < len(curve): listed = curve[i][1]
+        elif sid.startswith("fp"):
+            listed = (fps.get(sid[2:]) or {}).get("first")
+        h = hist.get(sid) or {}
+        if h.get("first") and (not listed or h["first"] < listed): listed = h["first"]
+        if listed:
+            r["listed"] = listed
+            try: r["dom"] = (datetime.fromisoformat(today) - datetime.fromisoformat(listed)).days
+            except Exception: pass
+        pr = [p for _, p in (h.get("prices") or [])]
+        fpp = (fps.get(sid[2:]) or {}).get("prices") if sid.startswith("fp") else None
+        r["cuts"] = sum(1 for a, b in zip(pr, pr[1:]) if b < a) + (len(fpp) if fpp else 0)
     for r in rows:   # no map point on the listing: use the suburb's centre, marked as approximate
         if not r.get("lat") or r.get("approx"):
             c = cent.get("%s|%s" % (r["s"], (r.get("sub") or "").upper()))
@@ -643,12 +671,14 @@ def finish(rows, scanned, keep_prev=True):
         r["cids"] = [c["id"] for c in cs[:6]]; r["q"] = quality(r)
         r["nsold"] = sum(1 for c in cs if c.get("is_sold"))
         if r["p"] and fair:
-            ratio = r["p"] / fair
-            r["ratio"] = round(ratio, 3); r["v"] = verdict(r["p"], r["_lo"], r["_hi"])
-            r["lo"] = round(r["_lo"], -3); r["hi"] = round(r["_hi"], -3)
+            # fair = likely sale price. The verdict compares asking with what similar blocks usually ASK
+            k = ASK_TO_SALE
+            ratio = r["p"] * k / fair
+            r["ratio"] = round(ratio, 3); r["v"] = verdict(r["p"] * k, r["_lo"], r["_hi"])
+            r["lo"] = round(r["_lo"] / k, -3); r["hi"] = round(r["_hi"] / k, -3)
             if level == "state" and r["v"] == "great": r["v"] = "good"   # few nearby comparisons: soften
-            r["offer"] = round(min(r["p"], fair) * 0.88, -3)
-            r["walk"] = round(min(r["p"], fair * 1.05), -3)
+            r["offer"] = round(min(r["p"], fair) * 0.93, -3)
+            r["walk"] = round(min(r["p"], fair * 1.08), -3)
         r["ppa"] = round(r["p"] / r["a"]) if r["p"] else None
         r.pop("_lo", None); r.pop("_hi", None)
     track_history(rows, scanned, {x["id"]: x for x in sold})
@@ -663,7 +693,7 @@ def finish(rows, scanned, keep_prev=True):
                         "med_price": round(statistics.median(r["p"] for r in rs), -3),
                         "under300": sum(1 for r in rs if r["p"] <= 300_000)}
     data = {"scanned": scanned, "source": "farmbuy.com",
-            "min_acres": MIN_ACRES, "max_price": MAX_PRICE, "guide": guide,
+            "min_acres": MIN_ACRES, "ask_to_sale": ASK_TO_SALE, "max_price": MAX_PRICE, "guide": guide,
             "model": {"b": round(model["b"], 4), "h": round(model["h"], 4)}, "areas": areas,
             "latest": (json.load(open(os.path.join(HERE, "latest-values.json"))) if os.path.exists(os.path.join(HERE, "latest-values.json")) else {}),
             "nsw": (json.load(open(os.path.join(HERE, "nsw-growth.json"))) if os.path.exists(os.path.join(HERE, "nsw-growth.json")) else {}),
