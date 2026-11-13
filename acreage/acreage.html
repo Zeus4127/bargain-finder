@@ -240,6 +240,18 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
   <h3>Price guide by state</h3>
   <p class="what">Typical asking prices for blocks in this scan, by kind of land. Bare bush is usually far cheaper per acre than farmland or a block with a house.</p>
   <div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Listings</th><th class="r">Median $/acre</th><th class="r">Median price</th><th class="r">Under $300k</th><th class="r">$/acre bush</th><th class="r">$/acre farm</th><th class="r">$/acre with house</th></tr></thead><tbody id="gtable"></tbody></table></div>
+  <div class="panel"><h3>Costs and ways to earn: where the numbers come from</h3>
+    <ul class="plain">
+      <li><b>Stamp duty</b> is worked out with each state's 2026 general rates (WA uses its home rates when there's a house). First-home, young-farmer and primary-production concessions can cut it a lot, and foreign buyers pay 7–9% more. Check your state's revenue office before you sign.</li>
+      <li><b>Other buying costs:</b> conveyancing $1,000–$3,500, building and pest $400–$900, a boundary survey $1,500–$5,000 on bigger blocks.</li>
+      <li><b>Council rates</b> on rural land are usually 0.1–0.5% of the value a year, at least about $1,200.</li>
+      <li><b>Making a bare block livable:</b> off-grid solar and battery $35k–$55k (a grid connection can cost $40k–$150k a km), water tanks $12k–$25k, septic $5k–$20k, a shed $20k–$60k, approvals $5k–$20k, and a cabin or tiny home $60k–$180k.</li>
+      <li><b>Selling later:</b> agents charge about 2–3.5% plus $2,500–$15,000 for marketing.</li>
+      <li><b>Short stays</b> use real Airbnb listings near each block (Inside Airbnb, September 2026: Mid North Coast, Northern Rivers, Sydney, Brisbane, Sunshine Coast, Barossa, Tasmania, Barwon South West, Melbourne, Mornington Peninsula and Western Australia). Nights booked and earnings are Inside Airbnb's estimates for the last 12 months, before cleaning, fees and tax.</li>
+      <li><b>Long-term rent</b> is the median weekly rent of houses in the same postcode from new leases (NSW Fair Trading, October 2026; SA, March quarter 2026). Victoria and Queensland weren't reachable.</li>
+      <li><b>Agistment</b> is $5–$12 a head of cattle a week. The number of cattle is a rough guess from rainfall, so get a local agent's view. <b>Leasing paddocks</b> brings 2–5% of the land's value a year, <b>hay</b> $300–$800 a hectare in a good year, and <b>camping</b> hosts average about $10k a year. <b>Solar farm leases</b> pay $750–$1,500 a hectare a year, but only near a substation with spare capacity.</li>
+      <li>All income figures are before costs, tax and council approval. Short-stay cabins and camping usually need council approval first.</li>
+    </ul></div>
   <div class="panel"><h3>How the fair price works</h3>
     <ul class="plain">
       <li>Each block is compared with up to 12 of the most similar blocks for sale: within 50 km first (then 120 km, then 250 km, then the state; blocks without a map point use the postcode district instead), including recent sales, similar size, and the same kind of land: bare bush, working farm, bare lifestyle block, or a block with a house.</li>
@@ -344,6 +356,53 @@ function areaInfo(x){
   const mk=x.region&&D.areas?D.areas[x.s+"|"+x.region]:null;
   return {g,rg,label,st,yoy,dir,near,mk};
 }
+// buying, owning and selling costs (rough, 2026; see the Costs notes)
+const DUTY={NSW:[[0,0,1.25],[18000,225,1.5],[38000,525,1.75],[103000,1662,3.5],[387000,11602,4.5],[1290000,52237,5.5]],
+ VIC:[[0,0,1.4],[25000,350,2.4],[130000,2870,6],[960000,52800,5.5],[2000000,110000,6.5]],
+ QLD:[[0,0,0],[5000,0,1.5],[75000,1050,3.5],[540000,17325,4.5],[1000000,38025,5.75]],
+ SA:[[0,0,1],[12000,120,2],[30000,480,3],[50000,1080,3.5],[100000,2830,4],[200000,6830,4.25],[250000,8955,4.75],[300000,11330,5],[500000,21330,5.5]],
+ WA:[[0,0,1.9],[80000,1520,2.85],[100000,2090,3.8],[250000,7790,4.75],[500000,19665,5.15]],
+ WAH:[[0,0,1.9],[120000,2280,2.85],[150000,3135,3.8],[360000,11115,4.75],[725000,28453,5.15]],
+ TAS:[[0,50,0],[3000,50,1.75],[25000,435,2.25],[75000,1560,3.5],[200000,5935,4],[375000,12935,4.25],[725000,27810,4.5]]};
+function duty(s,p,house){
+  if(s==="NT"){if(p<=525000){const v=p/1000;return .06571441*v*v+15*v}return p*(p<3e6?.0495:p<5e6?.0575:.0595)}
+  const t=DUTY[s==="WA"&&house?"WAH":s];if(!t)return null;let b=t[0];for(const r of t)if(p>=r[0])b=r;return b[1]+(p-b[0])*b[2]/100}
+function costs(x){
+  if(!x.p)return null;const f=x.feats||[],c={};
+  c.duty=duty(x.s,x.p,x.house);
+  c.buyLo=(c.duty||0)+1500+(x.house?400:0);c.buyHi=(c.duty||0)+3500+(x.house?900:0)+(x.a>=40?5000:1500);
+  c.ratesLo=Math.max(1200,x.p*.001);c.ratesHi=Math.max(2500,x.p*.005);
+  if(!x.house){let lo=5000+20000,hi=20000+60000;               // approvals, shed
+    if(!f.includes("power")){lo+=35000;hi+=55000}                 // off-grid solar and battery (or a grid connection)
+    if(!f.some(k=>["bore","dam","creek","river","tank"].includes(k))){lo+=12000;hi+=25000} // water tanks
+    lo+=5000;hi+=20000;                                            // septic
+    c.liveLo=lo;c.liveHi=hi;c.cabinLo=60000;c.cabinHi=180000}
+  c.sellLo=x.p*.02+2500;c.sellHi=x.p*.035+15000;return c}
+// ways the block could earn money (rough yearly ranges before costs; see "Ways to earn" in the guide)
+function incomeIdeas(x){
+  const out=[],f=x.feats||[],ha=x.a/2.471,k=v=>"$"+(v>=1e6?(v/1e6).toFixed(1)+"M":Math.round(v/1000)+"k");
+  const st=x.stay;
+  if(st)out.push(`🏡 Short stays: ${st.n} ${st.kind} within 40 km average about $${st.night}/night and are booked about ${st.nights} nights a year, earning about ${k(st.rev)} a year (top quarter ${k(st.top)}). ${x.house?"The house could do the same.":"A cabin or tiny home here could too, once approved."}`);
+  else if(x.city&&x.city[1]<250)out.push(`🏡 Short stays: no Airbnb figures for this area, but rural cabins usually get $150–$250 a night at 35–60% booked: about $20k–$50k a year before costs.`);
+  if(x.rent&&x.house)out.push(`🔑 Long-term rent: houses in postcode ${esc(x.pc)} rent for about $${x.rent[0]}/week (${x.rent[1]} new leases last period): about ${k(x.rent[0]*50)} a year.`);
+  else if(x.rent&&!x.house)out.push(`🔑 Long-term rent: once a house is built, houses in postcode ${esc(x.pc)} rent for about $${x.rent[0]}/week.`);
+  const bush=f.includes("bush")&&!FARM.some(t=>(x.type||"").includes(t));
+  if(x.a>=20&&!bush&&x.rain){const per10=x.rain<400?.2:x.rain<600?.5:x.rain<800?1:1.5,head=Math.max(1,Math.round(ha/10*per10));
+    if(x.a<20000)out.push(`🐄 Agistment: room for roughly ${head} cattle in an average year at ${x.rain} mm rain (a rough guess: ask a local agent); at $5–$12 a head a week that's about ${k(head*5*52)}–${k(head*12*52)} a year.`)}
+  if(x.p&&x.a>=40&&!bush)out.push(`🌾 Lease the paddocks to a neighbour: usually 2–5% of land value a year, about ${k(x.p*.02)}–${k(x.p*.05)}.`);
+  if(x.rain>=500&&x.a>=20&&x.a<2000&&!bush)out.push(`🌿 Hay: in a good year, cutting hay can net $300–$800 a hectare.`);
+  if(x.a>=10&&x.city&&x.city[1]<300)out.push(`⛺ Camping (Hipcamp-style): a few tent sites at $30–$75 a night; the average host earns about $10k a year.`);
+  if(x.subst&&x.subst[1]<=2&&x.a>=200)out.push(`☀️ Solar farm lease: a ${x.subst[2]||""} kV substation is ${x.subst[1]} km away. Solar developers pay about $750–$1,500 a hectare a year, if the site suits.`);
+  if(f.includes("bush"))out.push(`🐝 Bush blocks: beekeepers pay a small rent for hive sites, and carbon or biodiversity schemes may pay to keep the trees.`);
+  if(x.town&&x.town[1]<25)out.push(`🥚 Farm gate: an honesty box for eggs, fruit, veg or firewood near ${esc(x.town[0])} can bring in a few thousand a year.`);
+  return out}
+function incomeLine(x){const o=incomeIdeas(x);return o.length?`<details class="loc"><summary>💵 Ways it could earn (${o.length})</summary>${o.map(t=>`<div style="margin:4px 0">${t}</div>`).join("")}</details>`:""}
+function costLine(x){
+  const c=costs(x);if(!c)return"";const k=v=>"$"+Math.round(v/1000)+"k";
+  let t=`💰 To buy: about ${k(c.buyLo)}–${k(c.buyHi)} on top of the price (stamp duty ${c.duty!=null?k(c.duty):"?"}, legal, inspections and survey). Council rates about ${k(c.ratesLo)}–${k(c.ratesHi)} a year.`;
+  if(c.liveLo)t+=` To make it livable (power, water, septic, shed, approvals): about ${k(c.liveLo)}–${k(c.liveHi)}, plus ${k(c.cabinLo)}–${k(c.cabinHi)} for a cabin or tiny home.`;
+  t+=` Selling later: about ${k(c.sellLo)}–${k(c.sellHi)} in agent and marketing fees.`;
+  return `<div class="loc">${t}</div>`}
 function placeLine(x){
   if(!x.town)return"";const rd=k=>Math.round(k*1.3/5)*5||5;
   let t=`📍 ${esc(x.town[0])} (town of 1,000+) about ${rd(x.town[1])} km by road`;
@@ -415,7 +474,7 @@ function card(x){
     <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
   <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Likely sale price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
   ${x.lo?`<div class="loc">Similar blocks nearby usually ask ${short(x.lo)} to ${short(x.hi)}.</div>`:""}
-  ${subLine(x)}${domLine(x)}${placeLine(x)}${areaLine(x)}${catchLine(x)}
+  ${subLine(x)}${domLine(x)}${placeLine(x)}${costLine(x)}${incomeLine(x)}${areaLine(x)}${catchLine(x)}
   ${t?`<div class="tags">${t}</div>`:""}
   ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
   <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>

@@ -686,6 +686,30 @@ def finish(rows, scanned, keep_prev=True):
                 vals = grid[row].split()
                 if 0 <= col < len(vals) and float(vals[col]) < hd["nodata_value"] - 1: r["rain"] = round(float(vals[col]))
     except Exception as e: print("rainfall grid:", e)
+    # income evidence: short stays nearby (Inside Airbnb) and house rents by postcode (state bond data)
+    try: bnb = json.load(open(os.path.join(HERE, "ref", "airbnb.json")))["rows"]
+    except Exception: bnb = []
+    try: rents = json.load(open(os.path.join(HERE, "ref", "rents.json")))["rents"]
+    except Exception: rents = {}
+    cells = {}
+    for b in bnb: cells.setdefault((round(b[0]), round(b[1])), []).append(b)
+    for r in rows:
+        rt = rents.get("%s|%s" % (r["s"], r["pc"]))
+        if rt: r["rent"] = rt
+        if not r.get("lat") or not bnb: continue
+        near = []
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                for b in cells.get((round(r["lat"]) + dy, round(r["lng"]) + dx), []):
+                    d = km(r, {"lat": b[0], "lng": b[1]})
+                    if d <= 40: near.append((d, b))
+        rural = [b for d, b in near if b[5]]
+        use, kind = (rural, "cabins, cottages and farm stays") if len(rural) >= 5 else ([b for d, b in near if d <= 25], "whole homes")
+        booked = [b for b in use if b[3] > 0]
+        if len(use) >= 5 and len(booked) >= 3:
+            r["stay"] = {"n": len(use), "kind": kind, "night": round(statistics.median(b[2] for b in use)),
+                         "nights": round(statistics.median(b[3] for b in booked)), "rev": round(statistics.median(b[4] for b in booked), -2),
+                         "top": round(pctl(sorted(b[4] for b in booked), 0.75), -2)}
     for r in rows:
         r["house"] = r.get("bed", 0) > 0
         if r["house"] and "house" not in r.setdefault("feats", []): r["feats"].insert(0, "house")
