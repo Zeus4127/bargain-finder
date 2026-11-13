@@ -670,6 +670,40 @@ def finish(rows, scanned, keep_prev=True):
         pr = [p for _, p in (h.get("prices") or [])]
         fpp = (fps.get(sid[2:]) or {}).get("prices") if sid.startswith("fp") else None
         r["cuts"] = sum(1 for a, b in zip(pr, pr[1:]) if b < a) + (len(fpp) if fpp else 0)
+    # price history: asking-price changes we have seen, plus earlier sales of the same address
+    # (NSW government sales, Farmbuy and Farm Property sold lists), when the land size roughly matches
+    AB = {"road": "rd", "street": "st", "lane": "ln", "drive": "dr", "avenue": "ave", "highway": "hwy", "court": "ct",
+          "place": "pl", "close": "cl", "crescent": "cres", "parade": "pde", "terrace": "tce", "track": "trk"}
+    def anorm(a):
+        a = re.sub(r"[^a-z0-9 ]", " ", (a or "").lower().split(",")[0])
+        return " ".join(AB.get(w, w) for w in a.split())
+    past = {}
+    try:
+        for x in json.load(open(os.path.join(HERE, "nsw-sales.json"))):
+            if x.get("addr"): past.setdefault((anorm(x["addr"]), x["sub"].upper()), []).append((x["date"], x["p"], x["a"], "NSW government sales record"))
+    except Exception: pass
+    try:
+        for x in json.load(open(os.path.join(HERE, "sold-cache.json"))).values():
+            if x.get("p") and x.get("addr") and x.get("sold"):
+                past.setdefault((anorm(x["addr"]), (x.get("sub") or "").upper()), []).append((x["sold"], x["p"], x.get("a") or 0, "Farmbuy sold"))
+    except Exception: pass
+    for r in rows:
+        hs = []
+        h = hist.get(str(r["id"])) or {}
+        for d, p in (h.get("prices") or []): hs.append([d, p, "asking"])
+        if str(r["id"]).startswith("fp"):
+            for d, pt in ((fps.get(str(r["id"])[2:]) or {}).get("prices") or []):
+                v = parse_price(pt)
+                if v: hs.append([d, v, "asking"])
+        for d, p, a, src in past.get((anorm(r.get("addr")), (r.get("sub") or "").upper()), []):
+            if a and r["a"] and 0.7 <= a / r["a"] <= 1.4 and p:
+                hs.append([d, p, "sold (" + src + ")"])
+        if hs:
+            seen, out = set(), []
+            for e in sorted(hs):
+                k = (e[0][:7], round(e[1], -3), e[2][:4])
+                if k not in seen: seen.add(k); out.append(e)
+            r["hist"] = out
     for r in rows:   # no map point on the listing: use the suburb's centre, marked as approximate
         if not r.get("lat") or r.get("approx"):
             c = cent.get("%s|%s" % (r["s"], (r.get("sub") or "").upper()))

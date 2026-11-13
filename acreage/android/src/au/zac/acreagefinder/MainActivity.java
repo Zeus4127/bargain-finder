@@ -21,8 +21,9 @@ import java.net.URL;
 /** Acreage Finder: the land finder page in a WebView. Shows the newest listings it has, and fetches
  *  fresh ones (refreshed hourly by the scanner) in the background each time it is opened. */
 public class MainActivity extends Activity {
-    static final String DATA_URL =
-        "https://raw.githubusercontent.com/Zeus4127/bargain-finder/ccr-37547555-829az5/acreage/acreage-data.js";
+    static final String BASE =
+        "https://raw.githubusercontent.com/Zeus4127/bargain-finder/ccr-37547555-829az5/acreage/";
+    static final String DATA_URL = BASE + "acreage-data.js";
     static final long CHECK_EVERY_MS = 15 * 60 * 1000L;
     WebView web;
     long lastCheck = 0;
@@ -52,6 +53,13 @@ public class MainActivity extends Activity {
                     try { return new WebResourceResponse("application/javascript", "utf-8", new FileInputStream(f)); }
                     catch (Exception e) { }
                 }
+                File pg = new File(getFilesDir(), "acreage.html"), hd = new File(getFilesDir(), "history-data.js");
+                if (p.endsWith("/index.html") && pg.length() > 20000) {
+                    try { return new WebResourceResponse("text/html", "utf-8", new FileInputStream(pg)); } catch (Exception e) { }
+                }
+                if (p.endsWith("/history-data.js") && hd.length() > 10000) {
+                    try { return new WebResourceResponse("application/javascript", "utf-8", new FileInputStream(hd)); } catch (Exception e) { }
+                }
                 return null;
             }
         });
@@ -73,6 +81,8 @@ public class MainActivity extends Activity {
     /** Download the newest listings; if they are newer than what is showing, offer a one-tap refresh. */
     void fetchNewData() {
         new Thread(new Runnable() { public void run() {
+            fetchFile("acreage.html", "<title>Acreage Finder", 20000);
+            fetchFile("history-data.js", "window.HISTORY_DATA", 10000);
             File tmp = new File(getFilesDir(), "acreage-data.tmp");
             try {
                 HttpURLConnection c = (HttpURLConnection) new URL(DATA_URL + "?t=" + System.currentTimeMillis() / 60000).openConnection();
@@ -98,6 +108,22 @@ public class MainActivity extends Activity {
                 tmp.delete();   // no internet: keep showing what we have
             }
         }}).start();
+    }
+
+    /** Download one small file of the app (page or growth data) if it looks right; used next time the page loads. */
+    void fetchFile(String name, String mustStart, long minSize) {
+        File tmp = new File(getFilesDir(), name + ".tmp");
+        try {
+            HttpURLConnection c = (HttpURLConnection) new URL(BASE + name + "?t=" + System.currentTimeMillis() / 60000).openConnection();
+            c.setConnectTimeout(15000); c.setReadTimeout(60000);
+            if (c.getResponseCode() != 200) return;
+            try (InputStream in = c.getInputStream(); FileOutputStream out = new FileOutputStream(tmp)) {
+                byte[] buf = new byte[65536]; int n;
+                while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+            }
+            if (tmp.length() >= minSize && readHead(tmp, 60).toLowerCase().startsWith(mustStart.toLowerCase())) tmp.renameTo(new File(getFilesDir(), name));
+            else tmp.delete();
+        } catch (Exception e) { tmp.delete(); }
     }
 
     static String readHead(File f, int n) {
