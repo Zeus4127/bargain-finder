@@ -62,7 +62,7 @@ def parse_price(t):
     """Lowest sensible dollar figure in a price string, or None."""
     if not t: return None
     t = html.unescape(t).lower().replace("–", "-")
-    if re.search(r"\b(priced from|from \$|lots? from|per lot)", t): return None
+    if re.search(r"\b(priced from|from \$|lots? from|per lot|each|per block|lots? \d+\s*(?:&|and|,)\s*\d+)", t): return None
     if re.search(r"\bper\s*(acre|ac|ha|hectare)\b|/\s*(ac|acre|ha)\b|per week|/wk|p\.?w\b", t): return None
     vals = []
     for m in re.finditer(NUM, t):
@@ -216,26 +216,45 @@ def kind(r):
     if "bush" in (r.get("feats") or []) and not farm: return "bush"
     return "farm" if farm else "life"
 
+def km(a, b):
+    """Distance in km between two blocks with coordinates, else None."""
+    if not (a.get("lat") and b.get("lat")): return None
+    la1, lo1, la2, lo2 = map(math.radians, (a["lat"], a["lng"], b["lat"], b["lng"]))
+    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+    return 12742 * math.asin(math.sqrt(h))
+
 def comps_for(subj, pool, model, k=12):
-    """Most similar priced blocks: same district first, then wider area, then state."""
+    """Most similar priced blocks: nearest first (by distance when both have map points,
+    else by postcode district), then wider rings, then the state."""
     a = subj["a"]
-    def cands(test, lo, hi):
-        return [c for c in pool if c["id"] != subj["id"] and test(c) and lo <= c["a"] / a <= hi]
-    levels = [("district", lambda c: c["pc"][:3] == subj["pc"][:3], 1 / 3, 3),
-              ("area", lambda c: c["pc"][:2] == subj["pc"][:2], 1 / 4, 4),
-              ("state", lambda c: c["s"] == subj["s"], 1 / 4, 4)]
-    picked, level = [], "state"
+    def ring(d_max, pc_len):
+        def test(c):
+            d = km(subj, c)
+            if d is not None: return d <= d_max
+            return pc_len and c["pc"][:pc_len] == subj["pc"][:pc_len]
+        return test
+    if subj.get("lat"):
+        levels = [("near50", ring(50, 0), 1 / 3, 3), ("near120", ring(120, 3), 1 / 3, 3),
+                  ("near250", ring(250, 2), 1 / 4, 4), ("state", lambda c: c["s"] == subj["s"], 1 / 4, 4)]
+    else:
+        levels = [("district", lambda c: c["pc"][:3] == subj["pc"][:3], 1 / 3, 3),
+                  ("area", lambda c: c["pc"][:2] == subj["pc"][:2], 1 / 4, 4),
+                  ("state", lambda c: c["s"] == subj["s"], 1 / 4, 4)]
+    sk = kind(subj)
     for name, test, lo, hi in levels:
-        cs = cands(test, lo, hi)
-        sk = kind(subj)
+        cs = [c for c in pool if c["id"] != subj["id"] and lo <= c["a"] / a <= hi and test(c)]
         same = [c for c in cs if kind(c) == sk]
         use = same if len(same) >= 4 else cs
         if len(use) >= 4 or name == "state":
-            def key(c):  # nearest in size, prefer same house status and same district
-                return abs(math.log(c["a"] / a)) + (0 if c["house"] == subj.get("house") else 0.4) + (0 if c["pc"][:3] == subj["pc"][:3] else 0.3) + (0 if kind(c) == kind(subj) else 0.5) - (0.15 if c.get("is_sold") else 0)
-            picked = sorted(use, key=key)[:k]; level = name
-            break
-    return picked, level
+            def key(c):  # nearest in size and distance, same house status and kind, sales count more
+                d = km(subj, c)
+                far = (d / 150) if d is not None else (0 if c["pc"][:3] == subj["pc"][:3] else 0.3)
+                return abs(math.log(c["a"] / a)) + (0 if c["house"] == subj.get("house") else 0.4) + min(far, 1) + \
+                       (0 if kind(c) == sk else 0.5) - (0.15 if c.get("is_sold") else 0)
+            # the same block listed twice (two agents) is not a comparison
+            use = [c for c in use if not (c["p"] == subj.get("p") and abs(c["a"] - a) < 0.5 and c["pc"] == subj["pc"])]
+            return sorted(use, key=key)[:k], name
+    return [], "state"
 
 def pctl(v, q):
     v = sorted(v); i = (len(v) - 1) * q; lo = int(i); hi = min(lo + 1, len(v) - 1)
@@ -272,7 +291,7 @@ def load_sold():
         out.append({"id": "s" + str(x["id"]), "s": x["s"], "pc": x.get("pc") or "000", "sub": x.get("sub"), "region": x.get("region"),
                     "a": x["a"], "p": x["p"], "house": (x.get("bed") or 0) > 0, "bush": "bush" in tags,
                     "feats": ["bush"] if "bush" in tags and not (x.get("bed") or 0) else [], "type": x.get("type") or "",
-                    "sold": x.get("sold"), "is_sold": True, "u": x.get("u")})
+                    "sold": x.get("sold"), "is_sold": True, "u": x.get("u"), "lat": x.get("lat"), "lng": x.get("lng")})
     # Farm Property sales (scan_fp_sold.py); skip ones already seen on Farmbuy (same postcode, size and price)
     try: fp = json.load(open(os.path.join(HERE, "fp-sold-cache.json")))
     except Exception: fp = {}
@@ -287,7 +306,8 @@ def load_sold():
         out.append({"id": "f" + x["id"], "s": x["state"], "pc": x.get("postcode") or "000",
                     "sub": re.sub(r"^.*?\b(?:road|rd|lane|ln|highway|hwy|street|st|drive|dr|track|way)\b\s*", "", x.get("address") or "", flags=re.I).strip() or x.get("address"),
                     "region": None, "a": x["acres"], "p": x["price"], "house": (x.get("bed") or 0) > 0, "bush": False,
-                    "feats": [], "type": ty, "sold": x.get("date"), "is_sold": True, "u": x["url"], "src": "fp"})
+                    "feats": [], "type": ty, "sold": x.get("date"), "is_sold": True, "u": x["url"], "src": "fp",
+                    "lat": x.get("lat"), "lng": x.get("lng")})
     return out
 
 def track_history(rows, scanned, sold_by_id):
@@ -337,6 +357,7 @@ def main():
         for r in rows:
             for k in ("fair", "ratio", "v", "offer", "walk", "comps", "cids", "lvl", "lo", "hi", "nsold", "drop"): r.pop(k, None)
             r["flags"] = [f for f in r.get("flags") or [] if f != "station"]
+            if r.get("pt"): r["p"] = parse_price(r["pt"])
         return finish(rows, old["scanned"], keep_prev=False)
     raw = []
     for code in STATES:
@@ -429,7 +450,7 @@ def finish(rows, scanned, keep_prev=True):
     data = {"scanned": scanned, "source": "farmbuy.com",
             "min_acres": MIN_ACRES, "max_price": MAX_PRICE, "guide": guide,
             "model": {"b": round(model["b"], 4), "h": round(model["h"], 4)},
-            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u")} for x in sold if x["a"] >= MIN_ACRES],
+            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u", "lat", "lng")} for x in sold if x["a"] >= MIN_ACRES],
             "listings": rows}
     prev_ids = set()
     pth = os.path.join(HERE, "acreage-data.js")

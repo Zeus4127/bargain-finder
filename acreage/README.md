@@ -16,14 +16,30 @@ python3 scan_acreage.py --rescore    # re-price the saved listings without scann
 The scanner waits about a second between requests, as Farmbuy's robots.txt asks. Detail pages are
 saved in `details-cache.json`, so later scans only open new listings.
 
-Deal alerts: put an ntfy topic name in `ACREAGE_NTFY_TOPIC.txt` next to the script. After each scan,
-any new great or good deal under $350k that isn't under offer is sent to that topic, the same way the
-caravan scanner does it.
+Deal alerts: set the environment variable `ACREAGE_NTFY_TOPIC` to an ntfy topic name before running
+(never write it into a file). After each scan, any new great or good deal under $350k that isn't under
+offer is sent to that topic, the same way the caravan scanner does it.
+
+Daily: `./run_daily.sh` runs the sold collectors, the scan and the page build in order.
+
+## Where the data comes from
+
+| Source | What | Script |
+|---|---|---|
+| Farmbuy.com | Every block for sale over 100 acres, with detail pages and map points | `scan_acreage.py` |
+| Farmbuy sold sitemap | Recent sales with price and date | `scan_sold.py` |
+| FarmProperty.com.au /sold | About 9,300 sold farms; price on about 670, sale date and map point from the detail page | `scan_fp_sold.py` |
+| NSW Planning Portal map | Zone and real minimum lot size, for "could be split into N lots" | `scan_acreage.py` |
+| VicPlan map | Zone; minimum lot is the state default for the zone (council schedules can differ) | `scan_acreage.py` |
+| Bendigo Bank farmland values | Growth by state, region, council and parcel size | `history/` |
+
+Not used: Domain, realestate.com.au, Facebook and Gumtree (off-limits), REIWA (bot check), Elders (not
+reachable). Paste their ads into "Check a listing" instead.
 
 ## How a block is priced
 
-1. Find up to 12 of the most similar blocks for sale: same postcode district first (then the wider
-   area, then the state), similar size, and the same kind of land (bare bush, working farm, bare
+1. Find up to 12 of the most similar blocks for sale or recently sold: within 50 km first (then 120 km,
+   250 km, then the state; blocks without a map point use the postcode district), similar size, and the same kind of land (bare bush, working farm, bare
    lifestyle block, or a block with a house).
 2. Scale each one's price to this block's size, then take the middle value.
 3. Adjust for the block's own details read from its listing: creek or river +5%, power +4%,

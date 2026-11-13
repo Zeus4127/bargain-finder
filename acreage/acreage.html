@@ -221,7 +221,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
   <div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Listings</th><th class="r">Median $/acre</th><th class="r">Median price</th><th class="r">Under $300k</th><th class="r">$/acre bush</th><th class="r">$/acre farm</th><th class="r">$/acre with house</th></tr></thead><tbody id="gtable"></tbody></table></div>
   <div class="panel"><h3>How the fair price works</h3>
     <ul class="plain">
-      <li>Each block is compared with up to 12 of the most similar blocks for sale: same postcode district first (then the wider area, then the state), similar size, and the same kind of land: bare bush, working farm, bare lifestyle block, or a block with a house.</li>
+      <li>Each block is compared with up to 12 of the most similar blocks for sale: within 50 km first (then 120 km, then 250 km, then the state; blocks without a map point use the postcode district instead), including recent sales, similar size, and the same kind of land: bare bush, working farm, bare lifestyle block, or a block with a house.</li>
       <li>Each comparison block's price is scaled to this block's size (bigger blocks cost more in total but less per acre), and the middle value is the fair price. Stations over 20,000 acres are left out, because they trade as a different market.</li>
       <li>Then the block's own details: creek or river frontage adds 5%, power 4%. A covenant takes off 25%, no right to build 30%, leasehold 20%, doubtful access 15%, flood-prone 7%.</li>
       <li><b>Verdict:</b> judged against the usual range of the similar blocks (their middle half). Inside the range is a fair price. Just under the low end is a good deal, and 15%+ under is a great deal. Less than half the low end is flagged "unusually cheap: find out why", because land that cheap nearly always has a catch. Up to 20% over the high end is a bit high, and more than that is overpriced.</li>
@@ -332,7 +332,7 @@ function why(x){
   if(x.v==="why")r.push("This is less than half the low end of what similar blocks nearby ask. Land this cheap usually has a catch: scrub you can't clear, a covenant, no right to build, no legal access, or poor country. Find out which before you get excited.");
   if(x.ratio){const pct=Math.round((1-x.ratio)*100);r.push(pct>=0?`Asking is ${pct}% under the fair price of ${money(x.fair)}.`:`Asking is ${-pct}% over the fair price of ${money(x.fair)}.`)}
   if(!x.fair){r.push("This is a big pastoral station. Stations trade as their own market, so there is no fair price for it here.");return r}
-  const lv={district:"in the same postcode district",area:"in the wider area",state:"across "+x.s}[x.lvl]||"";
+  const lv={near50:"within 50 km",near120:"within 120 km",near250:"within 250 km",district:"in the same postcode district",area:"in the wider area",state:"across "+x.s}[x.lvl]||"";
   r.push(`Fair price is the middle of ${x.comps} similar ${KN[kindOf(x)]||"blocks"} ${lv}, each scaled to this block's size.`);
   const cn=(x.cids||[]).map(i=>byId[i]).filter(Boolean).slice(0,4);
   if(cn.length)r.push("Compared with: "+cn.map(c=>`${c.sub} ${acres(c.a)} ${short(c.p)}${c.sold?" (sold)":""}`).join("; ")+".");
