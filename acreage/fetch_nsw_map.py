@@ -17,6 +17,7 @@ def get(params):
             print("retry", e, flush=True); time.sleep(5 * (i + 1))
     raise SystemExit("gave up")
 
+os.makedirs(os.path.dirname(OUT), exist_ok=True)
 rows = json.load(open(OUT)) if os.path.exists(OUT) else []
 off = len(rows)
 while True:
