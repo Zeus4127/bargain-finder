@@ -203,9 +203,13 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <div class="tablewrap"><table><thead><tr><th>Region</th><th>State</th><th class="r">$/acre 2025</th><th class="r">Last year</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th></tr></thead><tbody id="rtable"></tbody></table></div>
     <p class="what">Growth is the average per year (compound). Tap a region to see growth by farm size.</p>
     <div id="bands"></div></div>
-  <div class="panel"><h3>Recent sales vs asking prices, by region</h3>
-    <p class="what">Farmbuy sales of 100+ acres over the last few months, against what similar regions' blocks are asking now. When asking prices sit far above what's selling, sellers are hopeful and prices may soften. When they're close, the market is holding.</p>
-    <div class="tablewrap"><table><thead><tr><th>Region</th><th>State</th><th class="r">Sales</th><th class="r">Sold $/acre</th><th class="r">Asking $/acre now</th><th class="r">Asking vs sold</th></tr></thead><tbody id="rsold"></tbody></table></div></div>
+  <div class="panel"><h3>How busy is each area right now?</h3>
+    <p class="what">Blocks of 10+ acres for sale now, against how many sold in the last 3 months (Farmbuy). <b>Months of supply</b> is how long it would take to sell everything for sale at today's pace: under 6 is a busy market where prices tend to rise, over 12 is slow and buyers have the upper hand. <b>Sold vs asking</b> compares the price per acre of recent sales with blocks the same size asking now: under 90% means sellers are asking more than buyers have been paying.</p>
+    <div class="row"><label for="aState" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">State<select id="aState" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="">All</option></select></label>
+    <label for="aBand" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Size<select id="aBand" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="">All 10+ acres</option><option value="10-50">10 to 50 acres</option><option value="50-200">50 to 200 acres</option><option value="200+">200+ acres</option></select></label>
+    <label for="aSort" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Sort<select id="aSort" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="supply">Busiest first</option><option value="sold">Most sales</option><option value="forsale">Most for sale</option></select></label></div>
+    <div class="tablewrap"><table><thead><tr><th>Area</th><th>State</th><th class="r">For sale</th><th class="r">Sold, 3 months</th><th class="r">Months of supply</th><th>Market</th><th>Sales each month</th><th class="r">Sold vs asking</th><th class="r">Older sales on record</th></tr></thead><tbody id="atable"></tbody></table></div>
+    <p class="what">Sales counts start in mid 2026 and grow every day the app runs. "Older sales on record" are Farm Property's past sales in the same area, most without a date.</p></div>
   <div class="panel"><h3>Councils</h3>
     <label for="lq" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Find a council (e.g. Western Downs, Tenterfield, Southern Mallee)<input id="lq" type="search" style="padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:42px" placeholder="council name"></label>
     <div class="tablewrap"><table><thead><tr><th>Council</th><th>State</th><th class="r">$/acre 2025</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th><th class="r">$100k 20 yrs ago is now</th></tr></thead><tbody id="ltable"></tbody></table></div>
@@ -285,6 +289,7 @@ if(D.scanned){const d=new Date(D.scanned);$("scanned").textContent=L.length+" bl
 const live=L.filter(x=>x.p&&!gone(x));
 const deals=live.filter(x=>x.v==="great"||x.v==="good"||x.v==="why");
 $("facts").innerHTML=[[L.length,"blocks of 10+ acres"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"cheap for their area"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
+function km(a,b){const r=Math.PI/180,dl=(b.lat-a.lat)*r,dg=(b.lng-a.lng)*r,h=Math.sin(dl/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dg/2)**2;return 12742*Math.asin(Math.sqrt(h))}
 function median(a){if(!a.length)return null;a=[...a].sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2}
 $("facts").lastChild.querySelector("b").textContent=live.length?"$"+Math.round(median(live.map(x=>x.p/x.a))).toLocaleString("en-AU"):"–";
 
@@ -311,19 +316,23 @@ function subLine(x){
 const HD=window.HISTORY_DATA;
 function areaInfo(x){
   if(!HD)return null;
-  let g=null,label="";
-  if(x.lga){g=HD.lgas.find(l=>l.state===x.s&&l.lga.toUpperCase()===x.lga.toUpperCase());if(g)label=x.lga+" council"}
+  let g=null,label="",rg=null;
+  if(x.lga_g){g=HD.lgas.find(l=>l.state===x.s&&l.lga===x.lga_g);if(g)label=x.lga_g+" council"}
+  if(!g&&x.br){rg=HD.regions.find(r=>!r.is_state&&r.state===x.s&&r.name===x.br);if(rg)label=x.br+" region"}
   const st=HD.regions.find(r=>r.is_state&&r.state===x.s);
   const near=SOLD.filter(c=>c.s===x.s&&c.pc.slice(0,3)===x.pc.slice(0,3));
-  const yoy=g&&g.prev?(g.median/g.prev-1)*100:st?st.yoy:null;
+  const yoy=g&&g.prev?(g.median/g.prev-1)*100:rg&&rg.yoy!=null?rg.yoy:st?st.yoy:null;
   const dir=yoy==null?null:yoy>3?"up":yoy<-3?"down":"sideways";
-  return {g,label,st,yoy,dir,near};
+  const mk=x.region&&D.areas?D.areas[x.s+"|"+x.region]:null;
+  return {g,rg,label,st,yoy,dir,near,mk};
 }
 function areaLine(x){
   const a=areaInfo(x);if(!a)return"";
   const p=[];
-  if(a.dir)p.push(`Area prices: <b>${a.dir==="up"?"going up":a.dir==="down"?"going down":"steady"}</b> (${a.yoy>0?"+":""}${a.yoy.toFixed(1)}% last year, ${a.g?a.label:x.s+" overall"})`);
-  const c20=a.g?a.g.cagr20:a.st&&a.st.cagr20;if(c20!=null)p.push(`${c20}%/yr over 20 years`);
+  if(a.dir)p.push(`Area prices: <b>${a.dir==="up"?"going up":a.dir==="down"?"going down":"steady"}</b> (${a.yoy>0?"+":""}${a.yoy.toFixed(1)}% last year, ${a.label||x.s+" overall"})`);
+  const c20=a.g?a.g.cagr20:a.rg?a.rg.cagr20:a.st&&a.st.cagr20;if(c20!=null)p.push(`${c20}%/yr over 20 years`);
+  if(a.mk&&a.mk.pace)p.push(`${esc(a.mk.region)} market: <b>${{busy:"busy",normal:"normal",slow:"slow"}[a.mk.pace]}</b> (${a.mk.forsale} for sale, ${a.mk.sold90} sold in 3 months)`);
+  if(x.s==="QLD"&&x.a>=1000&&x.lat&&D.qbig){const q=D.qbig.filter(b=>km(x,b)<=150);if(q.length>=3)p.push(`${q.length} big QLD station sales within 150 km (2023–25, state valuer): median ${money(median(q.map(b=>b.ppha/2.471)))}/acre`)}
   if(a.near.length)p.push(`${a.near.length} sold nearby recently, median ${money(median(a.near.map(c=>c.p/c.a)))}/acre`);
   return p.length?`<div class="loc">${p.join(" · ")}</div>`:"";
 }
@@ -539,12 +548,23 @@ function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr
   $("tsold").innerHTML=SOLD.slice().sort((a,b)=>(b.sold||"").localeCompare(a.sold||"")).slice(0,60).map(c=>`<tr><td><a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.sub)} ${esc(c.pc)}</a></td><td>${c.s}</td><td class="r num">${acres(c.a)}</td><td class="r num">${short(c.p)}</td><td class="r num">${money(c.p/c.a)}</td><td>${c.house?"House":c.bush?"Bush":"Land"}</td><td class="num">${c.sold?new Date(c.sold).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"–"}</td></tr>`).join("")||'<tr><td colspan="7" class="muted">No sold data yet.</td></tr>';
 })();
 
-// sold vs asking by region
+// how busy is each area
 (function(){
-  const by={};SOLD.forEach(c=>{if(!c.region)return;(by[c.s+"|"+c.region]=by[c.s+"|"+c.region]||{s:c.s,r:c.region,sold:[],ask:[]}).sold.push(c.p/c.a)});
-  L.forEach(x=>{if(x.region&&x.p&&!gone(x)){const k=x.s+"|"+x.region;if(by[k])by[k].ask.push(x.p/x.a)}});
-  const rows=Object.values(by).filter(v=>v.sold.length>=3).sort((a,b)=>b.sold.length-a.sold.length);
-  $("rsold").innerHTML=rows.map(v=>{const so=median(v.sold),as=v.ask.length?median(v.ask):null,g=as?(as/so-1)*100:null;return `<tr><td>${esc(v.r)}</td><td>${v.s}</td><td class="r num">${v.sold.length}</td><td class="r num">${money(so)}</td><td class="r num">${as?money(as):"–"}</td><td class="r num" ${g==null?"":g>40?'style="color:var(--warn)"':g<15?'style="color:var(--ok)"':""}>${g==null?"–":(g>0?"+":"")+Math.round(g)+"%"}</td></tr>`}).join("")||'<tr><td colspan="6" class="muted">No sold data yet.</td></tr>';
+  const A=Object.values(D.areas||{});if(!A.length)return;
+  const sel=$("aState");[...new Set(A.map(a=>a.s))].sort().forEach(s=>sel.insertAdjacentHTML("beforeend",`<option>${s}</option>`));
+  const months=[...new Set(A.flatMap(a=>Object.keys(a.months)))].sort().slice(-6);
+  function draw(){
+    const st=sel.value,b=$("aBand").value,so=$("aSort").value;
+    let r=A.filter(a=>!st||a.s===st).map(a=>{const fs=b?(a.fs_band[b]||0):a.forsale,sd=b?(a.s90_band[b]||0):a.sold90;
+      const sup=sd>=3?fs/(sd/3):null;return {...a,fs,sd,sup,pace:sup==null?null:sup<=6?"busy":sup<=12?"normal":"slow"}}).filter(a=>a.fs||a.sd);
+    r.sort(so==="sold"?(x,y)=>y.sd-x.sd:so==="forsale"?(x,y)=>y.fs-x.fs:(x,y)=>(x.sup??1e9)-(y.sup??1e9));
+    const mx=Math.max(1,...A.flatMap(a=>months.map(m=>a.months[m]||0)));
+    $("atable").innerHTML=r.map(a=>{const bars=months.map(m=>{const v=a.months[m]||0;return `<span title="${m}: ${v} sold" style="display:inline-block;width:7px;margin-right:2px;vertical-align:bottom;height:${2+Math.round(22*v/mx)}px;background:var(--accent);border-radius:2px"></span>`}).join("");
+      const pc=a.pace==="busy"?'style="color:var(--ok);font-weight:700"':a.pace==="slow"?'style="color:var(--warn);font-weight:700"':"";
+      const g=a.sold_vs_ask;
+      return `<tr><td>${esc(a.region)}</td><td>${a.s}</td><td class="r num">${a.fs}</td><td class="r num">${a.sd}</td><td class="r num">${a.sup==null?"–":a.sup.toFixed(a.sup<10?1:0)}</td><td ${pc}>${a.pace?{busy:"Busy",normal:"Normal",slow:"Slow"}[a.pace]:"Too few sales"}</td><td style="white-space:nowrap">${bars}</td><td class="r num" ${g==null?"":g<0.9?'style="color:var(--warn)"':g>=1?'style="color:var(--ok)"':""}>${g==null?"–":Math.round(g*100)+"%"}</td><td class="r num">${a.fp_sold||"–"}</td></tr>`}).join("")||'<tr><td colspan="9" class="muted">No areas match.</td></tr>';
+  }
+  ["aState","aBand","aSort"].forEach(i=>$(i).addEventListener("change",draw));draw();
 })();
 
 renderDeals();renderAll();

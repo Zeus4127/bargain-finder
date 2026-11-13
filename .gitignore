@@ -14,3 +14,5 @@ acreage/*.before-*
 acreage/sold.log
 acreage/fp-sold.log
 acreage/fp-sale.log
+acreage/nsw-vg/
+acreage/nsw-sales.json

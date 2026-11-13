@@ -1,0 +1,1403 @@
+{
+"source": "Queensland State Valuation Service, Larger Rural Sales maps (sales over 500 ha, 2023 to 2025); positions read off the map, accurate to about 15 km",
+"sales": [
+{
+"n": "Merluna",
+"ppha": 213,
+"lat": -13.332,
+"lng": 142.629
+},
+{
+"n": "Kendall River",
+"ppha": 120,
+"lat": -14.114,
+"lng": 142.291
+},
+{
+"n": "Harvest Home",
+"ppha": 3268,
+"lat": -15.647,
+"lng": 145.145
+},
+{
+"n": "Fairlight",
+"ppha": 79,
+"lat": -15.805,
+"lng": 144.137
+},
+{
+"n": "Beesbike",
+"ppha": 614,
+"lat": -15.818,
+"lng": 145.382
+},
+{
+"n": "Soda Springs",
+"ppha": 1513,
+"lat": -15.893,
+"lng": 144.952
+},
+{
+"n": "Dawnvale Station",
+"ppha": 43,
+"lat": -16.128,
+"lng": 145.421
+},
+{
+"n": "Kimalo Station",
+"ppha": 11853,
+"lat": -16.984,
+"lng": 145.446
+},
+{
+"n": "Chatica",
+"ppha": 1905,
+"lat": -17.015,
+"lng": 145.204
+},
+{
+"n": "Mount Albion",
+"ppha": 290,
+"lat": -17.326,
+"lng": 145.306
+},
+{
+"n": "Wyvuri",
+"ppha": 11780,
+"lat": -17.395,
+"lng": 146.064
+},
+{
+"n": "Morecombe",
+"ppha": 292,
+"lat": -17.918,
+"lng": 145.317
+},
+{
+"n": "Burlington",
+"ppha": 370,
+"lat": -17.94,
+"lng": 144.675
+},
+{
+"n": "Golden Valley",
+"ppha": 210,
+"lat": -17.978,
+"lng": 142.559
+},
+{
+"n": "Savannah Station",
+"ppha": 1727,
+"lat": -18.059,
+"lng": 144.436
+},
+{
+"n": "Minnamoolka",
+"ppha": 29,
+"lat": -18.104,
+"lng": 145.22
+},
+{
+"n": "Bowthorn",
+"ppha": 70,
+"lat": -18.02,
+"lng": 138.479
+},
+{
+"n": "Mount Little",
+"ppha": 208,
+"lat": -18.193,
+"lng": 143.063
+},
+{
+"n": "Rocky Springs",
+"ppha": 1280,
+"lat": -18.21,
+"lng": 144.606
+},
+{
+"n": "Brookdale",
+"ppha": 679,
+"lat": -18.14,
+"lng": 139.591
+},
+{
+"n": "Lamonds Lagoon (pt)",
+"ppha": 408,
+"lat": -18.292,
+"lng": 145.425
+},
+{
+"n": "Glen Dhu",
+"ppha": 921,
+"lat": -18.385,
+"lng": 145.159
+},
+{
+"n": "Stake Yard",
+"ppha": 119,
+"lat": -18.498,
+"lng": 143.301
+},
+{
+"n": "Mount Talbot",
+"ppha": 556,
+"lat": -18.58,
+"lng": 143.867
+},
+{
+"n": "Reedybrook",
+"ppha": 1278,
+"lat": -18.808,
+"lng": 145.269
+},
+{
+"n": "Hopewell",
+"ppha": 312,
+"lat": -18.8,
+"lng": 145.55
+},
+{
+"n": "Oakleigh",
+"ppha": 364,
+"lat": -19.076,
+"lng": 144.109
+},
+{
+"n": "Undilla",
+"ppha": 201,
+"lat": -19.094,
+"lng": 138.952
+},
+{
+"n": "Bagstowe",
+"ppha": 384,
+"lat": -19.245,
+"lng": 143.903
+},
+{
+"n": "Springvale",
+"ppha": 4722,
+"lat": -19.295,
+"lng": 146.788
+},
+{
+"n": "Springvale",
+"ppha": 2811,
+"lat": -19.404,
+"lng": 146.927
+},
+{
+"n": "Annavale",
+"ppha": 22246,
+"lat": -19.634,
+"lng": 146.432
+},
+{
+"n": "Clothes Peg",
+"ppha": 511,
+"lat": -19.68,
+"lng": 144.46
+},
+{
+"n": "Limestone",
+"ppha": 1486,
+"lat": -19.671,
+"lng": 147.135
+},
+{
+"n": "Gainsford",
+"ppha": 3410,
+"lat": -19.731,
+"lng": 146.187
+},
+{
+"n": "Basalt",
+"ppha": 8480,
+"lat": -19.748,
+"lng": 146.425
+},
+{
+"n": "Piccaninny",
+"ppha": 23725,
+"lat": -19.757,
+"lng": 147.434
+},
+{
+"n": "Basalt",
+"ppha": 19611,
+"lat": -19.843,
+"lng": 146.41
+},
+{
+"n": "Penny Royal Glenkirk",
+"ppha": 1302,
+"lat": -19.836,
+"lng": 146.804
+},
+{
+"n": "Penny Royal Glenkirk",
+"ppha": 972,
+"lat": -19.831,
+"lng": 147.069
+},
+{
+"n": "Percy Springs",
+"ppha": 528,
+"lat": -19.936,
+"lng": 146.188
+},
+{
+"n": "Glencoe",
+"ppha": 1492,
+"lat": -20.176,
+"lng": 145.288
+},
+{
+"n": "Centauri",
+"ppha": 969,
+"lat": -20.163,
+"lng": 146.36
+},
+{
+"n": "Lilyvale",
+"ppha": 1346,
+"lat": -20.223,
+"lng": 143.035
+},
+{
+"n": "Glenroc",
+"ppha": 1076,
+"lat": -20.238,
+"lng": 147.939
+},
+{
+"n": "Borefield",
+"ppha": 2845,
+"lat": -20.329,
+"lng": 146.431
+},
+{
+"n": "Yallatup",
+"ppha": 4391,
+"lat": -20.303,
+"lng": 148.917
+},
+{
+"n": "Glenavon",
+"ppha": 2614,
+"lat": -20.357,
+"lng": 148.493
+},
+{
+"n": "Walkers Park Gilgunyah",
+"ppha": 918,
+"lat": -20.38,
+"lng": 143.47
+},
+{
+"n": "Park Gilgunyah",
+"ppha": 1570,
+"lat": -20.39,
+"lng": 144.09
+},
+{
+"n": "Carse O`gowrie",
+"ppha": 616,
+"lat": -20.458,
+"lng": 147.198
+},
+{
+"n": "Ernestina Plains",
+"ppha": 1304,
+"lat": -20.436,
+"lng": 141.512
+},
+{
+"n": "Slogan Downs",
+"ppha": 1826,
+"lat": -20.497,
+"lng": 146.673
+},
+{
+"n": "Peronne",
+"ppha": 4743,
+"lat": -20.524,
+"lng": 145.627
+},
+{
+"n": "Bakara",
+"ppha": 466,
+"lat": -20.525,
+"lng": 148.057
+},
+{
+"n": "Hillrise",
+"ppha": 1254,
+"lat": -20.526,
+"lng": 148.895
+},
+{
+"n": "Marath o n",
+"ppha": 1347,
+"lat": -20.686,
+"lng": 143.916
+},
+{
+"n": "Glendower",
+"ppha": 1226,
+"lat": -20.698,
+"lng": 144.979
+},
+{
+"n": "Exmoor Station",
+"ppha": 8000,
+"lat": -20.772,
+"lng": 149.118
+},
+{
+"n": "Sussex Park",
+"ppha": 1537,
+"lat": -20.803,
+"lng": 144.146
+},
+{
+"n": "Hillcrest",
+"ppha": 3133,
+"lat": -20.817,
+"lng": 148.839
+},
+{
+"n": "Harvest Home",
+"ppha": 363,
+"lat": -20.865,
+"lng": 146.959
+},
+{
+"n": "Gattonvale",
+"ppha": 2613,
+"lat": -20.861,
+"lng": 148.079
+},
+{
+"n": "Bindooran",
+"ppha": 1422,
+"lat": -20.839,
+"lng": 141.668
+},
+{
+"n": "Nocoleche",
+"ppha": 3310,
+"lat": -20.897,
+"lng": 144.483
+},
+{
+"n": "Watten Downs",
+"ppha": 757,
+"lat": -20.953,
+"lng": 144.177
+},
+{
+"n": "Coleraine",
+"ppha": 692,
+"lat": -21.019,
+"lng": 143.016
+},
+{
+"n": "Illalong",
+"ppha": 730,
+"lat": -21.012,
+"lng": 143.937
+},
+{
+"n": "Moonby Downs",
+"ppha": 1169,
+"lat": -21.207,
+"lng": 144.109
+},
+{
+"n": "Essex Downs",
+"ppha": 679,
+"lat": -21.235,
+"lng": 143.261
+},
+{
+"n": "Windsor Park",
+"ppha": 723,
+"lat": -21.261,
+"lng": 142.784
+},
+{
+"n": "Marionvale (part)",
+"ppha": 1019,
+"lat": -21.346,
+"lng": 144.102
+},
+{
+"n": "Old Oakdale",
+"ppha": 391,
+"lat": -21.325,
+"lng": 149.379
+},
+{
+"n": "Barragunda",
+"ppha": 1030,
+"lat": -21.385,
+"lng": 144.608
+},
+{
+"n": "Skye",
+"ppha": 692,
+"lat": -21.374,
+"lng": 141.915
+},
+{
+"n": "Marionvale",
+"ppha": 1020,
+"lat": -21.429,
+"lng": 144.385
+},
+{
+"n": "Glenluce",
+"ppha": 6376,
+"lat": -21.471,
+"lng": 149.537
+},
+{
+"n": "Raelee Downs",
+"ppha": 843,
+"lat": -21.493,
+"lng": 143.417
+},
+{
+"n": "Blue Mountain",
+"ppha": 8218,
+"lat": -21.515,
+"lng": 149.219
+},
+{
+"n": "Cawnpore",
+"ppha": 185,
+"lat": -22.804,
+"lng": 141.533
+},
+{
+"n": "",
+"ppha": 6309,
+"lat": -18.655,
+"lng": 146.39
+},
+{
+"n": "",
+"ppha": 2090,
+"lat": -15.075,
+"lng": 145.203
+},
+{
+"n": "",
+"ppha": 329,
+"lat": -16.892,
+"lng": 145.643
+},
+{
+"n": "",
+"ppha": 48,
+"lat": -17.279,
+"lng": 145.548
+},
+{
+"n": "",
+"ppha": 1211,
+"lat": -17.61,
+"lng": 145.557
+},
+{
+"n": "",
+"ppha": 193,
+"lat": -17.71,
+"lng": 145.219
+},
+{
+"n": "",
+"ppha": 23854,
+"lat": -19.625,
+"lng": 147.517
+},
+{
+"n": "Yallatup",
+"ppha": 1278,
+"lat": -20.37,
+"lng": 148.896
+},
+{
+"n": "Waterview",
+"ppha": 244,
+"lat": -11.234,
+"lng": 151.539
+},
+{
+"n": "Alva",
+"ppha": 959,
+"lat": -25.127,
+"lng": 145.504
+},
+{
+"n": "Boin",
+"ppha": 200,
+"lat": -26.584,
+"lng": 145.866
+},
+{
+"n": "Bardia",
+"ppha": 99,
+"lat": -27.762,
+"lng": 146.91
+},
+{
+"n": "Wando",
+"ppha": 490,
+"lat": -22.332,
+"lng": 143.595
+},
+{
+"n": "Tulmur",
+"ppha": 371,
+"lat": -22.387,
+"lng": 142.505
+},
+{
+"n": "Wando",
+"ppha": 633,
+"lat": -22.572,
+"lng": 143.463
+},
+{
+"n": "Tranby",
+"ppha": 248,
+"lat": -22.664,
+"lng": 142.483
+},
+{
+"n": "Corona",
+"ppha": 647,
+"lat": -23.104,
+"lng": 143.499
+},
+{
+"n": "Moonya",
+"ppha": 810,
+"lat": -23.326,
+"lng": 145.207
+},
+{
+"n": "Kerand",
+"ppha": 479,
+"lat": -23.481,
+"lng": 146.934
+},
+{
+"n": "Carcara",
+"ppha": 85,
+"lat": -23.829,
+"lng": 142.473
+},
+{
+"n": "Gowan",
+"ppha": 1403,
+"lat": -25.07,
+"lng": 145.363
+},
+{
+"n": "Gilmore",
+"ppha": 23,
+"lat": -25.32,
+"lng": 144.809
+},
+{
+"n": "Varna",
+"ppha": 221,
+"lat": -26.053,
+"lng": 145.269
+},
+{
+"n": "Etona",
+"ppha": 2071,
+"lat": -26.116,
+"lng": 146.904
+},
+{
+"n": "Weonia",
+"ppha": 997,
+"lat": -27.914,
+"lng": 147.225
+},
+{
+"n": "Benalla",
+"ppha": 869,
+"lat": -24.54,
+"lng": 144.811
+},
+{
+"n": "Carlow",
+"ppha": 2193,
+"lat": -24.821,
+"lng": 145.657
+},
+{
+"n": "Attica",
+"ppha": 333,
+"lat": -25.266,
+"lng": 147.442
+},
+{
+"n": "Noella",
+"ppha": 878,
+"lat": -25.61,
+"lng": 145.941
+},
+{
+"n": "Boondook",
+"ppha": 89,
+"lat": -26.467,
+"lng": 142.861
+},
+{
+"n": "Penaroo",
+"ppha": 124,
+"lat": -27.937,
+"lng": 145.112
+},
+{
+"n": "Currane",
+"ppha": 592,
+"lat": -23.23,
+"lng": 144.734
+},
+{
+"n": "Colanya",
+"ppha": 430,
+"lat": -23.236,
+"lng": 143.477
+},
+{
+"n": "Currane",
+"ppha": 593,
+"lat": -23.393,
+"lng": 144.829
+},
+{
+"n": "Rocklea",
+"ppha": 886,
+"lat": -23.687,
+"lng": 145.824
+},
+{
+"n": "Newark",
+"ppha": 1294,
+"lat": -23.687,
+"lng": 146.068
+},
+{
+"n": "Rosabel",
+"ppha": 632,
+"lat": -23.78,
+"lng": 143.862
+},
+{
+"n": "Woolbunna",
+"ppha": 5,
+"lat": -26.72,
+"lng": 144.745
+},
+{
+"n": "Wylpena",
+"ppha": 509,
+"lat": -26.985,
+"lng": 146.961
+},
+{
+"n": "Boobara",
+"ppha": 139,
+"lat": -27.579,
+"lng": 145.435
+},
+{
+"n": "Tancred",
+"ppha": 345,
+"lat": -21.983,
+"lng": 145.223
+},
+{
+"n": "Melrose",
+"ppha": 322,
+"lat": -22.791,
+"lng": 143.398
+},
+{
+"n": "Leander",
+"ppha": 347,
+"lat": -23.234,
+"lng": 144.23
+},
+{
+"n": "Leander",
+"ppha": 378,
+"lat": -23.373,
+"lng": 144.254
+},
+{
+"n": "Willowen",
+"ppha": 729,
+"lat": -23.863,
+"lng": 144.256
+},
+{
+"n": "Parkgate",
+"ppha": 905,
+"lat": -23.853,
+"lng": 145.818
+},
+{
+"n": "Tonkoro",
+"ppha": 193,
+"lat": -24.005,
+"lng": 142.488
+},
+{
+"n": "Linamar",
+"ppha": 678,
+"lat": -24.556,
+"lng": 144.508
+},
+{
+"n": "Allawah",
+"ppha": 888,
+"lat": -25.099,
+"lng": 145.782
+},
+{
+"n": "Araluen",
+"ppha": 185,
+"lat": -25.702,
+"lng": 143.848
+},
+{
+"n": "Halton",
+"ppha": 1038,
+"lat": -26.167,
+"lng": 146.775
+},
+{
+"n": "Pitherty",
+"ppha": 181,
+"lat": -28.559,
+"lng": 145.286
+},
+{
+"n": "Adalonga",
+"ppha": 214,
+"lat": -23.26,
+"lng": 143.911
+},
+{
+"n": "Cargara",
+"ppha": 2377,
+"lat": -25.18,
+"lng": 146.746
+},
+{
+"n": "Coolabah",
+"ppha": 712,
+"lat": -28.008,
+"lng": 146.0
+},
+{
+"n": "Yanburra",
+"ppha": 580,
+"lat": -23.073,
+"lng": 144.489
+},
+{
+"n": "Rocklea",
+"ppha": 2624,
+"lat": -23.609,
+"lng": 147.093
+},
+{
+"n": "Yeenunga",
+"ppha": 173,
+"lat": -25.933,
+"lng": 144.137
+},
+{
+"n": "Raceview",
+"ppha": 742,
+"lat": -26.113,
+"lng": 146.493
+},
+{
+"n": "Raceview",
+"ppha": 443,
+"lat": -26.288,
+"lng": 146.441
+},
+{
+"n": "Wandilla",
+"ppha": 227,
+"lat": -28.313,
+"lng": 145.193
+},
+{
+"n": "Cathedral",
+"ppha": 396,
+"lat": -22.039,
+"lng": 142.257
+},
+{
+"n": "Randwick",
+"ppha": 1101,
+"lat": -22.314,
+"lng": 143.274
+},
+{
+"n": "Allambie",
+"ppha": 5712,
+"lat": -22.296,
+"lng": 147.487
+},
+{
+"n": "Stockholm",
+"ppha": 603,
+"lat": -22.48,
+"lng": 144.795
+},
+{
+"n": "Springvale",
+"ppha": 835,
+"lat": -22.87,
+"lng": 147.048
+},
+{
+"n": "Darriveen",
+"ppha": 648,
+"lat": -22.972,
+"lng": 144.284
+},
+{
+"n": "Malanbar",
+"ppha": 2153,
+"lat": -23.169,
+"lng": 147.158
+},
+{
+"n": "Dundonald",
+"ppha": 568,
+"lat": -23.317,
+"lng": 144.798
+},
+{
+"n": "Rosebank",
+"ppha": 642,
+"lat": -23.563,
+"lng": 144.377
+},
+{
+"n": "Westfield",
+"ppha": 755,
+"lat": -23.773,
+"lng": 144.028
+},
+{
+"n": "Summerdell",
+"ppha": 974,
+"lat": -23.765,
+"lng": 146.197
+},
+{
+"n": "Withywine",
+"ppha": 323,
+"lat": -23.85,
+"lng": 143.45
+},
+{
+"n": "Avington",
+"ppha": 1235,
+"lat": -24.147,
+"lng": 145.037
+},
+{
+"n": "Woodbine",
+"ppha": 2169,
+"lat": -24.162,
+"lng": 145.522
+},
+{
+"n": "Elsinore",
+"ppha": 2011,
+"lat": -24.549,
+"lng": 145.518
+},
+{
+"n": "Homebush",
+"ppha": 1264,
+"lat": -24.699,
+"lng": 145.45
+},
+{
+"n": "Aubigny",
+"ppha": 1994,
+"lat": -25.594,
+"lng": 146.279
+},
+{
+"n": "Wadeholme",
+"ppha": 580,
+"lat": -25.731,
+"lng": 145.9
+},
+{
+"n": "Barradeen",
+"ppha": 883,
+"lat": -26.054,
+"lng": 146.422
+},
+{
+"n": "Didgerie",
+"ppha": 144,
+"lat": -26.464,
+"lng": 145.734
+},
+{
+"n": "Millwood",
+"ppha": 392,
+"lat": -26.559,
+"lng": 147.008
+},
+{
+"n": "Doobibla",
+"ppha": 119,
+"lat": -26.97,
+"lng": 145.612
+},
+{
+"n": "Glentuckie",
+"ppha": 173,
+"lat": -28.818,
+"lng": 145.618
+},
+{
+"n": "Springvale",
+"ppha": 450,
+"lat": -23.539,
+"lng": 146.036
+},
+{
+"n": "Wattlevale",
+"ppha": 317,
+"lat": -23.645,
+"lng": 145.95
+},
+{
+"n": "Nine Mile",
+"ppha": 2924,
+"lat": -23.743,
+"lng": 146.678
+},
+{
+"n": "Hillgrove",
+"ppha": 2132,
+"lat": -26.321,
+"lng": 147.24
+},
+{
+"n": "Wilma Vale",
+"ppha": 531,
+"lat": -26.409,
+"lng": 146.987
+},
+{
+"n": "Vincentia",
+"ppha": 1014,
+"lat": -27.919,
+"lng": 147.427
+},
+{
+"n": "Stratavon",
+"ppha": 1138,
+"lat": -24.095,
+"lng": 145.039
+},
+{
+"n": "Northview",
+"ppha": 1180,
+"lat": -26.053,
+"lng": 146.801
+},
+{
+"n": "Auburnvale",
+"ppha": 184,
+"lat": -26.507,
+"lng": 145.857
+},
+{
+"n": "Caledonia",
+"ppha": 1969,
+"lat": -26.494,
+"lng": 147.184
+},
+{
+"n": "Kungi Lakes",
+"ppha": 182,
+"lat": -28.7,
+"lng": 145.359
+},
+{
+"n": "Bannockburn",
+"ppha": 281,
+"lat": -21.824,
+"lng": 145.223
+},
+{
+"n": "Enryb Downs",
+"ppha": 741,
+"lat": -21.982,
+"lng": 143.643
+},
+{
+"n": "Tulmer (part)",
+"ppha": 248,
+"lat": -22.49,
+"lng": 142.408
+},
+{
+"n": "Westward Ho",
+"ppha": 567,
+"lat": -22.707,
+"lng": 143.75
+},
+{
+"n": "Rodney Downs",
+"ppha": 603,
+"lat": -23.177,
+"lng": 144.912
+},
+{
+"n": "Audreystone",
+"ppha": 1222,
+"lat": -23.504,
+"lng": 145.274
+},
+{
+"n": "Pebbley Creek",
+"ppha": 431,
+"lat": -23.49,
+"lng": 147.259
+},
+{
+"n": "Green Valley",
+"ppha": 2187,
+"lat": -23.601,
+"lng": 147.436
+},
+{
+"n": "Villafield",
+"ppha": 2908,
+"lat": -23.672,
+"lng": 146.631
+},
+{
+"n": "Green Valley",
+"ppha": 1908,
+"lat": -23.695,
+"lng": 147.424
+},
+{
+"n": "Drought Horse",
+"ppha": 751,
+"lat": -23.886,
+"lng": 144.12
+},
+{
+"n": "Elward Downs",
+"ppha": 563,
+"lat": -24.069,
+"lng": 143.712
+},
+{
+"n": "Fraserburgh",
+"ppha": 144,
+"lat": -24.956,
+"lng": 143.363
+},
+{
+"n": "Valera Vale",
+"ppha": 2282,
+"lat": -25.947,
+"lng": 146.411
+},
+{
+"n": "Spring Hill",
+"ppha": 483,
+"lat": -26.408,
+"lng": 146.435
+},
+{
+"n": "Claverton Park",
+"ppha": 478,
+"lat": -27.196,
+"lng": 146.078
+},
+{
+"n": "Glengarry Farm",
+"ppha": 348,
+"lat": -28.084,
+"lng": 146.599
+},
+{
+"n": "Ronlow Park Station",
+"ppha": 262,
+"lat": -21.795,
+"lng": 145.9
+},
+{
+"n": "The Avenue Holding",
+"ppha": 258,
+"lat": -22.264,
+"lng": 142.377
+},
+{
+"n": "Hereward, Bude",
+"ppha": 691,
+"lat": -22.708,
+"lng": 144.044
+},
+{
+"n": "Hereward, Bude",
+"ppha": 691,
+"lat": -22.844,
+"lng": 144.008
+},
+{
+"n": "Corona, Werite",
+"ppha": 175,
+"lat": -22.978,
+"lng": 143.283
+},
+{
+"n": "Evesham, Moondarra",
+"ppha": 320,
+"lat": -22.983,
+"lng": 143.828
+},
+{
+"n": "Laidlaw, Melton",
+"ppha": 564,
+"lat": -24.085,
+"lng": 143.988
+},
+{
+"n": "Woodbine (part)",
+"ppha": 2224,
+"lat": -24.199,
+"lng": 145.387
+},
+{
+"n": "Meroondah Downs",
+"ppha": 611,
+"lat": -24.244,
+"lng": 143.659
+},
+{
+"n": "Paradise Downs",
+"ppha": 2178,
+"lat": -24.262,
+"lng": 145.69
+},
+{
+"n": "Inkerman (part)",
+"ppha": 587,
+"lat": -24.296,
+"lng": 144.123
+},
+{
+"n": "Hayfield, Tryeta",
+"ppha": 148,
+"lat": -24.744,
+"lng": 142.848
+},
+{
+"n": "Woolga,Glanmire",
+"ppha": 1451,
+"lat": -24.985,
+"lng": 145.862
+},
+{
+"n": "Currareva, Dianna",
+"ppha": 263,
+"lat": -25.261,
+"lng": 142.695
+},
+{
+"n": "Barcoo Junction",
+"ppha": 247,
+"lat": -25.281,
+"lng": 142.997
+},
+{
+"n": "Taylors Plains",
+"ppha": 1944,
+"lat": -25.661,
+"lng": 147.25
+},
+{
+"n": "Mangalore, Hythe",
+"ppha": 988,
+"lat": -26.723,
+"lng": 146.056
+},
+{
+"n": "Reynella, Bicton",
+"ppha": 502,
+"lat": -26.764,
+"lng": 146.752
+},
+{
+"n": "Macks Creek/Carbean",
+"ppha": 616,
+"lat": -27.526,
+"lng": 146.054
+},
+{
+"n": "Scotstown, Highbury",
+"ppha": 751,
+"lat": -22.618,
+"lng": 145.04
+},
+{
+"n": "Culburnie, Bendigo",
+"ppha": 1332,
+"lat": -23.429,
+"lng": 145.106
+},
+{
+"n": "Glen Thomson, Nerena",
+"ppha": 785,
+"lat": -23.705,
+"lng": 144.199
+},
+{
+"n": "Lilydale/Fairfield",
+"ppha": 2348,
+"lat": -24.26,
+"lng": 145.547
+},
+{
+"n": "Thargomindah Station",
+"ppha": 131,
+"lat": -28.069,
+"lng": 144.103
+},
+{
+"n": "Janalian, Acme Downs",
+"ppha": 716,
+"lat": -28.126,
+"lng": 147.219
+},
+{
+"n": "Wandora, Donald Downs",
+"ppha": 604,
+"lat": -21.812,
+"lng": 142.526
+},
+{
+"n": "Lucella, Drumlion Station",
+"ppha": 587,
+"lat": -22.132,
+"lng": 143.905
+},
+{
+"n": "Blue Gate, Angora Park",
+"ppha": 506,
+"lat": -22.598,
+"lng": 144.617
+},
+{
+"n": "Clyde, Drumlion, Hereward",
+"ppha": 655,
+"lat": -22.613,
+"lng": 143.78
+},
+{
+"n": "Wallambank And Mooroobikin",
+"ppha": 1119,
+"lat": -28.058,
+"lng": 147.341
+},
+{
+"n": "Glen Allen, Euston, Ventura",
+"ppha": 602,
+"lat": -22.893,
+"lng": 143.561
+},
+{
+"n": "Morundah, Mt Harden, Lowana",
+"ppha": 1406,
+"lat": -24.864,
+"lng": 144.999
+},
+{
+"n": "Bendena, Lochiel, Truganinni Holdings",
+"ppha": 213,
+"lat": -27.813,
+"lng": 146.884
+},
+{
+"n": "Central Plains Holding, Vergemont (part)",
+"ppha": 145,
+"lat": -23.541,
+"lng": 143.061
+},
+{
+"n": "Myendetta, Mangalore, Hythe, Colombo, Tooloon",
+"ppha": 636,
+"lat": -26.478,
+"lng": 146.173
+},
+{
+"n": "Myendetta, Mangalore, Hythe, Colombo, Tooloon",
+"ppha": 638,
+"lat": -26.8,
+"lng": 146.247
+},
+{
+"n": "",
+"ppha": 420,
+"lat": -23.289,
+"lng": 144.139
+},
+{
+"n": "Leander",
+"ppha": 971,
+"lat": -23.36,
+"lng": 144.447
+},
+{
+"n": "",
+"ppha": 1789,
+"lat": -23.599,
+"lng": 146.676
+},
+{
+"n": "",
+"ppha": 7,
+"lat": -26.602,
+"lng": 145.178
+},
+{
+"n": "Waterview",
+"ppha": 244,
+"lat": -28.501,
+"lng": 142.962
+}
+]
+}

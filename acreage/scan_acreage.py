@@ -353,6 +353,112 @@ def load_sold():
                     "lat": x.get("lat"), "lng": x.get("lng")})
     return out
 
+# Farmbuy region -> Bendigo Bank farmland report region, used when a block has no council growth figure
+FB_TO_BR = {
+    "NSW": {"Hunter": "Hunter", "Riverina": "Riverina Murray", "South West Slopes": "Riverina Murray",
+            "Central Tablelands": "Central West", "Central West Slopes & Plains": "Central West",
+            "Mid North Coast": "North Coast", "Northern Rivers": "North Coast", "Southern Tablelands": "South East",
+            "South Coast": "South East", "Snowy Mountains": "South East", "Upper Western": "Far West", "Lower Western": "Far West"},
+    "VIC": {"Central": "Central", "East Gippsland": "East Gippsland", "Mallee": "Mallee", "South West": "South West",
+            "Wimmera": "Wimmera", "North East": "Ovens Murray", "Northern Country": "Goulburn"},
+    "SA": {"Eastern Eyre Peninsula": "Eyre Peninsula", "Lower Eyre Peninsula": "Eyre Peninsula", "West Coast": "Eyre Peninsula",
+           "Kangaroo Island": "Kangaroo Island", "Lower South East": "Lower South East", "Murraylands": "Murray & Mallee",
+           "Riverland": "Murray & Mallee", "Mid North": "Yorke & Mid-North", "Yorke Peninsula": "Yorke & Mid-North",
+           "Mount Lofty Ranges": "Adelaide & Fleurieu", "Flinders": "North", "North East Pastoral": "North"},
+    "WA": {"Great Southern": "Great Southern", "South West": "South West", "Lower West": "South West"},
+    "TAS": {"North West Coast": "North West", "Western": "North West", "Central North": "Northern", "North East": "Northern",
+            "Midlands": "Northern", "South East": "South", "Upper Derwent Valley": "South"},
+}
+LGA_SUFFIX = re.compile(r"\s+(Regional|City|Shire|Aboriginal Shire|Town|Council)$", re.I)
+
+_GL = None
+def growth_lga(state, name):
+    """The council's name as the Bendigo Bank farmland report spells it, or None if the report doesn't list it."""
+    global _GL
+    if _GL is None:
+        try:
+            h = json.loads(open(os.path.join(HERE, "history-data.js")).read().split("=", 1)[1].strip().rstrip(";"))
+            _GL = {(l["state"], l["lga"].upper()): l["lga"] for l in h["lgas"]}
+        except Exception: _GL = {}
+    n = name.upper()
+    for c in (n, re.sub(r"^GREATER\s+", "", n), n.replace("LATROBE", "LA TROBE"), n.replace("MID COAST", "MID-COAST")):
+        if (state, c) in _GL: return _GL[(state, c)]
+    return None
+
+def band_of(a):
+    return "10-50" if a < 50 else "50-200" if a < 200 else "200+"
+
+def fill_areas(rows, sold, scanned):
+    """Give each block its council and region, then work out how busy each area's market is."""
+    # postcode -> Farmbuy region, from every block and sale that has one
+    pc_reg = {}
+    for x in list(rows) + list(sold):
+        if x.get("region"): pc_reg.setdefault((x["s"], x["pc"]), {}).setdefault(x["region"], 0); pc_reg[(x["s"], x["pc"])][x["region"]] += 1
+    pc_reg = {k: max(v, key=v.get) for k, v in pc_reg.items()}
+    # suburb -> council, from blocks with a planning lookup, plus the QLD government locality list
+    sub_lga = {}
+    for r in rows:
+        if r.get("lga"): sub_lga.setdefault((r["s"], (r.get("sub") or "").upper()), r["lga"])
+    try: qld = json.load(open(os.path.join(HERE, "qld-localities.json")))
+    except Exception: qld = {}
+    for r in rows:
+        if not r.get("region"): r["region"] = pc_reg.get((r["s"], r["pc"]))
+        if not r.get("lga"):
+            g = sub_lga.get((r["s"], (r.get("sub") or "").upper()))
+            if not g and r["s"] == "QLD": g = qld.get((r.get("sub") or "").upper())
+            if g: r["lga"] = g
+        if r.get("lga"):
+            r["lga"] = LGA_SUFFIX.sub("", re.sub(r"^(Shire|City|Town|Municipality) of\s+", "", r["lga"])).strip()
+            g = growth_lga(r["s"], r["lga"])
+            if g: r["lga_g"] = g
+        br = FB_TO_BR.get(r["s"], {}).get(r.get("region") or "")
+        if br: r["br"] = br
+    # market numbers per region
+    end = scanned[:10]
+    def days(d):
+        try: return (datetime.fromisoformat(end) - datetime.fromisoformat(d[:10])).days
+        except Exception: return None
+    fp = {}
+    try: fp = json.load(open(os.path.join(HERE, "fp-sold-cache.json")))
+    except Exception: pass
+    sc = {}
+    try: sc = json.load(open(os.path.join(HERE, "sold-cache.json")))
+    except Exception: pass
+    A = {}
+    def area(s, reg):
+        return A.setdefault(s + "|" + reg, {"s": s, "region": reg, "forsale": 0, "fs_band": {}, "sold90": 0, "s90_band": {},
+                                             "months": {}, "fp_sold": 0, "cuts": 0, "_ask": {}, "_sold": {}})
+    for r in rows:
+        if not r.get("region"): continue
+        a = area(r["s"], r["region"]); b = band_of(r["a"])
+        a["forsale"] += 1; a["fs_band"][b] = a["fs_band"].get(b, 0) + 1
+        if r.get("drop"): a["cuts"] += 1
+        if r.get("p") and r["a"] < STATION_ACRES: a["_ask"].setdefault(b, []).append(r["p"] / r["a"])
+    for x in sc.values():   # Farmbuy sales: every one has the date it was marked sold
+        if not x.get("region") or not x.get("a") or x["a"] < MIN_ACRES or not x.get("sold"): continue
+        a = area(x["s"], x["region"]); dd = days(x["sold"]); b = band_of(x["a"])
+        a["months"][x["sold"][:7]] = a["months"].get(x["sold"][:7], 0) + 1
+        if dd is not None and 0 <= dd <= 90: a["sold90"] += 1; a["s90_band"][b] = a["s90_band"].get(b, 0) + 1
+        if x.get("p") and x["a"] < STATION_ACRES: a["_sold"].setdefault(b, []).append(x["p"] / x["a"])
+    for x in fp.values():   # Farm Property: older sales, mostly without a date
+        reg = pc_reg.get((x.get("state"), x.get("postcode")))
+        if not reg or (x.get("acres") or 0) < MIN_ACRES: continue
+        a = area(x["state"], reg); a["fp_sold"] += 1
+        if x.get("price") and x["acres"] < STATION_ACRES: a["_sold"].setdefault(band_of(x["acres"]), []).append(x["price"] / x["acres"])
+    for a in A.values():
+        per_month = a["sold90"] / 3
+        a["supply"] = round(a["forsale"] / per_month, 1) if a["sold90"] >= 3 else None
+        a["pace"] = None if a["supply"] is None else "busy" if a["supply"] <= 6 else "normal" if a["supply"] <= 12 else "slow"
+        gaps, w = 0.0, 0
+        for b in a["_ask"]:
+            if len(a["_ask"][b]) >= 5 and len(a["_sold"].get(b, [])) >= 5:
+                n = min(len(a["_ask"][b]), len(a["_sold"][b]))
+                gaps += n * statistics.median(a["_sold"][b]) / statistics.median(a["_ask"][b]); w += n
+        a["sold_vs_ask"] = round(gaps / w, 2) if w else None
+        a["months"] = dict(sorted(a["months"].items()))
+        del a["_ask"], a["_sold"]
+    return A
+
 def fp_listings(rows):
     """Farm Property listings (scan_fp_sale.py) that Farmbuy doesn't already have."""
     try: fp = json.load(open(os.path.join(HERE, "fp-sale-cache.json")))
@@ -517,6 +623,7 @@ def finish(rows, scanned, keep_prev=True):
         r["ppa"] = round(r["p"] / r["a"]) if r["p"] else None
         r.pop("_lo", None); r.pop("_hi", None)
     track_history(rows, scanned, {x["id"]: x for x in sold})
+    areas = fill_areas(rows, sold, scanned)
     # state medians for the guide
     guide = {}
     for s in STATES:
@@ -527,8 +634,9 @@ def finish(rows, scanned, keep_prev=True):
                         "under300": sum(1 for r in rs if r["p"] <= 300_000)}
     data = {"scanned": scanned, "source": "farmbuy.com",
             "min_acres": MIN_ACRES, "max_price": MAX_PRICE, "guide": guide,
-            "model": {"b": round(model["b"], 4), "h": round(model["h"], 4)},
-            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u", "lat", "lng")} for x in sold if x["a"] >= MIN_ACRES],
+            "model": {"b": round(model["b"], 4), "h": round(model["h"], 4)}, "areas": areas,
+            "qbig": (json.load(open(os.path.join(HERE, "qld-big-sales.json")))["sales"] if os.path.exists(os.path.join(HERE, "qld-big-sales.json")) else []),
+            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u", "lat", "lng", "src")} for x in sold if x["a"] >= MIN_ACRES],
             "listings": rows}
     prev_ids = set()
     pth = os.path.join(HERE, "acreage-data.js")
