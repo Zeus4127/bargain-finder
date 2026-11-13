@@ -210,6 +210,17 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <label for="aSort" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Sort<select id="aSort" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="supply">Busiest first</option><option value="sold">Most sales</option><option value="forsale">Most for sale</option></select></label></div>
     <div class="tablewrap"><table><thead><tr><th>Area</th><th>State</th><th class="r">For sale</th><th class="r">Sold, 3 months</th><th class="r">Months of supply</th><th>Market</th><th>Sales each month</th><th class="r">Sold vs asking</th><th class="r">Older sales on record</th></tr></thead><tbody id="atable"></tbody></table></div>
     <p class="what">Sales counts start in mid 2026 and grow every day the app runs. "Older sales on record" are Farm Property's past sales in the same area, most without a date.</p></div>
+  <div class="panel"><h3>Do small blocks (10 to 100 acres) grow faster?</h3>
+    <p class="what">Short answer: not usually. Small blocks cost a lot more per acre than big farms, but over 10 years they have mostly grown at the same speed or slower.</p>
+    <ul class="plain">
+    <li><b>Australia-wide:</b> ABARES put hobby farms at the slowest 10-year growth of any farm type, about 4% a year to 2024, against about 10% for big grazing and cropping farms. They had a burst of about 10% a year from 2020 to 2023. <span class="muted">(ABARES, June 2025, from news reports of the release)</span></li>
+    <li><b>Smallest farm sizes in each region (75 to 250 acres):</b> grew faster than their region's farms in only 13 of 39 regions. They sell for about 1.2 to 2.5 times the region's price per acre. <span class="muted">(Bendigo Bank farmland reports)</span></li>
+    <li><b>Where small blocks did best:</b> Adelaide Hills and Fleurieu (+16.6% in 2025), Hunter (+10.1%), and Tasmania, where 37 to 100 acre blocks grew 9.6 to 10.6% a year in the north and south over 10 years.</li>
+    <li><b>Queensland 2026 valuations:</b> small rural home blocks rose 11 to 86% since the last valuation 2 to 4 years ago. Biggest: North Burnett +86%, Western Downs +72%, Lockyer Valley +66%, Noosa +43%. They beat farms in 6 of 13 councils.</li>
+    <li><b>NSW:</b> rural land values fell 0.4% in the year to July 2025. The Valuer General put it down to weaker demand for lifestyle blocks. Biggest falls: Snowy Monaro −14.3%, Greater Hume −12.8%.</li>
+    <li><b>Newest figures, first half of 2026:</b> Australia +7.6% vs a year before. QLD +11.9%, NSW +2.1%, VIC +7.7%, SA +9.5%, WA +20.9%, TAS −9.5%. Sales were the fewest on record.</li>
+    </ul>
+    <p class="what">What this means for you: buy a small block because the price is right and you'll enjoy it, not because it will out-grow a farm. The ones that grew most were within an easy drive of a city or big town.</p></div>
   <div class="panel"><h3>Councils</h3>
     <label for="lq" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Find a council (e.g. Western Downs, Tenterfield, Southern Mallee)<input id="lq" type="search" style="padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:42px" placeholder="council name"></label>
     <div class="tablewrap"><table><thead><tr><th>Council</th><th>State</th><th class="r">$/acre 2025</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th><th class="r">$100k 20 yrs ago is now</th></tr></thead><tbody id="ltable"></tbody></table></div>
@@ -332,6 +343,10 @@ function areaLine(x){
   if(a.dir)p.push(`Area prices: <b>${a.dir==="up"?"going up":a.dir==="down"?"going down":"steady"}</b> (${a.yoy>0?"+":""}${a.yoy.toFixed(1)}% last year, ${a.label||x.s+" overall"})`);
   const c20=a.g?a.g.cagr20:a.rg?a.rg.cagr20:a.st&&a.st.cagr20;if(c20!=null)p.push(`${c20}%/yr over 20 years`);
   if(a.mk&&a.mk.pace)p.push(`${esc(a.mk.region)} market: <b>${{busy:"busy",normal:"normal",slow:"slow"}[a.mk.pace]}</b> (${a.mk.forsale} for sale, ${a.mk.sold90} sold in 3 months)`);
+  const LV=D.latest||{};
+  if(LV.h1){const reg=a.rg?a.rg.name:x.br||(x.lga_g&&(LV.h1.find(h=>h.state===x.s&&(h.covers||[]).includes(x.lga_g))||{}).region);const h=reg&&LV.h1.find(h=>h.state===x.s&&h.region===reg);if(h&&h.change_pct!=null)p.push(`Newest: ${h.change_pct>0?"+":""}${h.change_pct}% in the first half of 2026 vs a year before (${esc(h.region)} region)`)}
+  if(x.s==="NSW"&&x.lga&&LV.nswvg&&LV.nswvg[x.lga]!=null){const v=LV.nswvg[x.lga];p.push(`NSW Valuer General: rural land values ${v>0?"+":""}${v}% in the year to July 2025 (${esc(x.lga)})`)}
+  if(x.s==="QLD"&&x.lga&&LV.qldvg&&LV.qldvg[x.lga]){const v=LV.qldvg[x.lga],b=[];if(v.rr!=null)b.push(`small rural home blocks +${v.rr}%${v.rr_to?" (median "+short(v.rr_to)+")":""}`);if(v.pp!=null)b.push(`farms ${v.pp>0?"+":""}${v.pp}%`);p.push(`QLD Valuer-General since ${v.since}: ${b.join(", ")} (${esc(x.lga)})`)}
   if(x.s==="QLD"&&x.a>=1000&&x.lat&&D.qbig){const q=D.qbig.filter(b=>km(x,b)<=150);if(q.length>=3)p.push(`${q.length} big QLD station sales within 150 km (2023–25, state valuer): median ${money(median(q.map(b=>b.ppha/2.471)))}/acre`)}
   if(a.near.length)p.push(`${a.near.length} sold nearby recently, median ${money(median(a.near.map(c=>c.p/c.a)))}/acre`);
   return p.length?`<div class="loc">${p.join(" · ")}</div>`:"";

@@ -1,0 +1,886 @@
+{
+"h1": [
+{
+"state": "QLD",
+"region": "Central",
+"covers": [
+"Barcaldine",
+"Blackall Tambo",
+"Etheridge",
+"Flinders",
+"Longreach",
+"McKinlay",
+"Murweh",
+"Richmond"
+],
+"change_pct": -33.3,
+"median_ppha": 1053,
+"sales": 10
+},
+{
+"state": "QLD",
+"region": "Central Highlands",
+"covers": [
+"Banana",
+"Central Highlands",
+"Isaac"
+],
+"change_pct": -19.1,
+"median_ppha": 5944,
+"sales": 41
+},
+{
+"state": "QLD",
+"region": "Far North",
+"covers": [
+"Cairns",
+"Cassowary Coast",
+"Cook",
+"Douglas",
+"Mareeba",
+"Tablelands"
+],
+"change_pct": 10.4,
+"median_ppha": 15563,
+"sales": 44
+},
+{
+"state": "QLD",
+"region": "North",
+"covers": [
+"Burdekin",
+"Charters Towers",
+"Hinchinbrook",
+"Mackay",
+"Townsville",
+"Whitsunday"
+],
+"change_pct": 2.9,
+"median_ppha": 15949,
+"sales": 71
+},
+{
+"state": "QLD",
+"region": "South East",
+"covers": [
+"Lockyer Valley",
+"Moreton Bay",
+"Scenic Rim",
+"Somerset",
+"Southern Downs",
+"Sunshine Coast",
+"Toowoomba"
+],
+"change_pct": 21.2,
+"median_ppha": 17065,
+"sales": 169
+},
+{
+"state": "QLD",
+"region": "Southern Coastal",
+"covers": [
+"Bundaberg",
+"Fraser Coast",
+"Gladstone",
+"Gympie",
+"Livingstone",
+"North Burnett",
+"Rockhampton",
+"South Burnett"
+],
+"change_pct": 17.3,
+"median_ppha": 11123,
+"sales": 220
+},
+{
+"state": "QLD",
+"region": "Western Downs",
+"covers": [
+"Balonne",
+"Goondiwindi",
+"Maranoa",
+"Western Downs"
+],
+"change_pct": 36.8,
+"median_ppha": 5065,
+"sales": 89
+},
+{
+"state": "NSW",
+"region": "Central West",
+"covers": [
+"Bathurst",
+"Blayney",
+"Bogan",
+"Cabonne",
+"Coonamble",
+"Cowra",
+"Dubbo",
+"Forbes",
+"Gilgandra",
+"Lachlan",
+"Lithgow",
+"Mid-Western",
+"Narromine",
+"Oberon",
+"Orange",
+"Parkes",
+"Warren",
+"Warrumbungle",
+"Weddin"
+],
+"change_pct": 2.5,
+"median_ppha": 6204,
+"sales": 240
+},
+{
+"state": "NSW",
+"region": "Far West",
+"covers": [
+"Balranald",
+"Bourke",
+"Brewarrina",
+"Central Darling",
+"Cobar",
+"Unincorporated Far West",
+"Walgett",
+"Wentworth"
+],
+"change_pct": -50.4,
+"median_ppha": 763,
+"sales": 22
+},
+{
+"state": "NSW",
+"region": "Hunter",
+"covers": [
+"Cessnock",
+"Dungog",
+"Maitland",
+"Mid-Coast",
+"Muswellbrook",
+"Singleton",
+"Upper Hunter"
+],
+"change_pct": 19.0,
+"median_ppha": 16757,
+"sales": 118
+},
+{
+"state": "NSW",
+"region": "New England & North West",
+"covers": [
+"Armidale",
+"Glen Innes Severn",
+"Gunnedah",
+"Gwydir",
+"Inverell",
+"Liverpool Plains",
+"Moree Plains",
+"Narrabri",
+"Tamworth",
+"Tenterfield",
+"Uralla",
+"Walcha"
+],
+"change_pct": 4.5,
+"median_ppha": 7808,
+"sales": 209
+},
+{
+"state": "NSW",
+"region": "North Coast",
+"covers": [
+"Ballina",
+"Bellingen",
+"Byron",
+"Clarence Valley",
+"Coffs Harbour",
+"Kempsey",
+"Kyogle",
+"Lismore",
+"Nambucca Valley",
+"Port Macquarie-Hastings",
+"Richmond Valley",
+"Tweed"
+],
+"change_pct": 1.4,
+"median_ppha": 15164,
+"sales": 221
+},
+{
+"state": "NSW",
+"region": "Riverina Murray",
+"covers": [
+"Albury",
+"Berrigan",
+"Bland",
+"Carrathool",
+"Coolamon",
+"Cootamundra-Gundagai",
+"Edward River",
+"Federation",
+"Greater Hume",
+"Griffith",
+"Hay",
+"Junee",
+"Leeton",
+"Lockhart",
+"Murray River",
+"Murrumbidgee",
+"Narrandera",
+"Snowy Valleys",
+"Temora",
+"Wagga Wagga"
+],
+"change_pct": 14.7,
+"median_ppha": 10237,
+"sales": 159
+},
+{
+"state": "NSW",
+"region": "South East",
+"covers": [
+"Bega Valley",
+"Eurobodalla",
+"Goulburn Mulwaree",
+"Hilltops",
+"Queanbeyan-Palerang",
+"Shoalhaven",
+"Snowy Monaro",
+"Upper Lachlan",
+"Yass Valley"
+],
+"change_pct": 7.1,
+"median_ppha": 14464,
+"sales": 175
+},
+{
+"state": "VIC",
+"region": "Central",
+"covers": [
+"Ballarat",
+"Bendigo",
+"Central Goldfields",
+"Gannawarra",
+"Hepburn",
+"Loddon",
+"Macedon Ranges",
+"Moorabool",
+"Mount Alexander",
+"Pyrenees"
+],
+"change_pct": 24.5,
+"median_ppha": 11245,
+"sales": 86
+},
+{
+"state": "VIC",
+"region": "East Gippsland",
+"covers": [
+"East Gippsland",
+"Wellington"
+],
+"change_pct": 16.7,
+"median_ppha": 16226,
+"sales": 46
+},
+{
+"state": "VIC",
+"region": "Goulburn",
+"covers": [
+"Campaspe",
+"Mitchell",
+"Moira",
+"Murrindindi",
+"Shepparton",
+"Strathbogie"
+],
+"change_pct": 4.8,
+"median_ppha": 15873,
+"sales": 105
+},
+{
+"state": "VIC",
+"region": "Mallee",
+"covers": [
+"Buloke",
+"Mildura",
+"Swan Hill"
+],
+"change_pct": 32.3,
+"median_ppha": 5871,
+"sales": 31
+},
+{
+"state": "VIC",
+"region": "Ovens Murray",
+"covers": [
+"Alpine",
+"Benalla",
+"Indigo",
+"Mansfield",
+"Towong",
+"Wangaratta",
+"Wodonga"
+],
+"change_pct": 3.1,
+"median_ppha": 18148,
+"sales": 47
+},
+{
+"state": "VIC",
+"region": "South & West Gippsland",
+"covers": [
+"Bass Coast",
+"Baw Baw",
+"Cardinia",
+"Latrobe",
+"South Gippsland"
+],
+"change_pct": 32.0,
+"median_ppha": 33029,
+"sales": 52
+},
+{
+"state": "VIC",
+"region": "South West",
+"covers": [
+"Ararat",
+"Colac Otway",
+"Corangamite",
+"Glenelg",
+"Golden Plains",
+"Moyne",
+"Southern Grampians",
+"Surf Coast"
+],
+"change_pct": -14.6,
+"median_ppha": 15465,
+"sales": 99
+},
+{
+"state": "VIC",
+"region": "Wimmera",
+"covers": [
+"Hindmarsh",
+"Horsham",
+"Northern Grampians",
+"West Wimmera",
+"Yarriambiack"
+],
+"change_pct": -6.1,
+"median_ppha": 9989,
+"sales": 66
+},
+{
+"state": "TAS",
+"region": "North West",
+"covers": [
+"Circular Head",
+"Central Coast",
+"Latrobe",
+"Kentish",
+"Waratah-Wynyard",
+"Meander Valley",
+"Burnie",
+"Devonport"
+],
+"change_pct": 6.1,
+"median_ppha": 26689,
+"sales": 7
+},
+{
+"state": "TAS",
+"region": "Northern",
+"covers": [
+"Launceston",
+"Dorset",
+"Break O'Day",
+"Northern Midlands",
+"George Town",
+"West Tamar"
+],
+"change_pct": 11.0,
+"median_ppha": 19513,
+"sales": 5
+},
+{
+"state": "TAS",
+"region": "South",
+"covers": [
+"Central Highlands",
+"Glamorgan-Spring Bay",
+"Sorell",
+"Kingborough",
+"Huon Valley",
+"Southern Midlands",
+"Clarence",
+"Derwent Valley",
+"Tasman"
+],
+"change_pct": -4.9,
+"median_ppha": 13265,
+"sales": 6
+},
+{
+"state": "SA",
+"region": "Adelaide & Fleurieu",
+"covers": [
+"Adelaide Hills",
+"Alexandrina",
+"Barossa",
+"Clare & Gilbert Valleys",
+"Light",
+"Mount Barker",
+"Onkaparinga",
+"Victor Harbor",
+"Yankalilla"
+],
+"change_pct": -5.5,
+"median_ppha": 22344,
+"sales": 91
+},
+{
+"state": "SA",
+"region": "Eyre Peninsula",
+"covers": [
+"Ceduna",
+"Cleve",
+"Elliston",
+"Franklin Harbour",
+"Kimba",
+"Lower Eyre Peninsula",
+"Streaky Bay",
+"Tumby Bay",
+"Wudinna"
+],
+"change_pct": 42.3,
+"median_ppha": 3113,
+"sales": 56
+},
+{
+"state": "SA",
+"region": "Kangaroo Island",
+"covers": [
+"Kangaroo Island"
+],
+"change_pct": -2.1,
+"median_ppha": 6040,
+"sales": 9
+},
+{
+"state": "SA",
+"region": "Lower South East",
+"covers": [
+"Grant",
+"Kingston",
+"Naracoorte Lucindale",
+"Robe",
+"Tatiara",
+"Wattle Range"
+],
+"change_pct": 0.0,
+"median_ppha": 15516,
+"sales": 84
+},
+{
+"state": "SA",
+"region": "Murray & Mallee",
+"covers": [
+"Berri Barmera",
+"Coorong",
+"Karoonda East Murray",
+"Loxton Waikerie",
+"Mid Murray",
+"Murray Bridge",
+"Renmark Paringa",
+"Southern Mallee"
+],
+"change_pct": -30.6,
+"median_ppha": 3220,
+"sales": 77
+},
+{
+"state": "SA",
+"region": "North",
+"covers": [
+"Flinders Ranges",
+"Goyder",
+"Mount Remarkable",
+"Orroroo Carrieton",
+"Peterborough"
+],
+"change_pct": 75.9,
+"median_ppha": 4929,
+"sales": 37
+},
+{
+"state": "SA",
+"region": "Yorke & Mid-North",
+"covers": [
+"Adelaide Plains",
+"Barunga West",
+"Copper Coast",
+"Northern Areas",
+"Port Pirie",
+"Wakefield",
+"Yorke Peninsula"
+],
+"change_pct": 14.7,
+"median_ppha": 13922,
+"sales": 73
+},
+{
+"state": "WA",
+"region": "Avon-Midland",
+"covers": [
+"Beverley",
+"Brookton",
+"Dandaragan",
+"Goomalling",
+"Moora",
+"Northam",
+"Toodyay",
+"Victoria Plains",
+"Wongan-Ballidu",
+"York"
+],
+"change_pct": -18.2,
+"median_ppha": 8169,
+"sales": 36
+},
+{
+"state": "WA",
+"region": "Central",
+"covers": [
+"Bruce Rock",
+"Corrigin",
+"Cuballing",
+"Dumbleyung",
+"Katanning",
+"Kulin",
+"Lake Grace",
+"Narrogin",
+"Pingelly",
+"Quairading",
+"Wagin",
+"Wandering",
+"West Arthur",
+"Wickepin",
+"Williams",
+"Woodanilling"
+],
+"change_pct": 27.2,
+"median_ppha": 8150,
+"sales": 42
+},
+{
+"state": "WA",
+"region": "Great Eastern",
+"covers": [
+"Cunderdin",
+"Dalwallinu",
+"Dowerin",
+"Kellerberrin",
+"Kondinin",
+"Koorda",
+"Merredin",
+"Morawa",
+"Mount Marshall",
+"Mukinbudin",
+"Narembeen",
+"Nungarin",
+"Perenjori",
+"Tammin",
+"Trayning",
+"Westonia",
+"Wyalkatchem",
+"Yilgarn"
+],
+"change_pct": 71.3,
+"median_ppha": 3335,
+"sales": 69
+},
+{
+"state": "WA",
+"region": "Great Southern",
+"covers": [
+"Albany",
+"Boyup Brook",
+"Broomehill-Tambellup",
+"Cranbrook",
+"Esperance",
+"Gnowangerup",
+"Jerramungup",
+"Kent",
+"Kojonup",
+"Plantagenet",
+"Ravensthorpe"
+],
+"change_pct": 23.0,
+"median_ppha": 9021,
+"sales": 62
+},
+{
+"state": "WA",
+"region": "Northern",
+"covers": [
+"Carnamah",
+"Chapman Valley",
+"Coorow",
+"Greater Geraldton",
+"Irwin",
+"Mingenew",
+"Northampton",
+"Three Springs"
+],
+"change_pct": -0.1,
+"median_ppha": 4772,
+"sales": 23
+},
+{
+"state": "WA",
+"region": "South West",
+"covers": [
+"Boddington",
+"Bridgetown-Greenbushes",
+"Busselton",
+"Capel",
+"Collie",
+"Dardanup",
+"Denmark",
+"Donnybrook-Balingup",
+"Harvey",
+"Manjimup",
+"Murray",
+"Nannup",
+"Waroona"
+],
+"change_pct": -8.2,
+"median_ppha": 16857,
+"sales": 41
+}
+],
+"nswvg": {
+"Bayside": 3.2,
+"Blacktown": 2.6,
+"Blue Mountains": -1.6,
+"Camden": 6.1,
+"Campbelltown": -6.4,
+"Canterbury-Bankstown": 5.0,
+"Fairfield": 5.8,
+"Hawkesbury": 0.6,
+"Hornsby": 1.2,
+"Liverpool": -2.2,
+"Northern Beaches": 2.1,
+"Penrith": 1.7,
+"Randwick": 5.4,
+"The Hills": 0.7,
+"Ballina": 1.4,
+"Bega Valley": 4.2,
+"Bellingen": 0.7,
+"Byron": 0.9,
+"Central Coast": -0.5,
+"Clarence Valley": 2.0,
+"Coffs Harbour": 1.3,
+"Eurobodalla": -5.9,
+"Kempsey": 2.0,
+"Kiama": -7.1,
+"Kyogle": 0.1,
+"Lake Macquarie": -0.7,
+"Lismore": 4.3,
+"Mid-Coast": -0.5,
+"Nambucca": -1.0,
+"Port Macquarie-Hastings": -2.4,
+"Port Stephens": -2.0,
+"Richmond Valley": 1.6,
+"Shellharbour": -5.0,
+"Shoalhaven": -8.8,
+"Tweed": 3.8,
+"Wingecarribee": 6.5,
+"Wollondilly": -2.3,
+"Wollongong": -0.1,
+"Albury": 5.2,
+"Armidale": 0.5,
+"Balranald": 0.0,
+"Bathurst": -1.6,
+"Berrigan": 0.8,
+"Bland": -4.9,
+"Blayney": 0.6,
+"Bogan": -6.2,
+"Bourke": 0.2,
+"Brewarrina": 9.5,
+"Broken Hill": 0.0,
+"Cabonne": 4.2,
+"Carrathool": 2.9,
+"Central Darling": 0.2,
+"Cessnock": 4.6,
+"Cobar": -0.4,
+"Coolamon": -0.2,
+"Coonamble": 0.1,
+"Cootamundra-Gundagai": -4.5,
+"Cowra": 0.9,
+"Dubbo": 0.6,
+"Dungog": -0.5,
+"Edward River": 2.7,
+"Federation": -2.8,
+"Forbes": 0.9,
+"Gilgandra": 3.3,
+"Glen Innes Severn": 1.2,
+"Goulburn Mulwaree": -0.9,
+"Greater Hume": -12.8,
+"Griffith": -2.2,
+"Gunnedah": 0.6,
+"Gwydir": 7.6,
+"Hay": -0.3,
+"Hilltops": -5.0,
+"Inverell": 5.0,
+"Junee": -4.6,
+"Lachlan": -7.8,
+"Leeton": -2.2,
+"Lithgow": -1.3,
+"Liverpool Plains": 17.9,
+"Lockhart": -1.8,
+"Maitland": -1.0,
+"Mid Western": 0.6,
+"Moree Plains": -1.1,
+"Murray River": -2.8,
+"Murrumbidgee": 0.0,
+"Muswellbrook": 2.3,
+"Narrabri": 7.2,
+"Narrandera": -10.4,
+"Narromine": 0.9,
+"Oberon": -0.2,
+"Orange": -1.7,
+"Parkes": 7.7,
+"Queanbeyan-Palerang": -1.4,
+"Singleton": -0.3,
+"Snowy Monaro": -14.3,
+"Snowy Valleys": 1.7,
+"Tamworth": 3.5,
+"Temora": -10.8,
+"Tenterfield": 7.1,
+"Upper Hunter": 1.5,
+"Upper Lachlan": 3.1,
+"Uralla": 6.9,
+"Wagga Wagga": -8.1,
+"Walcha": -11.9,
+"Walgett": -6.0,
+"Warren": -0.1,
+"Warrumbungle": 13.3,
+"Weddin": 3.2,
+"Wentworth": 0.0,
+"Yass Valley": -3.3
+},
+"qldvg": {
+"Burdekin": {
+"pp": 37.2,
+"since": 2022,
+"rr": 30,
+"rr_from": 108000,
+"rr_to": 140000
+},
+"Douglas": {
+"pp": 18.5,
+"since": 2021,
+"rr": 36,
+"rr_from": 182500,
+"rr_to": 248750
+},
+"Etheridge": {
+"pp": 80.0,
+"since": 2021,
+"rr": 11,
+"rr_from": 22500,
+"rr_to": 25000
+},
+"Gladstone": {
+"pp": 29.6,
+"since": 2022,
+"rr": 24,
+"rr_from": 230000,
+"rr_to": 285000
+},
+"Gold Coast": {
+"pp": 12.6,
+"since": 2023,
+"rr": 20,
+"rr_from": 740000,
+"rr_to": 890000
+},
+"Hinchinbrook": {
+"pp": -0.6,
+"since": 2022,
+"rr": 20,
+"rr_from": 110000,
+"rr_to": 132000
+},
+"Ipswich": {
+"pp": 54.9,
+"since": 2022,
+"rr": 35,
+"rr_from": 460000,
+"rr_to": 620000
+},
+"Lockyer Valley": {
+"pp": 41.7,
+"since": 2022,
+"rr": 66,
+"rr_from": 247500,
+"rr_to": 410000
+},
+"Mareeba": {
+"pp": 69.5,
+"since": 2021,
+"rr": 39,
+"rr_from": 222500,
+"rr_to": 310000
+},
+"Noosa": {
+"pp": 110.5,
+"since": 2022,
+"rr": 43,
+"rr_from": 470000,
+"rr_to": 670000
+},
+"Sunshine Coast": {
+"pp": 42.1,
+"since": 2023,
+"rr": 31,
+"rr_from": 550000,
+"rr_to": 720000
+},
+"Tablelands": {
+"pp": 6.3,
+"since": 2022,
+"rr": 28,
+"rr_from": 230000,
+"rr_to": 295000
+},
+"Western Downs": {
+"pp": 5.0,
+"since": 2022,
+"rr": 72,
+"rr_from": 71000,
+"rr_to": 122000
+},
+"North Burnett": {
+"rr": 86,
+"rr_from": 57000,
+"rr_to": 106000,
+"since": 2021
+},
+"Redland": {
+"rr": 21,
+"rr_from": 870000,
+"rr_to": 1050000,
+"since": 2023
+}
+},
+"source": {
+"h1": "Bendigo Bank Agribusiness, Australian Farmland Values 2026 Mid-Year Report (first half 2026 vs first half 2025)",
+"nswvg": "NSW Valuer General, Overview of NSW land values at 1 July 2025 (rural land, change over 12 months)",
+"qldvg": "Queensland Valuer-General, 2026 land valuations (change to 1 Oct 2025 since the last valuation)"
+}
+}

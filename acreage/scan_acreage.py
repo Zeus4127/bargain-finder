@@ -635,6 +635,7 @@ def finish(rows, scanned, keep_prev=True):
     data = {"scanned": scanned, "source": "farmbuy.com",
             "min_acres": MIN_ACRES, "max_price": MAX_PRICE, "guide": guide,
             "model": {"b": round(model["b"], 4), "h": round(model["h"], 4)}, "areas": areas,
+            "latest": (json.load(open(os.path.join(HERE, "latest-values.json"))) if os.path.exists(os.path.join(HERE, "latest-values.json")) else {}),
             "qbig": (json.load(open(os.path.join(HERE, "qld-big-sales.json")))["sales"] if os.path.exists(os.path.join(HERE, "qld-big-sales.json")) else []),
             "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u", "lat", "lng", "src")} for x in sold if x["a"] >= MIN_ACRES],
             "listings": rows}
