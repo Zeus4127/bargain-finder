@@ -9,3 +9,6 @@
 __pycache__/
 acreage/scan.log
 acreage/ACREAGE_NTFY_TOPIC.txt
+acreage/acreage-finder.html
+acreage/*.before-*
+acreage/sold.log

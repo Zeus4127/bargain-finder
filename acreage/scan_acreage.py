@@ -7,7 +7,7 @@ against similar blocks, and writes acreage-data.js for acreage.html.
 
 Run:  python3 scan_acreage.py            (full scan, ~10-20 min, polite 1.1s between requests)
       python3 scan_acreage.py --no-details   (faster, skips detail pages)
-Optional deal alerts: put an ntfy topic name in ACREAGE_NTFY_TOPIC.txt next to this file.
+Optional deal alerts: set the ACREAGE_NTFY_TOPIC environment variable to an ntfy topic (never put it in a file).
 """
 import json, re, sys, time, html, os, math, statistics, urllib.request, urllib.parse
 from datetime import datetime, timezone
@@ -92,6 +92,8 @@ FEATURES = [  # key, label, regex, quality points
     ("bitumen", "Sealed road",   r"\bbitumen|sealed road|highway frontage|all[- ]weather (road|access)", 4),
     ("rain",    "Good rainfall", r"\b(7|8|9|1[0-9])\d\d ?mm\b", 3),
     ("bush",    "Bush block",    r"bush ?block|bushland|\bscrub\b|timbered|uncleared|native (bush|vegetation|forest)|\bmallee\b|untouched|wilderness", 0),
+    ("titles",  "More than one title", r"\b(two|three|four|five|six|2|3|4|5|6|multiple|several|separate|individual) (separate |freehold |individual )?titles\b|\btitles? (can be|could be) sold separately|sold (as|on) (separate|individual) titles", 0),
+    ("subdiv",  "Subdivision potential", r"subdivision (potential|approv|opportunit|possible)|potential (to|for) subdivi|approved (for )?subdivision|da approved|development approval|subdivide|rezon", 0),
     ("vendor",  "Vendor finance", r"vendor finance|terms available|deposit and|owner finance", 0),
 ]
 FLAGS = [  # key, label, regex, quality penalty
@@ -123,7 +125,33 @@ def detail(url):
         feats.remove("house")
     m = re.search(r"user-content[^>]*>(.*?)</div>", s, re.S)
     desc = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", m.group(1)))).strip() if m else ""
-    return {"feats": feats, "flags": flags, "desc": desc[:320], "sold": sold, "uo2": uo}
+    la = re.search(r'data-lat="(-?[\d.]+)"', s); lo = re.search(r'data-lng="(-?[\d.]+)"', s)
+    rg = re.search(r'"property":\{"address":\{[^}]*"region":(null|"[^"]*")', s)
+    region = json.loads(rg.group(1)) if rg else None
+    return {"feats": feats, "flags": flags, "desc": desc[:320], "sold": sold, "uo2": uo, "v": 2,
+            "lat": float(la.group(1)) if la else None, "lng": float(lo.group(1)) if lo else None, "region": region}
+
+# ---- NSW planning: zoning and minimum lot size --------------------------------
+NSW_PLAN = "https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/ePlanning/Planning_Portal_Principal_Planning/MapServer"
+def nsw_planning(lat, lng):
+    out = {}
+    q = urllib.parse.urlencode({"geometry": f"{lng},{lat}", "geometryType": "esriGeometryPoint", "inSR": 4326,
+                                "spatialRel": "esriSpatialRelIntersects", "outFields": "*", "returnGeometry": "false", "f": "json"})
+    for layer, kind in ((19, "zone"), (22, "lot")):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(f"{NSW_PLAN}/{layer}/query?{q}", headers={"User-Agent": UA}), timeout=30) as r:
+                feats = json.loads(r.read().decode()).get("features") or []
+        except Exception:
+            continue
+        if not feats: continue
+        a = feats[0]["attributes"]
+        if kind == "zone":
+            out.update(zone=a.get("SYM_CODE") or a.get("LABEL"), zone_name=a.get("LAY_CLASS"), lga=(a.get("LGA_NAME") or "").title())
+        elif a.get("LOT_SIZE"):
+            v = float(a["LOT_SIZE"]); u = (a.get("UNITS") or "").lower()
+            out["minlot_ha"] = round(v / 10000 if "m" in u and "ha" not in u else v, 3)
+        time.sleep(0.3)
+    return out
 
 # ---- fair-price model --------------------------------------------------------
 STATION_ACRES = 20_000   # bigger holdings are mostly pastoral stations: priced as their own market
@@ -183,7 +211,7 @@ def comps_for(subj, pool, model, k=12):
         use = same if len(same) >= 4 else cs
         if len(use) >= 4 or name == "state":
             def key(c):  # nearest in size, prefer same house status and same district
-                return abs(math.log(c["a"] / a)) + (0 if c["house"] == subj.get("house") else 0.4) + (0 if c["pc"][:3] == subj["pc"][:3] else 0.3) + (0 if kind(c) == kind(subj) else 0.5)
+                return abs(math.log(c["a"] / a)) + (0 if c["house"] == subj.get("house") else 0.4) + (0 if c["pc"][:3] == subj["pc"][:3] else 0.3) + (0 if kind(c) == kind(subj) else 0.5) - (0.15 if c.get("is_sold") else 0)
             picked = sorted(use, key=key)[:k]; level = name
             break
     return picked, level
@@ -212,6 +240,40 @@ def price_one(r, model, pool):
     r["_lo"] *= mult; r["_hi"] *= mult
     return fair * mult, cs, level
 
+def load_sold():
+    """Recent sales from sold-cache.json (scan_sold.py), shaped like listings so they can be comparisons."""
+    try: cache = json.load(open(os.path.join(HERE, "sold-cache.json")))
+    except Exception: return []
+    out = []
+    for x in cache.values():
+        if x.get("bad") or not x.get("p") or not x.get("a") or not x.get("s"): continue
+        tags = " ".join(x.get("tags") or []).lower()
+        out.append({"id": "s" + str(x["id"]), "s": x["s"], "pc": x.get("pc") or "000", "sub": x.get("sub"), "region": x.get("region"),
+                    "a": x["a"], "p": x["p"], "house": (x.get("bed") or 0) > 0, "bush": "bush" in tags,
+                    "feats": ["bush"] if "bush" in tags and not (x.get("bed") or 0) else [], "type": x.get("type") or "",
+                    "sold": x.get("sold"), "is_sold": True, "u": x.get("u")})
+    return out
+
+def track_history(rows, scanned, sold_by_id):
+    """Keep first-seen date, price changes and gone-from-market dates across daily scans."""
+    hp = os.path.join(HERE, "listings-history.json")
+    try: hist = json.load(open(hp))
+    except Exception: hist = {}
+    today = scanned[:10]; seen = set()
+    for r in rows:
+        h = hist.setdefault(r["id"], {"first": today, "prices": []})
+        h["last"] = today; h.pop("gone", None); seen.add(r["id"])
+        if r["p"] and (not h["prices"] or h["prices"][-1][1] != r["p"]): h["prices"].append([today, r["p"]])
+        h.update(sub=r["sub"], s=r["s"], a=r["a"], u=r["u"])
+        r["first"] = h["first"]
+        if len(h["prices"]) > 1 and h["prices"][-1][1] < h["prices"][-2][1]:
+            r["drop"] = [h["prices"][-2][1], h["prices"][-1][1], h["prices"][-1][0]]
+    for pid, h in hist.items():
+        if pid not in seen and "gone" not in h: h["gone"] = today
+        sx = sold_by_id.get("s" + pid)
+        if sx: h["sold_price"] = sx["p"]; h["sold_date"] = sx.get("sold")
+    json.dump(hist, open(hp, "w"))
+
 def quality(r):
     q = 50
     for k, _, _, pts in FEATURES:
@@ -237,7 +299,7 @@ def main():
         old = json.loads(open(pth).read().split("=", 1)[1].rstrip().rstrip(";"))
         rows = old["listings"]
         for r in rows:
-            for k in ("fair", "ratio", "v", "offer", "walk", "comps", "cids", "lvl", "lo", "hi"): r.pop(k, None)
+            for k in ("fair", "ratio", "v", "offer", "walk", "comps", "cids", "lvl", "lo", "hi", "nsold", "drop"): r.pop(k, None)
             r["flags"] = [f for f in r.get("flags") or [] if f != "station"]
         return finish(rows, old["scanned"], keep_prev=False)
     raw = []
@@ -271,13 +333,23 @@ def main():
         todo = [r for r in rows if r["p"] and r["p"] <= DETAIL_MAX]
         print("Reading", len(todo), "detail pages (", sum(1 for r in todo if r["id"] in cache), "cached )")
         for i, r in enumerate(todo, 1):
-            d = cache.get(r["id"]) or detail(r["u"])
+            d = cache.get(r["id"])
+            if not d or d.get("v") != 2: d = detail(r["u"])
             if d: cache[r["id"]] = d
             if d:
-                r.update({k: v for k, v in d.items() if k not in ("uo2",)})
+                r.update({k: v for k, v in d.items() if k not in ("uo2", "v")})
                 if d.get("uo2"): r["uo"] = True
             if i % 25 == 0: print(f"  {i}/{len(todo)}", flush=True); json.dump(cache, open(cp, "w"))
         json.dump(cache, open(cp, "w"))
+        pp = os.path.join(HERE, "planning-cache.json")
+        try: plan = json.load(open(pp))
+        except Exception: plan = {}
+        nsw = [r for r in rows if r["s"] == "NSW" and r.get("lat")]
+        print("NSW planning lookups:", sum(1 for r in nsw if r["id"] not in plan), "new", flush=True)
+        for r in nsw:
+            if r["id"] not in plan: plan[r["id"]] = nsw_planning(r["lat"], r["lng"])
+            r.update(plan[r["id"]])
+        json.dump(plan, open(pp, "w"))
     return finish(rows, datetime.now(timezone.utc).isoformat(timespec="minutes"))
 
 def finish(rows, scanned, keep_prev=True):
@@ -286,13 +358,19 @@ def finish(rows, scanned, keep_prev=True):
         if r["house"] and "house" not in r.setdefault("feats", []): r["feats"].insert(0, "house")
         if not r["house"] and "house" in r.get("feats", []): r["feats"].remove("house")
         if r["a"] >= STATION_ACRES: r.setdefault("flags", []).append("station")
+        if r.get("minlot_ha"):
+            lots = int((r["a"] / 2.471) // r["minlot_ha"])
+            r["lots"] = lots if lots >= 2 else 0
     priced = [r for r in rows if r["p"]]
     model = fit(priced)
-    pool = [r for r in priced if r["a"] < STATION_ACRES and not r.get("sold")]
+    sold = load_sold()
+    pool = [r for r in priced if r["a"] < STATION_ACRES and not r.get("sold")] + \
+           [x for x in sold if x["a"] >= MIN_ACRES * 0.5 and x["a"] < STATION_ACRES]
     for r in rows:
         fair, cs, level = price_one(r, model, pool)
         r["fair"] = round(fair, -3) if fair else None; r["comps"] = len(cs); r["lvl"] = level
         r["cids"] = [c["id"] for c in cs[:6]]; r["q"] = quality(r)
+        r["nsold"] = sum(1 for c in cs if c.get("is_sold"))
         if r["p"] and fair:
             ratio = r["p"] / fair
             r["ratio"] = round(ratio, 3); r["v"] = verdict(r["p"], r["_lo"], r["_hi"])
@@ -302,6 +380,7 @@ def finish(rows, scanned, keep_prev=True):
             r["walk"] = round(min(r["p"], fair * 1.05), -3)
         r["ppa"] = round(r["p"] / r["a"]) if r["p"] else None
         r.pop("_lo", None); r.pop("_hi", None)
+    track_history(rows, scanned, {x["id"]: x for x in sold})
     # state medians for the guide
     guide = {}
     for s in STATES:
@@ -313,6 +392,7 @@ def finish(rows, scanned, keep_prev=True):
     data = {"scanned": scanned, "source": "farmbuy.com",
             "min_acres": MIN_ACRES, "max_price": MAX_PRICE, "guide": guide,
             "model": {"b": round(model["b"], 4), "h": round(model["h"], 4)},
+            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u")} for x in sold if x["a"] >= MIN_ACRES],
             "listings": rows}
     prev_ids = set()
     pth = os.path.join(HERE, "acreage-data.js")
@@ -323,9 +403,8 @@ def finish(rows, scanned, keep_prev=True):
         f.write("window.ACREAGE_DATA=" + json.dumps(data, separators=(",", ":")) + ";\n")
     print("Wrote", pth)
     # optional ntfy alerts for new great/good deals under $350k
-    tp = os.path.join(HERE, "ACREAGE_NTFY_TOPIC.txt")
-    if keep_prev and prev_ids and os.path.exists(tp):
-        topic = open(tp).read().strip()
+    topic = os.environ.get("ACREAGE_NTFY_TOPIC", "").strip()
+    if keep_prev and prev_ids and topic:
         for r in rows:
             if r["id"] not in prev_ids and r.get("v") in ("great", "good") and r["p"] <= 350_000 and not r["uo"]:
                 msg = f"{r['a']:.0f} ac {r['sub']} {r['s']} ${r['p']:,.0f} ({r['v']} deal)"

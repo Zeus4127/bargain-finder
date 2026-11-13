@@ -6,9 +6,7 @@
 /* Layout: Bargain Finder frame. Sticky title bar, tab row, then one column of ranked cards; chart and guides in their own tabs. */
 :root{--bg:#F5F6F2;--surface:#FFFFFF;--ink:#1A2620;--muted:#5A6862;--line:#DCE3DE;--accent:#1F6F5C;--accent-soft:#E1F0EA;
  --ok:#26734A;--ok-soft:#E4F3EA;--good:#3F7F2A;--good-soft:#EBF4E1;--warn:#9A5B00;--warn-soft:#FDF2DF;--stop:#A3262D;--stop-soft:#FBE7E8;--info:#2D5F8A;--info-soft:#E6EFF7;--head:#E8F1EC;--sun:#F3B53F;--sun-ink:#2A1D00;
- --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101815;--surface:#18231F;--ink:#E3ECE7;--muted:#9AAAA2;--line:#2A3934;--accent:#5CC2A6;--accent-soft:#163A30;--ok:#71CF9B;--ok-soft:#163323;--good:#A8D77F;--good-soft:#22301A;--warn:#F0B35A;--warn-soft:#33270F;--stop:#F08389;--stop-soft:#3A1A1D;--info:#8DB9E2;--info-soft:#172634;--head:#14211C;--sun:#C98E1E;--sun-ink:#1A1200;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#101815;--surface:#18231F;--ink:#E3ECE7;--muted:#9AAAA2;--line:#2A3934;--accent:#5CC2A6;--accent-soft:#163A30;--ok:#71CF9B;--ok-soft:#163323;--good:#A8D77F;--good-soft:#22301A;--warn:#F0B35A;--warn-soft:#33270F;--stop:#F08389;--stop-soft:#3A1A1D;--info:#8DB9E2;--info-soft:#172634;--head:#14211C;--sun:#C98E1E;--sun-ink:#1A1200;color-scheme:dark}
+ color-scheme:light;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.45;color:var(--ink);background:var(--bg);-webkit-tap-highlight-color:transparent}
@@ -106,6 +104,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 <header class="top"><div class="topin">
   <div class="bar1"><h1>Acreage Finder</h1><span class="live"><span class="dot"></span><span id="scanned">loading…</span></span></div>
   <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-v="today">Today</button>
     <button role="tab" data-v="deals" aria-selected="true">Deals</button>
     <button role="tab" data-v="check">Check a listing</button>
     <button role="tab" data-v="all">All listings</button>
@@ -116,6 +115,17 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 </div></header>
 
 <main>
+<section class="view" id="v-today" hidden>
+  <h3>What's new</h3>
+  <p class="what" id="tNote"></p>
+  <div class="facts" id="tfacts" style="margin:0;border-radius:14px"></div>
+  <h3>New listings</h3><div class="list" id="tnew"></div>
+  <h3>Price drops</h3><div class="list" id="tdrop"></div>
+  <h3>Recently sold, 100+ acres</h3>
+  <p class="what">From Farmbuy's sold listings. The price is the sale price when the agent shares it, otherwise the last asking price. The date is roughly when it was marked sold.</p>
+  <div class="tablewrap"><table><thead><tr><th>Where</th><th>State</th><th class="r">Acres</th><th class="r">Price</th><th class="r">$/acre</th><th>Kind</th><th>Sold</th></tr></thead><tbody id="tsold"></tbody></table></div>
+</section>
+
 <section class="view" id="v-deals">
   <div class="hero"><div class="ey">All of Australia · 100 acres and up</div>
     <h2>Is this block a <em>bargain</em>?</h2>
@@ -193,6 +203,9 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <div class="tablewrap"><table><thead><tr><th>Region</th><th>State</th><th class="r">$/acre 2025</th><th class="r">Last year</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th></tr></thead><tbody id="rtable"></tbody></table></div>
     <p class="what">Growth is the average per year (compound). Tap a region to see growth by farm size.</p>
     <div id="bands"></div></div>
+  <div class="panel"><h3>Recent sales vs asking prices, by region</h3>
+    <p class="what">Farmbuy sales of 100+ acres over the last few months, against what similar regions' blocks are asking now. When asking prices sit far above what's selling, sellers are hopeful and prices may soften. When they're close, the market is holding.</p>
+    <div class="tablewrap"><table><thead><tr><th>Region</th><th>State</th><th class="r">Sales</th><th class="r">Sold $/acre</th><th class="r">Asking $/acre now</th><th class="r">Asking vs sold</th></tr></thead><tbody id="rsold"></tbody></table></div></div>
   <div class="panel"><h3>Councils</h3>
     <label for="lq" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Find a council (e.g. Western Downs, Tenterfield, Southern Mallee)<input id="lq" type="search" style="padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:42px" placeholder="council name"></label>
     <div class="tablewrap"><table><thead><tr><th>Council</th><th>State</th><th class="r">$/acre 2025</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th><th class="r">$100k 20 yrs ago is now</th></tr></thead><tbody id="ltable"></tbody></table></div>
@@ -250,7 +263,7 @@ const D=window.ACREAGE_DATA||{listings:[],guide:{},model:{}};
 const L=D.listings;
 const STATES=["QLD","NSW","VIC","SA","WA","NT","TAS"];
 const VN={why:"Unusually cheap: find out why",great:"Great deal",good:"Good deal",fair:"Fair price",high:"A bit high",over:"Overpriced",none:"No price shown",gone:"Under offer / sold"};
-const FEAT={house:"House or cabin",dam:"Dam",bore:"Bore",creek:"Creek or river",power:"Power",solar:"Solar",shed:"Shed",fenced:"Fenced",bitumen:"Sealed road",rain:"Good rainfall",vendor:"Vendor finance"};
+const FEAT={house:"House or cabin",dam:"Dam",bore:"Bore",creek:"Creek or river",power:"Power",solar:"Solar",shed:"Shed",fenced:"Fenced",bitumen:"Sealed road",rain:"Good rainfall",vendor:"Vendor finance",titles:"More than one title",subdiv:"Mentions subdivision",bush:"Bush block"};
 const FLAG={covenant:"Covenant / conservation agreement",nobuild:"No house allowed",lease:"Leasehold",access:"Check legal access",flood:"Flood-prone",remote:"Off-grid, no services",gas:"Gas wells",station:"Pastoral station: priced on its own"};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -258,7 +271,7 @@ const money=n=>n==null?"–":"$"+Math.round(n).toLocaleString("en-AU");
 const short=n=>n==null?"–":n>=1e6?"$"+(n/1e6).toFixed(n>=1e7?0:2).replace(/\.?0+$/,"")+"M":"$"+Math.round(n/1e3)+"k";
 const acres=a=>(a>=1000?Math.round(a).toLocaleString("en-AU"):(+a.toFixed(1)))+" ac";
 const gone=x=>x.uo||x.sold;
-const byId={};L.forEach(x=>byId[x.id]=x);
+const byId={};L.forEach(x=>byId[x.id]=x);const SOLD=D.sold||[];SOLD.forEach(x=>byId[x.id]=x);
 const vkey=x=>gone(x)?"gone":(x.v||"none");
 // value score: discount from fair + quality
 const score=x=>!x.ratio?-999:x.v==="why"?(x.q-50)*0.35-5:(1-x.ratio)*100+(x.q-50)*0.35;
@@ -281,6 +294,38 @@ function show(v){tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v)
 tabs.forEach(b=>b.onclick=()=>{show(b.dataset.v);window.scrollTo(0,0)});
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(tabs.some(b=>b.dataset.v===h))show(h)});
 
+
+const LATEST=(D.scanned||"").slice(0,10);
+const firstDays=[...new Set(L.map(x=>x.first).filter(Boolean))].sort();
+const tracking=firstDays.length>1;
+const isNew=x=>tracking&&x.first&&(Date.parse(LATEST)-Date.parse(x.first))<=3*864e5;
+function subLine(x){
+  const bits=[];
+  if(x.lots>=2)bits.push(`<b>Could split into ${x.lots} lots</b> under the council's ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} minimum lot size (zone ${esc(x.zone||"?")}${x.zone_name?" "+esc(x.zone_name):""}). Subdivision still needs council approval.`);
+  else if(x.minlot_ha)bits.push(`Can't be split: the council's minimum lot size here is ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} (zone ${esc(x.zone||"?")}).`);
+  if((x.feats||[]).includes("titles"))bits.push("<b>More than one title.</b> Separate titles can be sold off one at a time without a subdivision.");
+  if((x.feats||[]).includes("subdiv"))bits.push("The listing mentions subdivision. Ask for the approval or council advice in writing.");
+  return bits.length?`<div class="loc" style="color:var(--ink)">${bits.join(" ")}</div>`:"";
+}
+const HD=window.HISTORY_DATA;
+function areaInfo(x){
+  if(!HD)return null;
+  let g=null,label="";
+  if(x.lga){g=HD.lgas.find(l=>l.state===x.s&&l.lga.toUpperCase()===x.lga.toUpperCase());if(g)label=x.lga+" council"}
+  const st=HD.regions.find(r=>r.is_state&&r.state===x.s);
+  const near=SOLD.filter(c=>c.s===x.s&&c.pc.slice(0,3)===x.pc.slice(0,3));
+  const yoy=g&&g.prev?(g.median/g.prev-1)*100:st?st.yoy:null;
+  const dir=yoy==null?null:yoy>3?"up":yoy<-3?"down":"sideways";
+  return {g,label,st,yoy,dir,near};
+}
+function areaLine(x){
+  const a=areaInfo(x);if(!a)return"";
+  const p=[];
+  if(a.dir)p.push(`Area prices: <b>${a.dir==="up"?"going up":a.dir==="down"?"going down":"steady"}</b> (${a.yoy>0?"+":""}${a.yoy.toFixed(1)}% last year, ${a.g?a.label:x.s+" overall"})`);
+  const c20=a.g?a.g.cagr20:a.st&&a.st.cagr20;if(c20!=null)p.push(`${c20}%/yr over 20 years`);
+  if(a.near.length)p.push(`${a.near.length} sold nearby recently, median ${money(median(a.near.map(c=>c.p/c.a)))}/acre`);
+  return p.length?`<div class="loc">${p.join(" · ")}</div>`:"";
+}
 // card
 function why(x){
   const r=[];
@@ -290,7 +335,8 @@ function why(x){
   const lv={district:"in the same postcode district",area:"in the wider area",state:"across "+x.s}[x.lvl]||"";
   r.push(`Fair price is the middle of ${x.comps} similar ${KN[kindOf(x)]||"blocks"} ${lv}, each scaled to this block's size.`);
   const cn=(x.cids||[]).map(i=>byId[i]).filter(Boolean).slice(0,4);
-  if(cn.length)r.push("Compared with: "+cn.map(c=>`${c.sub} ${acres(c.a)} ${short(c.p)}`).join("; ")+".");
+  if(cn.length)r.push("Compared with: "+cn.map(c=>`${c.sub} ${acres(c.a)} ${short(c.p)}${c.sold?" (sold)":""}`).join("; ")+".");
+  if(x.nsold)r.push(`${x.nsold} of the comparisons are recent sales, which count for more than asking prices.`);
   if(x.house)r.push("Priced as a block with a house. Land with a house lists for a lot more than bare land of the same size.");
   (x.flags||[]).forEach(f=>{const m={covenant:"Covenant takes about 25% off: you can't clear it, and building may be limited.",nobuild:"No right to build takes about 30% off.",lease:"Leasehold takes about 20% off: you pay rent and need approval to sell.",access:"Access needs checking: a block without legal road access is worth much less.",flood:"Flood-prone land is worth a little less. Check the flood maps.",remote:"No services: budget for solar, water tanks and a long drive.",gas:"Gas wells bring traffic and easements, but some pay yearly compensation."}[f];if(m)r.push(m)});
   if(x.desc==null)r.push("I couldn't read this listing's page, so its features are unknown.");
@@ -301,11 +347,12 @@ function card(x){
   const t=(x.feats||[]).map(f=>`<span class="tag">${FEAT[f]||f}</span>`).join("")+(x.flags||[]).map(f=>`<span class="tag bad">${FLAG[f]||f}</span>`).join("");
   const name=x.addr.replace(/,?\s*(QLD|NSW|VIC|SA|WA|TAS|NT)\s*\d{4}$/,"")||x.sub;
   return `<article class="card">
-  <div class="chead"><div style="min-width:0"><div class="pills"><span class="pill v-${vk}">${VN[vk]}${gone(x)&&x.v?" · was "+VN[x.v].toLowerCase():""}</span><span class="pill st">${x.s}</span>${x.type?`<span class="pill v-none">${esc(x.type.split(",")[0])}</span>`:""}</div>
+  <div class="chead"><div style="min-width:0"><div class="pills"><span class="pill v-${vk}">${VN[vk]}${gone(x)&&x.v?" · was "+VN[x.v].toLowerCase():""}</span><span class="pill st">${x.s}</span>${isNew(x)?'<span class="pill v-great">New</span>':""}${x.drop?`<span class="pill v-high">Price drop ${short(x.drop[0])} → ${short(x.drop[1])}</span>`:""}${x.type?`<span class="pill v-none">${esc(x.type.split(",")[0])}</span>`:""}</div>
     <h4>${esc(name)}</h4><div class="loc">${esc(x.sub)} ${x.s} ${esc(x.pc)}${x.ag?" · "+esc(x.ag):""}</div></div>
     <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
   <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Fair price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
   ${x.lo?`<div class="loc">Similar blocks nearby usually ask ${short(x.lo)} to ${short(x.hi)}.</div>`:""}
+  ${subLine(x)}${areaLine(x)}
   ${t?`<div class="tags">${t}</div>`:""}
   ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
   <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>
@@ -435,7 +482,7 @@ const st=H.regions.filter(r=>r.is_state);const ORDER=["QLD","NSW","VIC","SA","WA
 const N=H.national;
 $("gfacts").innerHTML=[[money(pa(N.median)),"median per acre, 2025"],[pc(N.yoy),"growth in 2025 (12-year low)"],[N.cagr20+"%","a year over 20 years"],["×"+(Math.pow(1+N.cagr20/100,20)).toFixed(1),"what land cost in 2005"]].map(f=>`<div><b>${f[0]}</b><small>${f[1]}</small></div>`).join("");
 $("gstates").innerHTML=st.map(r=>`<tr><td>${r.name}</td><td class="r num">${money(pa(r.median))}</td><td class="r num" ${cls(r.yoy)}>${pc(r.yoy)}</td><td class="r num" ${cls(r.cagr5)}>${pc(r.cagr5)}</td><td class="r num" ${cls(r.cagr10)}>${pc(r.cagr10)}</td><td class="r num" ${cls(r.cagr20)}>${pc(r.cagr20)}</td><td class="r num">${r.cagr20!=null?short(100000*Math.pow(1+r.cagr20/100,20)):"–"}</td></tr>`).join("");
-const COL={QLD:"#C2410C",NSW:"#1F6F5C",VIC:"#2D5F8A",SA:"#9A5B00",WA:"#7C3AED",TAS:"#0E7490",NT:"#A3262D"};
+const COL={QLD:"#C2410C",NSW:"#1F6F5C",VIC:"#2D5F8A",SA:"#9A5B00",WA:"#65A30D",TAS:"#0E7490",NT:"#A3262D"};
 let on=new Set(["QLD","NSW","VIC","SA","WA","TAS"]);
 const gc=$("gchips");ORDER.forEach(s=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=s;b.onclick=()=>{on.has(s)?on.delete(s):on.add(s);draw()};gc.appendChild(b)});
 function draw(){
@@ -476,6 +523,27 @@ function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr
   $("fOut").innerHTML=sc.map(([t,g,why])=>`<div><small>${t}: ${g.toFixed(1)}%/yr</small><b>${short(p*Math.pow(1+g/100,y))}</b><small>${why}</small></div>`).join("");
   $("fNote").textContent=`These are prices before costs. Rates, stamp duty (about 4–5% to buy), agent fees (2–3% to sell) and inflation of about 2.5–3% a year all come off. Land with nothing on it often grows slower than the farm medians above, and ABARES puts hobby-farm growth at about ${H.outlook.abares_10yr_hobby}% a year over 10 years.`;}
 ["fPrice","fYears","fRegion"].forEach(k=>$(k).addEventListener("input",fut));fut();
+})();
+
+// today
+(function(){
+  const live2=L.filter(x=>!gone(x));
+  const nw=tracking?live2.filter(isNew).sort((a,b)=>score(b)-score(a)):[];
+  const dr=live2.filter(x=>x.drop).sort((a,b)=>(b.drop[0]-b.drop[1])/b.drop[0]-(a.drop[0]-a.drop[1])/a.drop[0]);
+  $("tNote").textContent=tracking?`Scanned ${new Date(D.scanned).toLocaleString("en-AU")}. New means first seen in the last 3 days.`:`Daily tracking started ${new Date(firstDays[0]||D.scanned).toLocaleDateString("en-AU",{day:"numeric",month:"long"})}. From the next daily scan, new listings and price drops show up here.`;
+  const s90=SOLD.filter(c=>c.sold&&(Date.parse(LATEST)-Date.parse(c.sold))<=90*864e5);
+  $("tfacts").innerHTML=[[nw.length,"new listings"],[dr.length,"price drops"],[s90.length,"sold, last 90 days"],[s90.length?money(median(s90.map(c=>c.p/c.a))):"–","median sold $/acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
+  $("tnew").innerHTML=nw.length?nw.slice(0,30).map(card).join(""):`<div class="empty">${tracking?"No new 100+ acre listings in the last 3 days.":"Nothing to compare with yet. Check back after tomorrow's scan."}</div>`;
+  $("tdrop").innerHTML=dr.length?dr.slice(0,30).map(card).join(""):'<div class="empty">No price drops spotted yet.</div>';
+  $("tsold").innerHTML=SOLD.slice().sort((a,b)=>(b.sold||"").localeCompare(a.sold||"")).slice(0,60).map(c=>`<tr><td><a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.sub)} ${esc(c.pc)}</a></td><td>${c.s}</td><td class="r num">${acres(c.a)}</td><td class="r num">${short(c.p)}</td><td class="r num">${money(c.p/c.a)}</td><td>${c.house?"House":c.bush?"Bush":"Land"}</td><td class="num">${c.sold?new Date(c.sold).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"–"}</td></tr>`).join("")||'<tr><td colspan="7" class="muted">No sold data yet.</td></tr>';
+})();
+
+// sold vs asking by region
+(function(){
+  const by={};SOLD.forEach(c=>{if(!c.region)return;(by[c.s+"|"+c.region]=by[c.s+"|"+c.region]||{s:c.s,r:c.region,sold:[],ask:[]}).sold.push(c.p/c.a)});
+  L.forEach(x=>{if(x.region&&x.p&&!gone(x)){const k=x.s+"|"+x.region;if(by[k])by[k].ask.push(x.p/x.a)}});
+  const rows=Object.values(by).filter(v=>v.sold.length>=3).sort((a,b)=>b.sold.length-a.sold.length);
+  $("rsold").innerHTML=rows.map(v=>{const so=median(v.sold),as=v.ask.length?median(v.ask):null,g=as?(as/so-1)*100:null;return `<tr><td>${esc(v.r)}</td><td>${v.s}</td><td class="r num">${v.sold.length}</td><td class="r num">${money(so)}</td><td class="r num">${as?money(as):"–"}</td><td class="r num" ${g==null?"":g>40?'style="color:var(--warn)"':g<15?'style="color:var(--ok)"':""}>${g==null?"–":(g>0?"+":"")+Math.round(g)+"%"}</td></tr>`}).join("")||'<tr><td colspan="6" class="muted">No sold data yet.</td></tr>';
 })();
 
 renderDeals();renderAll();
