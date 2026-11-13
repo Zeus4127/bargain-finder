@@ -56,7 +56,7 @@ h3{margin:0;font-size:18px;text-wrap:balance}
 .loc{font-size:13px;color:var(--muted)}
 .pills{display:flex;flex-wrap:wrap;gap:5px}
 .pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
-.v-great{background:var(--ok-soft);color:var(--ok)}.v-good{background:var(--good-soft);color:var(--good)}.v-fair{background:var(--info-soft);color:var(--info)}.v-high{background:var(--warn-soft);color:var(--warn)}.v-over,.v-gone{background:var(--stop-soft);color:var(--stop)}.v-none{background:var(--head);color:var(--muted)}
+.v-great{background:var(--ok-soft);color:var(--ok)}.v-why{background:var(--warn-soft);color:var(--warn)}.v-good{background:var(--good-soft);color:var(--good)}.v-fair{background:var(--info-soft);color:var(--info)}.v-high{background:var(--warn-soft);color:var(--warn)}.v-over,.v-gone{background:var(--stop-soft);color:var(--stop)}.v-none{background:var(--head);color:var(--muted)}
 .st{background:var(--accent-soft);color:var(--accent)}
 .ask{text-align:right}
 .ask b{font:700 18px var(--mono);display:block}
@@ -159,7 +159,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
   <div class="filters">
     <label for="aq">Search<input type="search" id="aq" placeholder="town, postcode, agent"></label>
     <label for="as">State<select id="as"><option value="">All</option></select></label>
-    <label for="av">Verdict<select id="av"><option value="">Any</option><option value="great">Great deal</option><option value="good">Good deal</option><option value="fair">Fair price</option><option value="high">A bit high</option><option value="over">Overpriced</option><option value="none">No price shown</option></select></label>
+    <label for="av">Verdict<select id="av"><option value="">Any</option><option value="why">Unusually cheap</option><option value="great">Great deal</option><option value="good">Good deal</option><option value="fair">Fair price</option><option value="high">A bit high</option><option value="over">Overpriced</option><option value="none">No price shown</option></select></label>
     <label for="amax">Max price<select id="amax"><option value="0">Any</option><option value="200000">$200k</option><option value="300000">$300k</option><option value="500000">$500k</option><option value="1000000">$1M</option></select></label>
     <label for="asort">Sort<select id="asort"><option value="ratio">Best value</option><option value="p">Cheapest</option><option value="ppa">$ per acre</option><option value="a">Biggest</option><option value="q">Best quality</option></select></label>
     <label class="chk" for="agone"><input type="checkbox" id="agone"> Show under offer / sold</label>
@@ -211,7 +211,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
       <li>Each block is compared with up to 12 of the most similar blocks for sale: same postcode district first (then the wider area, then the state), similar size, and the same kind of land: bare bush, working farm, bare lifestyle block, or a block with a house.</li>
       <li>Each comparison block's price is scaled to this block's size (bigger blocks cost more in total but less per acre), and the middle value is the fair price. Stations over 20,000 acres are left out, because they trade as a different market.</li>
       <li>Then the block's own details: creek or river frontage adds 5%, power 4%. A covenant takes off 25%, no right to build 30%, leasehold 20%, doubtful access 15%, flood-prone 7%.</li>
-      <li><b>Verdict:</b> 25%+ under fair price is a great deal, 8–25% under is good, within ±10% is fair, 10–30% over is a bit high, more than 30% over is overpriced.</li>
+      <li><b>Verdict:</b> judged against the usual range of the similar blocks (their middle half). Inside the range is a fair price. Just under the low end is a good deal, and 15%+ under is a great deal. Less than half the low end is flagged "unusually cheap: find out why", because land that cheap nearly always has a catch. Up to 20% over the high end is a bit high, and more than that is overpriced.</li>
       <li><b>Opening offer</b> = 88% of the lower of asking and fair price. <b>Walk away</b> above fair price plus 5%.</li>
       <li>These are estimates from asking prices, not sold prices. A building and pest report, a title search and a look in person come first.</li>
     </ul></div>
@@ -249,7 +249,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 const D=window.ACREAGE_DATA||{listings:[],guide:{},model:{}};
 const L=D.listings;
 const STATES=["QLD","NSW","VIC","SA","WA","NT","TAS"];
-const VN={great:"Great deal",good:"Good deal",fair:"Fair price",high:"A bit high",over:"Overpriced",none:"No price shown",gone:"Under offer / sold"};
+const VN={why:"Unusually cheap: find out why",great:"Great deal",good:"Good deal",fair:"Fair price",high:"A bit high",over:"Overpriced",none:"No price shown",gone:"Under offer / sold"};
 const FEAT={house:"House or cabin",dam:"Dam",bore:"Bore",creek:"Creek or river",power:"Power",solar:"Solar",shed:"Shed",fenced:"Fenced",bitumen:"Sealed road",rain:"Good rainfall",vendor:"Vendor finance"};
 const FLAG={covenant:"Covenant / conservation agreement",nobuild:"No house allowed",lease:"Leasehold",access:"Check legal access",flood:"Flood-prone",remote:"Off-grid, no services",gas:"Gas wells",station:"Pastoral station: priced on its own"};
 const $=id=>document.getElementById(id);
@@ -261,7 +261,7 @@ const gone=x=>x.uo||x.sold;
 const byId={};L.forEach(x=>byId[x.id]=x);
 const vkey=x=>gone(x)?"gone":(x.v||"none");
 // value score: discount from fair + quality
-const score=x=>x.ratio?(1-x.ratio)*100+(x.q-50)*0.35:-999;
+const score=x=>!x.ratio?-999:x.v==="why"?(x.q-50)*0.35-5:(1-x.ratio)*100+(x.q-50)*0.35;
 
 let pref={dst:"All",dmax:"300000",dmin:"100",dhouse:false,dclean:false,tab:"deals"};
 try{Object.assign(pref,JSON.parse(localStorage.getItem("acreage-pref")||"{}"))}catch(e){}
@@ -270,8 +270,8 @@ const save=()=>{try{localStorage.setItem("acreage-pref",JSON.stringify(pref))}ca
 // header + facts
 if(D.scanned){const d=new Date(D.scanned);$("scanned").textContent=L.length+" blocks · scanned "+d.toLocaleDateString("en-AU",{day:"numeric",month:"short"})}else $("scanned").textContent="no scan data";
 const live=L.filter(x=>x.p&&!gone(x));
-const deals=live.filter(x=>x.v==="great"||x.v==="good");
-$("facts").innerHTML=[[L.length,"blocks over 100 ac"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"good or great deals"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
+const deals=live.filter(x=>x.v==="great"||x.v==="good"||x.v==="why");
+$("facts").innerHTML=[[L.length,"blocks over 100 ac"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"cheap for their area"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
 function median(a){if(!a.length)return null;a=[...a].sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2}
 $("facts").lastChild.querySelector("b").textContent=live.length?"$"+Math.round(median(live.map(x=>x.p/x.a))).toLocaleString("en-AU"):"–";
 
@@ -284,6 +284,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(tabs
 // card
 function why(x){
   const r=[];
+  if(x.v==="why")r.push("This is less than half the low end of what similar blocks nearby ask. Land this cheap usually has a catch: scrub you can't clear, a covenant, no right to build, no legal access, or poor country. Find out which before you get excited.");
   if(x.ratio){const pct=Math.round((1-x.ratio)*100);r.push(pct>=0?`Asking is ${pct}% under the fair price of ${money(x.fair)}.`:`Asking is ${-pct}% over the fair price of ${money(x.fair)}.`)}
   if(!x.fair){r.push("This is a big pastoral station. Stations trade as their own market, so there is no fair price for it here.");return r}
   const lv={district:"in the same postcode district",area:"in the wider area",state:"across "+x.s}[x.lvl]||"";
@@ -304,6 +305,7 @@ function card(x){
     <h4>${esc(name)}</h4><div class="loc">${esc(x.sub)} ${x.s} ${esc(x.pc)}${x.ag?" · "+esc(x.ag):""}</div></div>
     <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
   <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Fair price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
+  ${x.lo?`<div class="loc">Similar blocks nearby usually ask ${short(x.lo)} to ${short(x.hi)}.</div>`:""}
   ${t?`<div class="tags">${t}</div>`:""}
   ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
   <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>
@@ -328,7 +330,7 @@ function chart(pool){
   const xs=pool.map(x=>Math.max(-60,Math.min(60,(1-x.ratio)*100)));
   const xmin=-60,xmax=60,ymin=0,ymax=100;
   const X=v=>P.l+(v-xmin)/(xmax-xmin)*(W-P.l-P.r),Y=v=>H-P.b-(v-ymin)/(ymax-ymin)*(H-P.t-P.b);
-  const col={great:"var(--ok)",good:"var(--ok)",fair:"var(--info)",high:"var(--warn)",over:"var(--stop)"};
+  const col={why:"var(--warn)",great:"var(--ok)",good:"var(--ok)",fair:"var(--info)",high:"var(--warn)",over:"var(--stop)"};
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Value versus quality scatter">`;
   s+=`<rect x="${X(8)}" y="${Y(100)}" width="${X(60)-X(8)}" height="${Y(55)-Y(100)}" fill="var(--ok-soft)" rx="6"/>`;
   [-60,-30,0,30,60].forEach(v=>{s+=`<line x1="${X(v)}" x2="${X(v)}" y1="${P.t}" y2="${H-P.b}" stroke="var(--line)" ${v===0?'stroke-width="1.5"':""}/><text x="${X(v)}" y="${H-P.b+16}" text-anchor="middle" font-size="11" fill="var(--muted)">${v>0?v+"% under":v<0?(-v)+"% over":"fair"}</text>`});
@@ -401,7 +403,10 @@ function fairFor(st,pc,a,f){
   let v=median(cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-(c.house?1:0)))));
   const mult={creek:1.05,power:1.04,covenant:.75,nobuild:.70,lease:.80,access:.85,flood:.93};
   Object.keys(mult).forEach(k=>{if(f[k])v*=mult[k]});
-  return {fair:v,n:cs.length,level,cs,kind:matched?subj.kind:null};
+  const imp=cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-(c.house?1:0)))).sort((x,y)=>x-y);
+  const q=t=>{const i=(imp.length-1)*t,l=Math.floor(i),h=Math.min(l+1,imp.length-1);return imp[l]+(imp[h]-imp[l])*(i-l)};
+  const m2=v/median(imp);
+  return {fair:v,lo:q(.25)*m2,hi:q(.75)*m2,n:cs.length,level,cs,kind:matched?subj.kind:null};
 }
 function check(){
   const a=+$("cAcres").value,p=+$("cPrice").value,s=$("cState").value,pc=($("cPc").value||"").trim();
@@ -409,12 +414,12 @@ function check(){
   if(!a||!p){box.innerHTML='<p>Enter the acres and the asking price (or paste the listing and tap Read listing).</p>';return}
   const f={};Object.keys(CF).forEach(k=>f[k]=$("cf-"+k).checked);
   const r=fairFor(s,pc||"000",a,f);if(!r){box.innerHTML="<p>No scan data for that state yet.</p>";return}
-  const ratio=p/r.fair,v=ratio<=.75?"great":ratio<=.92?"good":ratio<=1.1?"fair":ratio<=1.3?"high":"over";
+  const ratio=p/r.fair,v=p<r.lo*.5?"why":p<=r.lo*.85?"great":p<=r.lo?"good":p<=r.hi?"fair":p<=r.hi*1.2?"high":"over";
   const pct=Math.round((1-ratio)*100);
   const near=r.cs.slice(0,6);
   box.innerHTML=`<div class="pills"><span class="pill v-${v}" style="font-size:14px">${VN[v]}</span><span class="pill st">${s}${pc?" "+esc(pc):""}</span></div>
   <div class="big"><div><small>Asking</small><b>${short(p)}</b></div><div><small>Fair price</small><b>${short(r.fair)}</b></div><div><small>Opening offer</small><b>${short(Math.min(p,r.fair)*.88)}</b></div><div><small>Walk away above</small><b>${short(Math.min(p,r.fair*1.05))}</b></div></div>
-  <p style="margin:0">${pct>=0?`Asking is <b>${pct}% under</b> what similar blocks are listed for.`:`Asking is <b>${-pct}% over</b> what similar blocks are listed for.`} That's ${money(p/a)}/acre for ${acres(a)}. Compared with ${r.n} ${r.kind?KN[r.kind]:"blocks of mixed kinds (too few "+KN[kindOf({house:f.house,feats:f.bush?["bush"]:[]})]+" nearby)"} ${r.level==="district"?"in the same postcode district":r.level==="area"?"in the wider area (same first two postcode digits)":"across "+s} of a similar size.</p>
+  <p style="margin:0">${pct>=0?`Asking is <b>${pct}% under</b> what similar blocks are listed for.`:`Asking is <b>${-pct}% over</b> what similar blocks are listed for.`} That's ${money(p/a)}/acre for ${acres(a)}. Similar blocks usually ask ${short(r.lo)} to ${short(r.hi)}.${v==="why"?" That's so far under the usual range that there's probably a catch: ask about covenants, clearing rules, the right to build and legal access.":""} Compared with ${r.n} ${r.kind?KN[r.kind]:"blocks of mixed kinds (too few "+KN[kindOf({house:f.house,feats:f.bush?["bush"]:[]})]+" nearby)"} ${r.level==="district"?"in the same postcode district":r.level==="area"?"in the wider area (same first two postcode digits)":"across "+s} of a similar size.</p>
   ${near.length?`<h3 style="font-size:15px">The blocks it was compared with</h3><ul class="plain">${near.map(x=>`<li><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.sub)} ${x.pc}</a>: ${acres(x.a)} for ${short(x.p)} (${money(x.ppa)}/ac, ${VN[x.v].toLowerCase()})</li>`).join("")}</ul>`:""}`;
 }
 

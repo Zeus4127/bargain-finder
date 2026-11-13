@@ -28,8 +28,9 @@ caravan scanner does it.
 2. Scale each one's price to this block's size, then take the middle value.
 3. Adjust for the block's own details read from its listing: creek or river +5%, power +4%,
    covenant −25%, no right to build −30%, leasehold −20%, doubtful access −15%, flood-prone −7%.
-4. Verdict from asking ÷ fair price: 0.75 or less is a great deal, up to 0.92 good, up to 1.10 fair,
-   up to 1.30 a bit high, above that overpriced. Opening offer is 88% of the lower of asking and fair
+4. Verdict against the usual range of the similar blocks (25th to 75th percentile): inside it is
+   fair; up to 15% under the low end is good, more is great; under half the low end is flagged
+   "unusually cheap: find out why"; up to 20% over the high end is a bit high, more is overpriced. Opening offer is 88% of the lower of asking and fair
    price. Walk away above fair price + 5%.
 
 These are asking prices, not sale prices, so they're a guide, not a valuation.

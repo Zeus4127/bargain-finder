@@ -163,8 +163,9 @@ FARM_TYPES = ("Cropping", "Livestock", "Mixed Farming", "Dairy", "Horticulture",
 def kind(r):
     """house = has a home; bush = bare bush/scrub; farm = working farmland; life = other bare lifestyle land."""
     if r.get("house"): return "house"
-    if "bush" in (r.get("feats") or []): return "bush"
-    return "farm" if any(t in (r.get("type") or "") for t in FARM_TYPES) else "life"
+    farm = any(t in (r.get("type") or "") for t in FARM_TYPES)
+    if "bush" in (r.get("feats") or []) and not farm: return "bush"
+    return "farm" if farm else "life"
 
 def comps_for(subj, pool, model, k=12):
     """Most similar priced blocks: same district first, then wider area, then state."""
@@ -187,6 +188,10 @@ def comps_for(subj, pool, model, k=12):
             break
     return picked, level
 
+def pctl(v, q):
+    v = sorted(v); i = (len(v) - 1) * q; lo = int(i); hi = min(lo + 1, len(v) - 1)
+    return v[lo] + (v[hi] - v[lo]) * (i - lo)
+
 def price_one(r, model, pool):
     if r["a"] >= STATION_ACRES: return None, [], ""
     cs, level = comps_for(r, pool, model)
@@ -194,6 +199,7 @@ def price_one(r, model, pool):
     hs = 1.0 if r.get("house") else 0.0
     implied = [c["p"] * (r["a"] / c["a"]) ** model["b"] * math.exp(model["h"] * (hs - (1.0 if c["house"] else 0.0))) for c in cs]
     fair = statistics.median(implied)
+    r["_lo"], r["_hi"] = pctl(implied, 0.25), pctl(implied, 0.75)
     f = set(r.get("feats", [])); g = set(r.get("flags", []))
     mult = 1.0
     if "creek" in f: mult *= 1.05
@@ -203,6 +209,7 @@ def price_one(r, model, pool):
     if "lease" in g: mult *= 0.80
     if "access" in g: mult *= 0.85
     if "flood" in g: mult *= 0.93
+    r["_lo"] *= mult; r["_hi"] *= mult
     return fair * mult, cs, level
 
 def quality(r):
@@ -214,11 +221,13 @@ def quality(r):
     if r["a"] >= 500: q += 3
     return max(5, min(100, q))
 
-def verdict(ratio):
-    if ratio <= 0.75: return "great"
-    if ratio <= 0.92: return "good"
-    if ratio <= 1.10: return "fair"
-    if ratio <= 1.30: return "high"
+def verdict(p, lo, hi):
+    """Judge the asking price against the normal range (middle half) of similar blocks."""
+    if p < lo * 0.5: return "why"
+    if p <= lo * 0.85: return "great"
+    if p <= lo: return "good"
+    if p <= hi: return "fair"
+    if p <= hi * 1.2: return "high"
     return "over"
 
 def main():
@@ -228,7 +237,7 @@ def main():
         old = json.loads(open(pth).read().split("=", 1)[1].rstrip().rstrip(";"))
         rows = old["listings"]
         for r in rows:
-            for k in ("fair", "ratio", "v", "offer", "walk", "comps", "cids", "lvl"): r.pop(k, None)
+            for k in ("fair", "ratio", "v", "offer", "walk", "comps", "cids", "lvl", "lo", "hi"): r.pop(k, None)
             r["flags"] = [f for f in r.get("flags") or [] if f != "station"]
         return finish(rows, old["scanned"], keep_prev=False)
     raw = []
@@ -286,11 +295,13 @@ def finish(rows, scanned, keep_prev=True):
         r["cids"] = [c["id"] for c in cs[:6]]; r["q"] = quality(r)
         if r["p"] and fair:
             ratio = r["p"] / fair
-            r["ratio"] = round(ratio, 3); r["v"] = verdict(ratio)
+            r["ratio"] = round(ratio, 3); r["v"] = verdict(r["p"], r["_lo"], r["_hi"])
+            r["lo"] = round(r["_lo"], -3); r["hi"] = round(r["_hi"], -3)
             if level == "state" and r["v"] == "great": r["v"] = "good"   # few nearby comparisons: soften
             r["offer"] = round(min(r["p"], fair) * 0.88, -3)
             r["walk"] = round(min(r["p"], fair * 1.05), -3)
         r["ppa"] = round(r["p"] / r["a"]) if r["p"] else None
+        r.pop("_lo", None); r.pop("_hi", None)
     # state medians for the guide
     guide = {}
     for s in STATES:
