@@ -614,6 +614,28 @@ def main():
         json.dump(plan, open(pp, "w"))
     return finish(rows, datetime.now(timezone.utc).isoformat(timespec="minutes"))
 
+def match_rules(x, r):
+    """Same rules as the page's "My rules" panel (alert-rules.json)."""
+    f, c = x.get("feats") or [], x.get("chk") or {}
+    if r.get("maxPrice") and not (x.get("p") and x["p"] <= r["maxPrice"]): return False
+    if r.get("minAcres") and x["a"] < r["minAcres"]: return False
+    if r.get("maxAcres") and x["a"] > r["maxAcres"]: return False
+    if r.get("maxTownKm") and not (x.get("town") and x["town"][1] * 1.3 <= r["maxTownKm"]): return False
+    if r.get("maxCityKm") and not (x.get("city") and x["city"][1] * 1.3 <= r["maxCityKm"]): return False
+    if r.get("minRain") and not (x.get("rain") and x["rain"] >= r["minRain"]): return False
+    if r.get("states") and x["s"] not in r["states"].split(): return False
+    if r.get("house") == "yes" and not x.get("house"): return False
+    if r.get("house") == "no" and x.get("house"): return False
+    if r.get("deal") == "good" and x.get("v") not in ("good", "great"): return False
+    if r.get("deal") == "great" and x.get("v") != "great": return False
+    if r.get("water") and not any(k in f for k in ("creek", "river", "dam", "bore")): return False
+    if r.get("noFlood") and (c.get("flood") or "flood" in (x.get("flags") or [])): return False
+    if r.get("noVeg") and c.get("veg"): return False
+    if r.get("noFire") and (c.get("fire") or c.get("burnt")): return False
+    if r.get("stay") and not x.get("stay"): return False
+    if r.get("split") and not (x.get("lots") or 0) >= 2: return False
+    return True
+
 def finish(rows, scanned, keep_prev=True):
     try: cent = json.load(open(os.path.join(HERE, "suburb-centroids.json")))
     except Exception: cent = {}
@@ -769,9 +791,11 @@ def finish(rows, scanned, keep_prev=True):
     print("Wrote", pth)
     # optional ntfy alerts for new great/good deals under $350k
     topic = os.environ.get("ACREAGE_NTFY_TOPIC", "").strip()
+    try: rules = json.load(open(os.path.join(HERE, "alert-rules.json")))   # "My rules" from the page (no secrets)
+    except Exception: rules = {}
     if keep_prev and prev_ids and topic:
         for r in rows:
-            if r["id"] not in prev_ids and r.get("v") in ("great", "good") and r["p"] <= 350_000 and not r["uo"]:
+            if r["id"] not in prev_ids and (match_rules(r, rules) if rules else (r.get("v") in ("great", "good") and r["p"] and r["p"] <= 350_000)) and not r["uo"]:
                 msg = f"{r['a']:.0f} ac {r['sub']} {r['s']} ${r['p']:,.0f} ({r['v']} deal)"
                 try:
                     urllib.request.urlopen(urllib.request.Request("https://ntfy.sh/" + topic, data=msg.encode(),

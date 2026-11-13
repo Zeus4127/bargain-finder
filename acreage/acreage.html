@@ -99,6 +99,8 @@ ul.plain{margin:0;padding-left:18px;display:grid;gap:5px;font-size:14.5px}
 .empty{padding:26px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;background:var(--surface)}
 footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 @media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--accent)}}
+#rulesBox button{padding:9px 16px;border-radius:999px;border:2px solid var(--accent);background:var(--card,#fff);color:var(--accent);font-weight:700;min-height:40px;cursor:pointer}
+#rulesBox button:first-child{background:var(--accent);color:#fff}
 </style>
 
 <header class="top"><div class="topin">
@@ -166,6 +168,29 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 
 <section class="view" id="v-all" hidden>
   <h3>All listings</h3>
+  <details class="panel" id="rulesBox"><summary><b>⭐ My rules</b> <span id="rulesCount" class="muted"></span></summary>
+    <p class="what">Set what you want once. Tick "Only my matches" below to see just those blocks. To get a phone alert each morning for new matches, tap "Copy my rules" and send them to me.</p>
+    <div class="grid2">
+      <label for="rMax">Max price $<input id="rMax" inputmode="numeric" placeholder="any"></label>
+      <label for="rMinA">Min acres<input id="rMinA" inputmode="numeric" placeholder="10"></label>
+      <label for="rMaxA">Max acres<input id="rMaxA" inputmode="numeric" placeholder="any"></label>
+      <label for="rTown">Max km to a town<input id="rTown" inputmode="numeric" placeholder="any"></label>
+      <label for="rCity">Max km to a city<input id="rCity" inputmode="numeric" placeholder="any"></label>
+      <label for="rRain">Min rain (mm a year)<input id="rRain" inputmode="numeric" placeholder="any"></label>
+      <label for="rStates">States (e.g. QLD NSW)<input id="rStates" placeholder="all"></label>
+      <label for="rHouse">House<select id="rHouse"><option value="">Either</option><option value="yes">Must have a house</option><option value="no">Bare land only</option></select></label>
+      <label for="rDeal">Deal<select id="rDeal"><option value="">Any price</option><option value="good">Good or great deals</option><option value="great">Great deals only</option></select></label>
+    </div>
+    <div class="row" style="flex-wrap:wrap;gap:10px;margin-top:8px">
+      <label class="chk"><input type="checkbox" id="rWater"> Has water (creek, river, dam or bore)</label>
+      <label class="chk"><input type="checkbox" id="rNoFlood"> No mapped flood area</label>
+      <label class="chk"><input type="checkbox" id="rNoVeg"> No protected vegetation</label>
+      <label class="chk"><input type="checkbox" id="rNoFire"> Not bushfire prone</label>
+      <label class="chk"><input type="checkbox" id="rStay"> Short-stay income nearby</label>
+      <label class="chk"><input type="checkbox" id="rSplit"> Could be split into lots</label>
+    </div>
+    <div class="row" style="gap:10px;margin-top:8px"><button type="button" id="rCopy">Copy my rules</button><button type="button" id="rClear">Clear</button></div>
+  </details>
   <div class="filters">
     <label for="aq">Search<input type="search" id="aq" placeholder="town, postcode, agent"></label>
     <label for="as">State<select id="as"><option value="">All</option></select></label>
@@ -173,6 +198,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <label for="amax">Max price<select id="amax"><option value="0">Any</option><option value="200000">$200k</option><option value="300000">$300k</option><option value="500000">$500k</option><option value="1000000">$1M</option></select></label>
     <label for="asort">Sort<select id="asort"><option value="ratio">Best value</option><option value="p">Cheapest</option><option value="ppa">$ per acre</option><option value="a">Biggest</option><option value="q">Best quality</option><option value="dom">Longest for sale</option><option value="cuts">Most price cuts</option></select></label>
     <label class="chk" for="agone"><input type="checkbox" id="agone"> Show under offer / sold</label>
+    <label class="chk" for="amine"><input type="checkbox" id="amine"> Only my matches</label>
     <span class="count" id="acount"></span>
   </div>
   <div class="list" id="alist"></div>
@@ -413,7 +439,7 @@ function placeLine(x){
 }
 function domLine(x){
   if(x.dom==null)return"";const m=Math.round(x.dom/30.4),b=[];
-  b.push(x.dom<45?`New: listed about ${x.dom} days ago`:`For sale about ${m<24?m+" months":(m/12).toFixed(1)+" years"}`);
+  b.push(x.dom<45?(x.dom<=1?`New: listed in the last day or so`:`New: listed about ${x.dom} days ago`):`For sale about ${m<24?m+" months":(m/12).toFixed(1)+" years"}`);
   if(x.cuts)b.push(`price cut ${x.cuts} time${x.cuts>1?"s":""}`);
   let t=b.join(", ")+".";
   if(x.dom>=365||x.cuts>=2)t+=" <b>The seller may take a lower offer.</b>";else if(x.dom>=180)t+=" Room to negotiate.";
@@ -513,11 +539,11 @@ function chart(pool){
 // all listings
 const asel=$("as");STATES.forEach(s=>asel.insertAdjacentHTML("beforeend",`<option>${s}</option>`));
 let alimit=40;
-["aq","as","av","amax","asort","agone"].forEach(k=>$(k).addEventListener(k==="aq"?"input":"change",()=>{alimit=40;renderAll()}));
+["aq","as","av","amax","asort","agone","amine"].forEach(k=>$(k).addEventListener(k==="aq"?"input":"change",()=>{alimit=40;renderAll()}));
 $("amore").onclick=()=>{alimit+=40;renderAll()};
 function renderAll(){
   const q=$("aq").value.trim().toLowerCase(),st=$("as").value,v=$("av").value,mx=+$("amax").value,so=$("asort").value,g=$("agone").checked;
-  let r=L.filter(x=>(!st||x.s===st)&&(!v||(v==="none"?!x.p:x.v===v))&&(!mx||(x.p&&x.p<=mx))&&(g||!gone(x))&&(!q||(x.addr+" "+x.sub+" "+x.pc+" "+x.ag).toLowerCase().includes(q)));
+  let r=L.filter(x=>(!st||x.s===st)&&(!v||(v==="none"?!x.p:x.v===v))&&(!mx||(x.p&&x.p<=mx))&&(g||!gone(x))&&(!q||(x.addr+" "+x.sub+" "+x.pc+" "+x.ag).toLowerCase().includes(q))&&(!$("amine").checked||matchRules(x,getRules())));
   const k={ratio:(a,b)=>score(b)-score(a),p:(a,b)=>(a.p||9e9)-(b.p||9e9),ppa:(a,b)=>(a.ppa||9e9)-(b.ppa||9e9),a:(a,b)=>b.a-a.a,q:(a,b)=>b.q-a.q,dom:(a,b)=>(b.dom||0)-(a.dom||0),cuts:(a,b)=>(b.cuts||0)-(a.cuts||0)||(b.dom||0)-(a.dom||0)}[so];
   r.sort(k);$("acount").textContent=r.length.toLocaleString("en-AU")+" blocks";
   $("alist").innerHTML=r.length?r.slice(0,alimit).map(card).join(""):'<div class="empty">No blocks match those filters.</div>';
@@ -690,6 +716,35 @@ function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr
   ["aState","aBand","aSort"].forEach(i=>$(i).addEventListener("change",draw));draw();
 })();
 
+
+// my rules: saved on this phone, used by "Only my matches" and (when sent to Claude) by the morning alerts
+const RK="acreageRules";
+function getRules(){try{return JSON.parse(localStorage.getItem(RK)||"{}")}catch(e){return{}}}
+function setRules(r){try{localStorage.setItem(RK,JSON.stringify(r))}catch(e){}}
+const RF={rMax:"maxPrice",rMinA:"minAcres",rMaxA:"maxAcres",rTown:"maxTownKm",rCity:"maxCityKm",rRain:"minRain",rStates:"states",rHouse:"house",rDeal:"deal",rWater:"water",rNoFlood:"noFlood",rNoVeg:"noVeg",rNoFire:"noFire",rStay:"stay",rSplit:"split"};
+function readRules(){const r={};for(const[id,k]of Object.entries(RF)){const el=$(id);if(!el)continue;if(el.type==="checkbox"){if(el.checked)r[k]=true}else{const v=el.value.trim();if(v)r[k]=["states","house","deal"].includes(k)?v.toUpperCase().replace(/[^A-Z ]/g,"").trim()||v:+v.replace(/[^0-9.]/g,"")}}if(r.house)r.house=r.house.toLowerCase();if(r.deal)r.deal=r.deal.toLowerCase();return r}
+function fillRules(){const r=getRules();for(const[id,k]of Object.entries(RF)){const el=$(id);if(!el)continue;if(el.type==="checkbox")el.checked=!!r[k];else el.value=r[k]??""}}
+function matchRules(x,r){
+  if(!r||!Object.keys(r).length)return true;const f=x.feats||[],c=x.chk||{};
+  if(r.maxPrice&&!(x.p&&x.p<=r.maxPrice))return false;
+  if(r.minAcres&&x.a<r.minAcres)return false;if(r.maxAcres&&x.a>r.maxAcres)return false;
+  if(r.maxTownKm&&!(x.town&&x.town[1]*1.3<=r.maxTownKm))return false;
+  if(r.maxCityKm&&!(x.city&&x.city[1]*1.3<=r.maxCityKm))return false;
+  if(r.minRain&&!(x.rain&&x.rain>=r.minRain))return false;
+  if(r.states&&!r.states.split(/\s+/).includes(x.s))return false;
+  if(r.house==="yes"&&!x.house)return false;if(r.house==="no"&&x.house)return false;
+  if(r.deal==="good"&&!["good","great"].includes(x.v))return false;if(r.deal==="great"&&x.v!=="great")return false;
+  if(r.water&&!f.some(k=>["creek","river","dam","bore"].includes(k)))return false;
+  if(r.noFlood&&(c.flood||(x.flags||[]).includes("flood")))return false;
+  if(r.noVeg&&c.veg)return false;if(r.noFire&&(c.fire||c.burnt))return false;
+  if(r.stay&&!x.stay)return false;if(r.split&&!(x.lots>=2))return false;
+  if(gone(x))return false;return true}
+function rulesChanged(){const r=readRules();setRules(r);const n=L.filter(x=>matchRules(x,r)).length;$("rulesCount").textContent=Object.keys(r).length?`(${n.toLocaleString("en-AU")} blocks match)`:"";if($("amine").checked){alimit=40;renderAll()}}
+fillRules();
+Object.keys(RF).forEach(id=>{const el=$(id);if(el)el.addEventListener(el.type==="checkbox"||el.tagName==="SELECT"?"change":"input",rulesChanged)});
+$("rCopy").addEventListener("click",()=>{const t=JSON.stringify(getRules());(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("rCopy").textContent="Copied! Send it to Claude"}).catch(()=>{prompt("Copy these rules:",t)})});
+$("rClear").addEventListener("click",()=>{setRules({});fillRules();rulesChanged()});
+rulesChanged();
 renderDeals();renderAll();
 const h=location.hash.slice(1);show(tabs.some(b=>b.dataset.v===h)?h:(pref.tab||"deals"));
 })();
