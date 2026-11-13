@@ -22,3 +22,6 @@ acreage/catches.log
 acreage/fp-sold-all.log
 acreage/daily.log
 acreage/hourly.log
+acreage/android/out/
+acreage/android/assets/
+*.jks
