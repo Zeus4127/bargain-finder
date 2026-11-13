@@ -1,7 +1,7 @@
 <title>Acreage Finder</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Every rural block over 100 acres for sale in Australia, priced against similar blocks: fair price, opening offer and walk-away price.">
+<meta name="description" content="Every rural block of 10 acres or more for sale in Australia, priced against similar blocks: fair price, opening offer and walk-away price.">
 <style>
 /* Layout: Bargain Finder frame. Sticky title bar, tab row, then one column of ranked cards; chart and guides in their own tabs. */
 :root{--bg:#F5F6F2;--surface:#FFFFFF;--ink:#1A2620;--muted:#5A6862;--line:#DCE3DE;--accent:#1F6F5C;--accent-soft:#E1F0EA;
@@ -121,20 +121,20 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
   <div class="facts" id="tfacts" style="margin:0;border-radius:14px"></div>
   <h3>New listings</h3><div class="list" id="tnew"></div>
   <h3>Price drops</h3><div class="list" id="tdrop"></div>
-  <h3>Recently sold, 100+ acres</h3>
-  <p class="what">From Farmbuy's sold listings. The price is the sale price when the agent shares it, otherwise the last asking price. The date is roughly when it was marked sold.</p>
+  <h3>Recently sold, 10+ acres</h3>
+  <p class="what">From Farmbuy and Farm Property sold listings. The price is the sale price when the agent shares it, otherwise the last asking price. The date is roughly when it was marked sold.</p>
   <div class="tablewrap"><table><thead><tr><th>Where</th><th>State</th><th class="r">Acres</th><th class="r">Price</th><th class="r">$/acre</th><th>Kind</th><th>Sold</th></tr></thead><tbody id="tsold"></tbody></table></div>
 </section>
 
 <section class="view" id="v-deals">
-  <div class="hero"><div class="ey">All of Australia · 100 acres and up</div>
+  <div class="hero"><div class="ey">All of Australia · 10 acres and up</div>
     <h2>Is this block a <em>bargain</em>?</h2>
-    <p>Every rural block over 100 acres for sale on Farmbuy, priced against similar blocks nearby. Each one gets a fair price, an offer to open with, and a price to walk away at.</p></div>
+    <p>Every rural block of 10 acres or more for sale on Farmbuy and Farm Property, priced against similar blocks and recent sales nearby. Each one gets a fair price, an offer to open with, and a price to walk away at.</p></div>
   <div class="facts" id="facts"></div>
   <div class="filters">
     <div style="display:grid;gap:3px"><span style="font-size:12px;color:var(--muted);font-weight:600">State</span><div class="chips" id="dstate"></div></div>
     <label for="dmax">Most I'll pay<select id="dmax"><option value="150000">$150k</option><option value="200000">$200k</option><option value="250000">$250k</option><option value="300000" selected>$300k</option><option value="400000">$400k</option><option value="500000">$500k</option><option value="750000">$750k</option><option value="1000000">$1M</option></select></label>
-    <label for="dmin">At least<select id="dmin"><option value="100" selected>100 ac</option><option value="200">200 ac</option><option value="500">500 ac</option><option value="1000">1,000 ac</option></select></label>
+    <label for="dmin">At least<select id="dmin"><option value="10">10 ac</option><option value="20">20 ac</option><option value="50">50 ac</option><option value="100" selected>100 ac</option><option value="200">200 ac</option><option value="500">500 ac</option><option value="1000">1,000 ac</option></select></label>
     <label class="chk" for="dhouse"><input type="checkbox" id="dhouse"> Has a house</label>
     <label class="chk" for="dclean"><input type="checkbox" id="dclean"> No covenants or lease</label>
   </div>
@@ -217,7 +217,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 
 <section class="view" id="v-guide" hidden>
   <h3>Price guide by state</h3>
-  <p class="what">Typical asking prices for 100+ acre blocks in this scan, by kind of land. Bare bush is usually far cheaper per acre than farmland or a block with a house.</p>
+  <p class="what">Typical asking prices for blocks in this scan, by kind of land. Bare bush is usually far cheaper per acre than farmland or a block with a house.</p>
   <div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Listings</th><th class="r">Median $/acre</th><th class="r">Median price</th><th class="r">Under $300k</th><th class="r">$/acre bush</th><th class="r">$/acre farm</th><th class="r">$/acre with house</th></tr></thead><tbody id="gtable"></tbody></table></div>
   <div class="panel"><h3>How the fair price works</h3>
     <ul class="plain">
@@ -284,7 +284,7 @@ const save=()=>{try{localStorage.setItem("acreage-pref",JSON.stringify(pref))}ca
 if(D.scanned){const d=new Date(D.scanned);$("scanned").textContent=L.length+" blocks · scanned "+d.toLocaleDateString("en-AU",{day:"numeric",month:"short"})}else $("scanned").textContent="no scan data";
 const live=L.filter(x=>x.p&&!gone(x));
 const deals=live.filter(x=>x.v==="great"||x.v==="good"||x.v==="why");
-$("facts").innerHTML=[[L.length,"blocks over 100 ac"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"cheap for their area"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
+$("facts").innerHTML=[[L.length,"blocks of 10+ acres"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"cheap for their area"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
 function median(a){if(!a.length)return null;a=[...a].sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2}
 $("facts").lastChild.querySelector("b").textContent=live.length?"$"+Math.round(median(live.map(x=>x.p/x.a))).toLocaleString("en-AU"):"–";
 
@@ -301,7 +301,8 @@ const tracking=firstDays.length>1;
 const isNew=x=>tracking&&x.first&&(Date.parse(LATEST)-Date.parse(x.first))<=3*864e5;
 function subLine(x){
   const bits=[];
-  if(x.lots>=2)bits.push(`<b>Could split into ${x.lots} lots</b> under the council's ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} minimum lot size (zone ${esc(x.zone||"?")}${x.zone_name?" "+esc(x.zone_name):""}). ${x.minsrc==="vicdefault"?"That's the Victorian default for this zone; the council's schedule can set a different size, so check it. ":""}Subdivision still needs council approval.`);
+  if(x.lots>=2)bits.push(`<b>Could split into ${x.lots} lots</b> under the council's ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} minimum lot size (zone ${esc(x.zone||"?")}${x.zone_name?" "+esc(x.zone_name):""}). ${x.minsrc==="vicdefault"?"That's the Victorian default for this zone; the council's schedule can set a different size, so check it. ":x.minsrc==="tasdefault"?"That's the Tasmanian state default for this zone; the council's Local Provisions Schedule can differ, so check it. ":x.minsrc==="waguide"?"That's a typical size for this zone in WA, only a guide; the council scheme sets the real one. ":""}Subdivision still needs council approval.`);
+  else if(x.nosplit)bits.push(`${esc(x.nosplit)} (zone ${esc(x.zone||"?")}).`);
   else if(x.minlot_ha)bits.push(`Can't be split: the council's minimum lot size here is ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} (zone ${esc(x.zone||"?")}).`);
   if((x.feats||[]).includes("titles"))bits.push("<b>More than one title.</b> Separate titles can be sold off one at a time without a subdivision.");
   if((x.feats||[]).includes("subdiv"))bits.push("The listing mentions subdivision. Ask for the approval or council advice in writing.");
@@ -470,7 +471,7 @@ function check(){
   ${near.length?`<h3 style="font-size:15px">The blocks it was compared with</h3><ul class="plain">${near.map(x=>`<li><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.sub)} ${x.pc}</a>: ${acres(x.a)} for ${short(x.p)} (${money(x.ppa)}/ac, ${VN[x.v].toLowerCase()})</li>`).join("")}</ul>`:""}`;
 }
 
-$("foot").innerHTML=`Listings from Farmbuy.com, scanned ${D.scanned?new Date(D.scanned).toLocaleString("en-AU"):"–"}. Fair prices are estimates from asking prices of similar blocks, not valuations. Features are read from listing text and can be wrong. Not financial or legal advice.`;
+$("foot").innerHTML=`Listings from Farmbuy.com and FarmProperty.com.au, scanned ${D.scanned?new Date(D.scanned).toLocaleString("en-AU"):"–"}. Fair prices are estimates from asking prices and recent sales of similar blocks, not valuations. Features are read from listing text and can be wrong. Not financial or legal advice.`;
 
 
 // growth
@@ -533,7 +534,7 @@ function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr
   $("tNote").textContent=tracking?`Scanned ${new Date(D.scanned).toLocaleString("en-AU")}. New means first seen in the last 3 days.`:`Daily tracking started ${new Date(firstDays[0]||D.scanned).toLocaleDateString("en-AU",{day:"numeric",month:"long"})}. From the next daily scan, new listings and price drops show up here.`;
   const s90=SOLD.filter(c=>c.sold&&(Date.parse(LATEST)-Date.parse(c.sold))<=90*864e5);
   $("tfacts").innerHTML=[[nw.length,"new listings"],[dr.length,"price drops"],[s90.length,"sold, last 90 days"],[s90.length?money(median(s90.map(c=>c.p/c.a))):"–","median sold $/acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
-  $("tnew").innerHTML=nw.length?nw.slice(0,30).map(card).join(""):`<div class="empty">${tracking?"No new 100+ acre listings in the last 3 days.":"Nothing to compare with yet. Check back after tomorrow's scan."}</div>`;
+  $("tnew").innerHTML=nw.length?nw.slice(0,30).map(card).join(""):`<div class="empty">${tracking?"No new listings in the last 3 days.":"Nothing to compare with yet. Check back after tomorrow's scan."}</div>`;
   $("tdrop").innerHTML=dr.length?dr.slice(0,30).map(card).join(""):'<div class="empty">No price drops spotted yet.</div>';
   $("tsold").innerHTML=SOLD.slice().sort((a,b)=>(b.sold||"").localeCompare(a.sold||"")).slice(0,60).map(c=>`<tr><td><a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.sub)} ${esc(c.pc)}</a></td><td>${c.s}</td><td class="r num">${acres(c.a)}</td><td class="r num">${short(c.p)}</td><td class="r num">${money(c.p/c.a)}</td><td>${c.house?"House":c.bush?"Bush":"Land"}</td><td class="num">${c.sold?new Date(c.sold).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"–"}</td></tr>`).join("")||'<tr><td colspan="7" class="muted">No sold data yet.</td></tr>';
 })();

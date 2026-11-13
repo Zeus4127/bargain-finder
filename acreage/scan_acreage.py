@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 HERE = os.path.dirname(os.path.abspath(__file__))
 UA = "Mozilla/5.0 (AcreageFinder personal scanner)"
 DELAY = 1.1          # farmbuy robots.txt asks for 1s between requests
-MIN_ACRES = 100
+MIN_ACRES = int(os.environ.get("ACREAGE_MIN_ACRES", "10"))   # smallest block to collect
 MAX_PRICE = 3_000_000  # pricier listings are kept only as comparisons
 DETAIL_MAX = 3_000_000  # open detail pages for every priced block (features + bush/farm/house)
 STATES = {"QLD": "Queensland", "NSW": "New South Wales", "VIC": "Victoria", "SA": "South Australia",
@@ -174,6 +174,49 @@ def vic_planning(lat, lng):
         out["minlot_ha"] = VIC_DEFAULT_HA[base.group(0)]; out["minsrc"] = "vicdefault"
     return out
 
+def _arc_point(url, lat, lng, fields):
+    q = urllib.parse.urlencode({"geometry": f"{lng},{lat}", "geometryType": "esriGeometryPoint", "inSR": 4326,
+                                "spatialRel": "esriSpatialRelIntersects", "outFields": fields, "returnGeometry": "false", "f": "json"})
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(f"{url}/query?{q}", headers={"User-Agent": UA}), timeout=30) as r:
+                d = json.loads(r.read().decode())
+            if "error" in d: raise ValueError(d["error"])
+            feats = d.get("features") or []
+            time.sleep(0.3)
+            return feats[0]["attributes"] if feats else None
+        except Exception:
+            time.sleep(2 * (attempt + 1))
+    return None
+
+# ---- TAS: Tasmanian Planning Scheme zone; lot size from the State Planning Provisions ----
+TAS_PLAN = "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/PlanningOnline/MapServer/13"
+def tas_planning(lat, lng):
+    a = _arc_point(TAS_PLAN, lat, lng, "LPS,ZONE,ZONESUBGRP")
+    if not a: return {}
+    z = (a.get("ZONE") or "").strip()
+    out = {"zone": z, "zone_name": z, "lga": re.sub(r"\s*Local Provisions? Schedule", "", a.get("LPS") or "").strip()}
+    rl = re.match(r"Rural Living\s*(?:Zone)?\s*([ABCD])", z + " " + (a.get("ZONESUBGRP") or ""), re.I)
+    if rl: out.update(minlot_ha={"A": 1, "B": 2, "C": 5, "D": 10}[rl.group(1).upper()], minsrc="tasdefault")
+    elif re.match(r"Rural\b", z): out.update(minlot_ha=40, minsrc="tasdefault")
+    elif z.startswith("Landscape Conservation"): out.update(minlot_ha=50, minsrc="tasdefault")
+    elif z.startswith("Agricultur"): out["nosplit"] = "Agriculture zone: Tasmania only allows subdivision here in special cases."
+    return out
+
+# ---- WA: local planning scheme zone; WA policy is against splitting farmland ----
+WA_PLAN = "https://public-services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Property_and_Planning/MapServer/112"
+def wa_planning(lat, lng):
+    a = _arc_point(WA_PLAN, lat, lng, "zone,lga,scheme_nam")
+    if not a: return {}
+    z = (a.get("zone") or "").strip()
+    out = {"zone": z, "zone_name": z, "lga": (a.get("lga") or "").strip()}
+    zl = z.lower()
+    if "smallholding" in zl: out.update(minlot_ha=4, minsrc="waguide")
+    elif "rural residential" in zl or "rural living" in zl: out.update(minlot_ha=1, minsrc="waguide")
+    elif re.search(r"rural|farm|agricult|general farming", zl):
+        out["nosplit"] = "WA planning policy is against splitting rural and farming land into smaller lots."
+    return out
+
 # ---- fair-price model --------------------------------------------------------
 STATION_ACRES = 20_000   # bigger holdings are mostly pastoral stations: priced as their own market
 
@@ -310,6 +353,36 @@ def load_sold():
                     "lat": x.get("lat"), "lng": x.get("lng")})
     return out
 
+def fp_listings(rows):
+    """Farm Property listings (scan_fp_sale.py) that Farmbuy doesn't already have."""
+    try: fp = json.load(open(os.path.join(HERE, "fp-sale-cache.json")))
+    except Exception: return []
+    have = {}
+    for r in rows: have.setdefault(r["pc"], []).append(r["a"])
+    out = []
+    for x in fp.values():
+        if not x.get("live") or not x.get("acres") or x["acres"] < MIN_ACRES or x.get("state") not in STATES: continue
+        pc = x.get("postcode") or "000"
+        if any(abs(a - x["acres"]) <= max(1.0, 0.03 * a) for a in have.get(pc, [])): continue
+        desc = x.get("desc") or ""; low = desc.lower()
+        feats = [k for k, _, rx, _ in FEATURES if re.search(rx, low)]
+        flags = [k for k, _, rx, _ in FLAGS if re.search(rx, low)]
+        if "power" in feats and re.search(r"no power|no electricity", low): feats.remove("power")
+        ty = (x.get("type") or "").strip()
+        ty = {"Grazing": "Livestock", "Mixed": "Mixed Farming", "Irrigation": "Cropping", "Specialty": "Specialist"}.get(ty, ty)
+        addr = x.get("address") or ""
+        sub = re.sub(r"^.*?\b(?:road|rd|lane|ln|highway|hwy|street|st|drive|dr|track|way|avenue|ave)\b\.?\s*", "", addr, flags=re.I).strip() or addr
+        pt = x.get("pt") or ""
+        status = (x.get("status") or "").lower()
+        out.append({"id": "fp" + x["id"], "s": x["state"], "sub": sub.title() if sub.isupper() else sub, "addr": f"{addr} {x['state']} {pc}",
+                    "pc": pc, "a": round(x["acres"], 1), "pt": pt, "p": parse_price(pt),
+                    "uo": "under" in status or "under offer" in pt.lower() or "under contract" in pt.lower(),
+                    "ct": x.get("status") or "", "type": ty, "u": x["url"], "ag": x.get("agent") or "", "bed": x.get("bed") or 0,
+                    "feats": feats, "flags": flags, "desc": desc[:320] if desc else None, "sold": "sold" in status,
+                    "lat": x.get("lat"), "lng": x.get("lng"), "src": "fp"})
+        have.setdefault(pc, []).append(x["acres"])
+    return out
+
 def track_history(rows, scanned, sold_by_id):
     """Keep first-seen date, price changes and gone-from-market dates across daily scans."""
     hp = os.path.join(HERE, "listings-history.json")
@@ -398,15 +471,20 @@ def main():
                 if d.get("uo2"): r["uo"] = True
             if i % 25 == 0: print(f"  {i}/{len(todo)}", flush=True); json.dump(cache, open(cp, "w"))
         json.dump(cache, open(cp, "w"))
+        extra = fp_listings(rows)
+        print("Farm Property listings not on Farmbuy:", len(extra), flush=True)
+        rows += extra
         pp = os.path.join(HERE, "planning-cache.json")
         try: plan = json.load(open(pp))
         except Exception: plan = {}
-        look = {"NSW": nsw_planning, "VIC": vic_planning}
+        look = {"NSW": nsw_planning, "VIC": vic_planning, "TAS": tas_planning, "WA": wa_planning}
         todo_p = [r for r in rows if r["s"] in look and r.get("lat")]
-        print("Planning lookups (NSW, VIC):", sum(1 for r in todo_p if r["id"] not in plan), "new", flush=True)
+        print("Planning lookups (NSW, VIC, TAS, WA):", sum(1 for r in todo_p if not plan.get(r["id"])), "new", flush=True)
         for r in todo_p:
-            if r["id"] not in plan: plan[r["id"]] = look[r["s"]](r["lat"], r["lng"])
-            r.update(plan[r["id"]])
+            if not plan.get(r["id"]):
+                got = look[r["s"]](r["lat"], r["lng"])
+                if got: plan[r["id"]] = got
+            r.update(plan.get(r["id"]) or {})
         json.dump(plan, open(pp, "w"))
     return finish(rows, datetime.now(timezone.utc).isoformat(timespec="minutes"))
 
