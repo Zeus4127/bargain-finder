@@ -336,8 +336,8 @@ const vkey=x=>gone(x)?"gone":(x.v||"none");
 // value score: discount from fair + quality
 const score=x=>!x.ratio?-999:x.v==="why"?(x.q-50)*0.35-5:(1-x.ratio)*100+(x.q-50)*0.35;
 
-let pref={dst:"All",dmax:"300000",dmin:"100",dhouse:false,dclean:false,tab:"deals"};
-try{Object.assign(pref,JSON.parse(localStorage.getItem("acreage-pref")||"{}"))}catch(e){}
+let pref={dst:"All",dmax:"300000",dmin:"10",dhouse:false,dclean:false,tab:"deals",pv:2};
+try{const sv=JSON.parse(localStorage.getItem("acreage-pref")||"{}");if(sv.pv!==2)delete sv.dmin;Object.assign(pref,sv);pref.pv=2}catch(e){}
 const save=()=>{try{localStorage.setItem("acreage-pref",JSON.stringify(pref))}catch(e){}};
 
 // header + facts
