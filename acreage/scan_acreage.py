@@ -62,7 +62,7 @@ def parse_price(t):
     """Lowest sensible dollar figure in a price string, or None."""
     if not t: return None
     t = html.unescape(t).lower().replace("–", "-")
-    if re.search(r"\b(priced from|from \$|lots? from|per lot|each|per block|lots? \d+\s*(?:&|and|,)\s*\d+)", t): return None
+    if re.search(r"\b(priced from|from \$|lots? from|per lot|each|per block|lots? \d+\s*(?:&|and|,)\s*\d+|\blot\s*\d+[a-z]?\s*[:\-–]?\s*\$)", t): return None
     if re.search(r"\bper\s*(acre|ac|ha|hectare)\b|/\s*(ac|acre|ha)\b|per week|/wk|p\.?w\b", t): return None
     vals = []
     for m in re.finditer(NUM, t):
@@ -99,7 +99,7 @@ FEATURES = [  # key, label, regex, quality points
 FLAGS = [  # key, label, regex, quality penalty
     ("covenant", "Covenant / conservation agreement", r"covenant|heritage agreement|conservation agreement|trust for nature|biodiversity (stewardship|conservation)|land for wildlife agreement", 15),
     ("nobuild",  "No house allowed / no building entitlement", r"no (dwelling|building|house) (entitlement|rights|permit)|not (eligible|permitted) for a dwelling|cannot build|no ability to build", 20),
-    ("lease",    "Leasehold, not freehold", r"leasehold|western lands lease|pastoral lease|perpetual lease|term lease", 12),
+    ("lease",    "Leasehold, not freehold", r"leasehold|western lands lease|pastoral lease|perpetual lease|term lease|mining tenement|mining lease", 12),
     ("access",   "Access needs checking", r"no legal access|access via neighbou?r|via (a )?neighbou?r|unformed road|paper road|4wd only|four wheel drive only|right of way", 10),
     ("flood",    "Flood-prone", r"flood[- ]prone|subject to flood|floods? (regularly|occasionally)|flood ?plain", 6),
     ("remote",   "Very remote / off-grid", r"off[- ]grid|no services|no power|no electricity", 4),
@@ -552,6 +552,9 @@ def main():
             for k in ("fair", "ratio", "v", "offer", "walk", "comps", "cids", "lvl", "lo", "hi", "nsold", "drop"): r.pop(k, None)
             r["flags"] = [f for f in r.get("flags") or [] if f != "station"]
             if r.get("pt"): r["p"] = parse_price(r["pt"])
+            low = ((r.get("desc") or "") + " " + (r.get("pt") or "")).lower()   # pick up flag rules added since the scan
+            for k, _, rx, _ in FLAGS:
+                if re.search(rx, low) and k not in r["flags"]: r["flags"].append(k)
         return finish(rows, old["scanned"], keep_prev=False)
     raw = []
     for code in STATES:

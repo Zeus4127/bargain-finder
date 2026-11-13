@@ -68,11 +68,13 @@ def main():
     d = json.loads(open(os.path.join(HERE, "acreage-data.js")).read().split("=", 1)[1].strip().rstrip(";"))
     todo = [r for r in d["listings"] if r["s"] in ("NSW", "VIC", "QLD", "WA") and r.get("lat") and not r.get("approx") and str(r["id"]) not in c]
     print("catch checks to do:", len(todo), flush=True)
-    for i, r in enumerate(todo, 1):
-        got = check(r)
-        if got: c[str(r["id"])] = got
-        if i % 50 == 0:
-            json.dump(c, open(CACHE, "w")); print("  %d/%d" % (i, len(todo)), flush=True)
+    # four at a time: each government map server sees about one request a second or less
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(4) as ex:
+        for i, (r, got) in enumerate(zip(todo, ex.map(check, todo)), 1):
+            if got: c[str(r["id"])] = got
+            if i % 50 == 0:
+                json.dump(c, open(CACHE, "w")); print("  %d/%d" % (i, len(todo)), flush=True)
     json.dump(c, open(CACHE, "w"))
     print("Wrote catch-cache.json:", len(c), flush=True)
 
