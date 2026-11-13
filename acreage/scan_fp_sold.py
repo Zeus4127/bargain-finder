@@ -10,6 +10,7 @@ One request about every 1.1 seconds.
   python3 scan_fp_sold.py            # both steps
   python3 scan_fp_sold.py --cards    # list pages only
   python3 scan_fp_sold.py --from 150 # carry on from list page 150
+  python3 scan_fp_sold.py --all      # also open unpriced sales for their date
 """
 import json, os, re, sys, time, html, urllib.request
 
@@ -135,7 +136,8 @@ def main():
     print("cards done:", len(c), flush=True)
     if "--cards" in sys.argv:
         return
-    todo = [r for r in c.values() if r.get("price") and r.get("acres", 0) >= 10 and "v" not in r]
+    # --all also opens unpriced sales, for the sale date (sales counts by year in every state)
+    todo = [r for r in c.values() if (r.get("price") or "--all" in sys.argv) and r.get("acres", 0) >= 10 and "v" not in r]
     print("detail pages to open:", len(todo), flush=True)
     for i, r in enumerate(todo, 1):
         page = get(r["url"])

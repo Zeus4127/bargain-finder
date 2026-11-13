@@ -440,7 +440,7 @@ def fill_areas(rows, sold, scanned):
     A = {}
     def area(s, reg):
         return A.setdefault(s + "|" + reg, {"s": s, "region": reg, "forsale": 0, "fs_band": {}, "sold90": 0, "s90_band": {},
-                                             "months": {}, "fp_sold": 0, "cuts": 0, "_ask": {}, "_sold": {}})
+                                             "months": {}, "years": {}, "fp_sold": 0, "cuts": 0, "_ask": {}, "_sold": {}})
     for r in rows:
         if not r.get("region"): continue
         a = area(r["s"], r["region"]); b = band_of(r["a"])
@@ -457,6 +457,7 @@ def fill_areas(rows, sold, scanned):
         reg = pc_reg.get((x.get("state"), x.get("postcode")))
         if not reg or (x.get("acres") or 0) < MIN_ACRES: continue
         a = area(x["state"], reg); a["fp_sold"] += 1
+        if x.get("date"): a["years"][x["date"][:4]] = a["years"].get(x["date"][:4], 0) + 1
         if x.get("price") and x["acres"] < STATION_ACRES: a["_sold"].setdefault(band_of(x["acres"]), []).append(x["price"] / x["acres"])
     for a in A.values():
         per_month = a["sold90"] / 3
@@ -469,6 +470,7 @@ def fill_areas(rows, sold, scanned):
                 gaps += n * statistics.median(a["_sold"][b]) / statistics.median(a["_ask"][b]); w += n
         a["sold_vs_ask"] = round(gaps / w, 2) if w else None
         a["months"] = dict(sorted(a["months"].items()))
+        a["years"] = dict(sorted(a["years"].items()))
         del a["_ask"], a["_sold"]
     return A
 
