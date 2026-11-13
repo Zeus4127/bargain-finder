@@ -136,7 +136,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
   <div class="filters">
     <div style="display:grid;gap:3px"><span style="font-size:12px;color:var(--muted);font-weight:600">State</span><div class="chips" id="dstate"></div></div>
     <label for="dmax">Most I'll pay<select id="dmax"><option value="150000">$150k</option><option value="200000">$200k</option><option value="250000">$250k</option><option value="300000" selected>$300k</option><option value="400000">$400k</option><option value="500000">$500k</option><option value="750000">$750k</option><option value="1000000">$1M</option></select></label>
-    <label for="dmin">At least<select id="dmin"><option value="10">10 ac</option><option value="20">20 ac</option><option value="50">50 ac</option><option value="100" selected>100 ac</option><option value="200">200 ac</option><option value="500">500 ac</option><option value="1000">1,000 ac</option></select></label>
+    <label for="dmin">At least<select id="dmin"><option value="10" selected>10 ac</option><option value="20">20 ac</option><option value="50">50 ac</option><option value="100">100 ac</option><option value="200">200 ac</option><option value="500">500 ac</option><option value="1000">1,000 ac</option></select></label>
     <label class="chk" for="dhouse"><input type="checkbox" id="dhouse"> Has a house</label>
     <label class="chk" for="dclean"><input type="checkbox" id="dclean"> No covenants or lease</label>
   </div>
@@ -258,7 +258,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <div class="tablewrap"><table><thead><tr><th>Council</th><th>State</th><th class="r">$/acre 2025</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th><th class="r">$100k 20 yrs ago is now</th></tr></thead><tbody id="ltable"></tbody></table></div>
     <p class="what">Councils with few sales jump around from year to year. Trust the 10 and 20-year figures more than the 5-year one.</p></div>
   <div class="panel"><h3>Every single sale</h3><ul class="plain">
-    <li><b>NSW</b> publishes every property sale since 2001 free, with land size (Valuer General "bulk property sales information"). Its site blocks automated downloads, so download the yearly files in a browser and send them to me. I can then pull out every 100+ acre sale and work out real growth by district.</li>
+    <li><b>NSW:</b> done. Every NSW rural sale of 10+ acres since 2001 (100,788 sales) is in the "NSW: real sale prices since 2001" table above and in the NSW price checks, refreshed every Monday.</li>
     <li><b>Other states</b> sell their sales records: WA Landgate (about $7 per property report), SA Land Services, QLD and VIC through licensed brokers, TAS through theLIST. Cotality (RP Data) or Pricefinder give every state with land size for roughly $175–$280 a month.</li></ul></div>
 </section>
 
@@ -719,7 +719,7 @@ function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr
 
 // my rules: saved on this phone, used by "Only my matches" and (when sent to Claude) by the morning alerts
 const RK="acreageRules";
-function getRules(){try{return JSON.parse(localStorage.getItem(RK)||"{}")}catch(e){return{}}}
+function getRules(){try{const v=localStorage.getItem(RK);if(v)return JSON.parse(v)}catch(e){}return Object.assign({},D.alert_rules||{})}
 function setRules(r){try{localStorage.setItem(RK,JSON.stringify(r))}catch(e){}}
 const RF={rMax:"maxPrice",rMinA:"minAcres",rMaxA:"maxAcres",rTown:"maxTownKm",rCity:"maxCityKm",rRain:"minRain",rStates:"states",rHouse:"house",rDeal:"deal",rWater:"water",rNoFlood:"noFlood",rNoVeg:"noVeg",rNoFire:"noFire",rStay:"stay",rSplit:"split"};
 function readRules(){const r={};for(const[id,k]of Object.entries(RF)){const el=$(id);if(!el)continue;if(el.type==="checkbox"){if(el.checked)r[k]=true}else{const v=el.value.trim();if(v)r[k]=["states","house","deal"].includes(k)?v.toUpperCase().replace(/[^A-Z ]/g,"").trim()||v:+v.replace(/[^0-9.]/g,"")}}if(r.house)r.house=r.house.toLowerCase();if(r.deal)r.deal=r.deal.toLowerCase();return r}

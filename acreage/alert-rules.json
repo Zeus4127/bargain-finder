@@ -1,0 +1,10 @@
+{
+ "maxPrice": 500000,
+ "minAcres": 10,
+ "maxTownKm": 40,
+ "minRain": 600,
+ "deal": "good",
+ "water": true,
+ "noFlood": true,
+ "noVeg": true
+}
