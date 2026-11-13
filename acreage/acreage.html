@@ -210,6 +210,12 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <label for="aSort" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Sort<select id="aSort" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="supply">Busiest first</option><option value="sold">Most sales</option><option value="forsale">Most for sale</option></select></label></div>
     <div class="tablewrap"><table><thead><tr><th>Area</th><th>State</th><th class="r">For sale</th><th class="r">Sold, 3 months</th><th class="r">Months of supply</th><th>Market</th><th>Sales each month</th><th class="r">Sold vs asking</th><th class="r">Older sales on record</th></tr></thead><tbody id="atable"></tbody></table></div>
     <p class="what">Sales counts start in mid 2026 and grow every day the app runs. "Older sales on record" are Farm Property's past sales in the same area, most without a date.</p></div>
+  <div class="panel" id="nswpanel" hidden><h3>NSW: real sale prices since 2001, by block size</h3>
+    <p class="what">From the NSW government's own sales records: the latest sale of every rural and semi-rural property of 10+ acres, with price, date and land size. Growth is per acre, per year, worked out from 3-year pooled medians so one odd year doesn't swing it. Each property appears once, at its latest sale, so early years have fewer sales.</p>
+    <div class="row"><label for="nBand" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Size<select id="nBand" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="all">All 10+ acres</option><option value="10-50">10 to 50 acres</option><option value="50-100">50 to 100 acres</option><option value="100-500">100 to 500 acres</option><option value="500+">500+ acres</option></select></label>
+    <label for="nKind" style="display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:600">Show<select id="nKind" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:40px"><option value="region">Regions</option><option value="council">Councils</option></select></label></div>
+    <div class="facts" id="nfacts" style="margin:8px 0;border-radius:14px"></div>
+    <div class="tablewrap"><table><thead><tr><th>Area</th><th class="r">Sales</th><th class="r">$/acre now</th><th class="r">5 yrs</th><th class="r">10 yrs</th><th class="r">20 yrs</th></tr></thead><tbody id="ntable"></tbody></table></div></div>
   <div class="panel"><h3>Do small blocks (10 to 100 acres) grow faster?</h3>
     <p class="what">Short answer: not usually. Small blocks cost a lot more per acre than big farms, but over 10 years they have mostly grown at the same speed or slower.</p>
     <ul class="plain">
@@ -347,6 +353,9 @@ function areaLine(x){
   if(LV.h1){const reg=a.rg?a.rg.name:x.br||(x.lga_g&&(LV.h1.find(h=>h.state===x.s&&(h.covers||[]).includes(x.lga_g))||{}).region);const h=reg&&LV.h1.find(h=>h.state===x.s&&h.region===reg);if(h&&h.change_pct!=null)p.push(`Newest: ${h.change_pct>0?"+":""}${h.change_pct}% in the first half of 2026 vs a year before (${esc(h.region)} region)`)}
   if(x.s==="NSW"&&x.lga&&LV.nswvg&&LV.nswvg[x.lga]!=null){const v=LV.nswvg[x.lga];p.push(`NSW Valuer General: rural land values ${v>0?"+":""}${v}% in the year to July 2025 (${esc(x.lga)})`)}
   if(x.s==="QLD"&&x.lga&&LV.qldvg&&LV.qldvg[x.lga]){const v=LV.qldvg[x.lga],b=[];if(v.rr!=null)b.push(`small rural home blocks +${v.rr}%${v.rr_to?" (median "+short(v.rr_to)+")":""}`);if(v.pp!=null)b.push(`farms ${v.pp>0?"+":""}${v.pp}%`);p.push(`QLD Valuer-General since ${v.since}: ${b.join(", ")} (${esc(x.lga)})`)}
+  if(x.s==="NSW"&&D.nsw&&D.nsw.groups){const G=D.nsw.groups,bd=x.a<50?"10-50":x.a<100?"50-100":x.a<500?"100-500":"500+";
+    const pick=[["council",x.lga,bd],["region",x.region,bd],["council",x.lga,"all"],["region",x.region,"all"],["NSW","NSW",bd]].map(([k,n,b])=>n&&G.find(g=>g.kind===k&&g.name===n&&g.band===b&&g.cagr10!=null)).find(Boolean);
+    if(pick)p.push(`NSW sales since 2001: ${pick.band==="all"?"blocks":pick.band+" acre blocks"} in ${pick.kind==="council"?esc(pick.name)+" council":pick.kind==="region"?esc(pick.name):"NSW"} grew <b>${pick.cagr10}%/yr</b> over 10 years${pick.cagr20!=null?`, ${pick.cagr20}%/yr over 20`:""} (${pick.n} sales, now ${money(pick.now)}/acre)`)}
   if(x.s==="QLD"&&x.a>=1000&&x.lat&&D.qbig){const q=D.qbig.filter(b=>km(x,b)<=150);if(q.length>=3)p.push(`${q.length} big QLD station sales within 150 km (2023–25, state valuer): median ${money(median(q.map(b=>b.ppha/2.471)))}/acre`)}
   if(a.near.length)p.push(`${a.near.length} sold nearby recently, median ${money(median(a.near.map(c=>c.p/c.a)))}/acre`);
   return p.length?`<div class="loc">${p.join(" · ")}</div>`:"";
@@ -563,6 +572,16 @@ function fut(){const p=+$("fPrice").value||0,y=+$("fYears").value;const [s,n]=fr
   $("tsold").innerHTML=SOLD.slice().sort((a,b)=>(b.sold||"").localeCompare(a.sold||"")).slice(0,60).map(c=>`<tr><td><a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.sub)} ${esc(c.pc)}</a></td><td>${c.s}</td><td class="r num">${acres(c.a)}</td><td class="r num">${short(c.p)}</td><td class="r num">${money(c.p/c.a)}</td><td>${c.house?"House":c.bush?"Bush":"Land"}</td><td class="num">${c.sold?new Date(c.sold).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"–"}</td></tr>`).join("")||'<tr><td colspan="7" class="muted">No sold data yet.</td></tr>';
 })();
 
+// NSW sales since 2001
+(function(){
+  const G=(D.nsw||{}).groups;if(!G||!G.length)return;$("nswpanel").hidden=false;
+  const pc=v=>v==null?"–":(v>0?"+":"")+v.toFixed(1)+"%";
+  function draw(){const b=$("nBand").value,k=$("nKind").value;
+    $("nfacts").innerHTML=["10-50","50-100","100-500","500+"].map(bb=>{const g=G.find(x=>x.kind==="NSW"&&x.band===bb);return g?`<div><b>${pc(g.cagr10)}</b><small>a year over 10 years, ${bb} acres (${money(g.now)}/acre now)</small></div>`:""}).join("");
+    const r=G.filter(x=>x.kind===k&&x.band===b).sort((x,y)=>(y.cagr10??-99)-(x.cagr10??-99));
+    $("ntable").innerHTML=r.map(x=>`<tr><td>${esc(x.name)}</td><td class="r num">${x.n}</td><td class="r num">${money(x.now)}</td><td class="r num">${pc(x.cagr5)}</td><td class="r num">${pc(x.cagr10)}</td><td class="r num">${pc(x.cagr20)}</td></tr>`).join("")||'<tr><td colspan="6" class="muted">Not enough sales for this size.</td></tr>'}
+  ["nBand","nKind"].forEach(i=>$(i).addEventListener("change",draw));draw();
+})();
 // how busy is each area
 (function(){
   const A=Object.values(D.areas||{});if(!A.length)return;

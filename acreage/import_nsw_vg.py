@@ -11,7 +11,7 @@ Keeps every sale of 10+ acres (the file gives land area in hectares or square me
 nsw-sales.json (each sale) and nsw-growth.json (median $/acre each year by area and size band, with
 5, 10 and 20-year growth). The data is free under CC BY-NC-ND: fine for personal use, not for sale.
 """
-import io, json, os, re, statistics, sys, zipfile
+import io, json, math, os, re, statistics, sys, zipfile
 from datetime import datetime
 from collections import defaultdict
 
@@ -115,8 +115,26 @@ def main():
             if x.get("lga"): sub_lga.setdefault((x.get("sub") or "").upper(), x["lga"])
     except Exception as e:
         print("no acreage-data.js to name areas:", e)
+    # nearest scanned NSW block (within 20 km) names the council and region for sales with a map point
+    grid = {}
+    try:
+        for x in d["listings"]:
+            if x["s"] == "NSW" and x.get("lat") and (x.get("lga") or x.get("region")):
+                grid.setdefault((round(x["lat"] * 5), round(x["lng"] * 5)), []).append(x)
+    except Exception: pass
+    def near(r):
+        best, bd = None, 20.0
+        ky, kx = round(r["lat"] * 5), round(r["lng"] * 5)
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                for x in grid.get((ky + dy, kx + dx), []):
+                    dd = math.hypot((x["lat"] - r["lat"]) * 111, (x["lng"] - r["lng"]) * 111 * math.cos(math.radians(r["lat"])))
+                    if dd < bd: best, bd = x, dd
+        return best
     for r in sales:
-        r["region"] = pc_reg.get(r["pc"]); r["lga"] = sub_lga.get(r["sub"].upper())
+        n = near(r) if r.get("lat") else None
+        r["lga"] = sub_lga.get(r["sub"].upper()) or (n or {}).get("lga")
+        r["region"] = pc_reg.get(r["pc"]) or (n or {}).get("region")
     json.dump(sales, open(os.path.join(HERE, "nsw-sales.json"), "w"), separators=(",", ":"))
     # growth: median $/acre per year by group (state, region, council) and size band, at least 5 sales a year
     groups = defaultdict(lambda: defaultdict(list))
@@ -130,9 +148,15 @@ def main():
         path = {y: round(statistics.median(v)) for y, v in years.items() if len(v) >= 5}
         if len(path) < 3: continue
         ys = sorted(path)
-        out.append({"kind": kind, "name": name, "band": b, "path": path, "sales": {y: len(years[y]) for y in ys},
+        # growth from 3-year pooled medians so one odd year doesn't swing it
+        sm = {}
+        for y in ys:
+            pool = years.get(y - 1, []) + years[y] + years.get(y + 1, [])
+            if len(pool) >= 8: sm[y] = statistics.median(pool)
+        out.append({"kind": kind, "name": name, "band": b, "path": {y: path[y] for y in ys}, "sales": {y: len(years[y]) for y in ys},
+                    "n": sum(len(v) for v in years.values()), "now": path[ys[-1]], "now_year": ys[-1],
                     "yoy": round((path[ys[-1]] / path[ys[-2]] - 1) * 100, 1) if ys[-1] - 1 == ys[-2] else None,
-                    "cagr5": cagr(path, 5), "cagr10": cagr(path, 10), "cagr20": cagr(path, 20)})
+                    "cagr5": cagr(sm, 5), "cagr10": cagr(sm, 10), "cagr20": cagr(sm, 20)})
     json.dump({"source": "NSW Valuer General bulk property sales information (CC BY-NC-ND 4.0)", "min_acres": MIN_ACRES,
                "groups": out}, open(os.path.join(HERE, "nsw-growth.json"), "w"), separators=(",", ":"))
     print("Wrote nsw-sales.json (%d sales) and nsw-growth.json (%d groups)" % (len(sales), len(out)))
