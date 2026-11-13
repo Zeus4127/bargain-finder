@@ -599,7 +599,7 @@ def main():
         try: plan = json.load(open(pp))
         except Exception: plan = {}
         look = {"NSW": nsw_planning, "VIC": vic_planning, "TAS": tas_planning, "WA": wa_planning}
-        todo_p = [r for r in rows if r["s"] in look and r.get("lat")]
+        todo_p = [r for r in rows if r["s"] in look and r.get("lat") and not r.get("approx")]
         print("Planning lookups (NSW, VIC, TAS, WA):", sum(1 for r in todo_p if not plan.get(r["id"])), "new", flush=True)
         for r in todo_p:
             if not plan.get(r["id"]):
@@ -610,6 +610,17 @@ def main():
     return finish(rows, datetime.now(timezone.utc).isoformat(timespec="minutes"))
 
 def finish(rows, scanned, keep_prev=True):
+    try: cent = json.load(open(os.path.join(HERE, "suburb-centroids.json")))
+    except Exception: cent = {}
+    try: catches = json.load(open(os.path.join(HERE, "catch-cache.json")))
+    except Exception: catches = {}
+    for r in rows:
+        ck = catches.get(str(r["id"]))
+        if ck: r["chk"] = {k: v for k, v in ck.items() if k != "v" and v}
+    for r in rows:   # no map point on the listing: use the suburb's centre, marked as approximate
+        if not r.get("lat") or r.get("approx"):
+            c = cent.get("%s|%s" % (r["s"], (r.get("sub") or "").upper()))
+            if c: r["lat"], r["lng"], r["approx"] = c[0], c[1], 1
     for r in rows:
         r["house"] = r.get("bed", 0) > 0
         if r["house"] and "house" not in r.setdefault("feats", []): r["feats"].insert(0, "house")

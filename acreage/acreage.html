@@ -343,6 +343,16 @@ function areaInfo(x){
   const mk=x.region&&D.areas?D.areas[x.s+"|"+x.region]:null;
   return {g,rg,label,st,yoy,dir,near,mk};
 }
+function catchLine(x){
+  const c=x.chk;if(!c)return"";const b=[];
+  if(c.fire)b.push(`🔥 Bushfire prone (${esc(c.fire)}): a house needs a bushfire plan and costs more to build.`);
+  if(c.flood)b.push(`🌊 In a mapped flood area (${esc(c.flood)}): check the flood map before you build.`);
+  if(c.veg)b.push(`🌳 Protected vegetation (${esc(c.veg)}): you may not be allowed to clear trees.`);
+  if(c.scl)b.push(`🌾 Strategic cropping land: good soil, but non-farm building is restricted.`);
+  const ov=(c.ov||[]).filter(o=>/^(ESO|SLO|EMO|SMO)/.test(o));
+  if(ov.length)b.push(`Other overlays: ${ov.map(esc).join(", ")} (environment, landscape, erosion or salinity rules apply).`);
+  return b.length?`<div class="loc" style="color:var(--ink)">${b.join(" ")}</div>`:"";
+}
 function areaLine(x){
   const a=areaInfo(x);if(!a)return"";
   const p=[];
@@ -374,6 +384,7 @@ function why(x){
   if(x.house)r.push("Priced as a block with a house. Land with a house lists for a lot more than bare land of the same size.");
   (x.flags||[]).forEach(f=>{const m={covenant:"Covenant takes about 25% off: you can't clear it, and building may be limited.",nobuild:"No right to build takes about 30% off.",lease:"Leasehold takes about 20% off: you pay rent and need approval to sell.",access:"Access needs checking: a block without legal road access is worth much less.",flood:"Flood-prone land is worth a little less. Check the flood maps.",remote:"No services: budget for solar, water tanks and a long drive.",gas:"Gas wells bring traffic and easements, but some pay yearly compensation."}[f];if(m)r.push(m)});
   if(x.desc==null)r.push("I couldn't read this listing's page, so its features are unknown.");
+  if(x.approx)r.push("The listing has no map point, so distances use the centre of "+esc(x.sub)+".");
   return r;
 }
 function card(x){
@@ -386,7 +397,7 @@ function card(x){
     <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
   <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Fair price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
   ${x.lo?`<div class="loc">Similar blocks nearby usually ask ${short(x.lo)} to ${short(x.hi)}.</div>`:""}
-  ${subLine(x)}${areaLine(x)}
+  ${subLine(x)}${areaLine(x)}${catchLine(x)}
   ${t?`<div class="tags">${t}</div>`:""}
   ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
   <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>
