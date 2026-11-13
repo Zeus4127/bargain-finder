@@ -439,7 +439,7 @@ function renderAll(){
 // guide
 const M=D.model||{b:.4,h:.45};
 const FARM=["Cropping","Livestock","Mixed Farming","Dairy","Horticulture","Viticulture","Specialist"];
-const kindOf=x=>x.house?"house":(x.feats||[]).includes("bush")?"bush":FARM.some(t=>(x.type||"").includes(t))?"farm":"life";
+const kindOf=x=>x.house===true?"house":(x.feats||[]).includes("bush")?"bush":FARM.some(t=>(x.type||"").includes(t))?"farm":"life";
 const pool=L.filter(x=>x.p&&x.a<20000&&!x.sold);
 function compsFor(subj){
   const a=subj.a,sk=subj.kind;
@@ -481,10 +481,10 @@ function fairFor(st,pc,a,f){
   const subj={id:"_check",s:st,pc:(pc||"000"),a:a,house:!!f.house,feats:f.bush?["bush"]:[],type:""};subj.kind=kindOf(subj);
   const {cs,level,matched}=compsFor(subj);if(cs.length<3)return null;
   const hs=subj.house?1:0;
-  let v=median(cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-(c.house?1:0)))));
+  let v=median(cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-Number(c.house||0)))));
   const mult={creek:1.05,power:1.04,covenant:.75,nobuild:.70,lease:.80,access:.85,flood:.93};
   Object.keys(mult).forEach(k=>{if(f[k])v*=mult[k]});
-  const imp=cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-(c.house?1:0)))).sort((x,y)=>x-y);
+  const imp=cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-Number(c.house||0)))).sort((x,y)=>x-y);
   const q=t=>{const i=(imp.length-1)*t,l=Math.floor(i),h=Math.min(l+1,imp.length-1);return imp[l]+(imp[h]-imp[l])*(i-l)};
   const m2=v/median(imp);
   return {fair:v,lo:q(.25)*m2,hi:q(.75)*m2,n:cs.length,level,cs,kind:matched?subj.kind:null};

@@ -10,7 +10,7 @@ Run:  python3 scan_acreage.py            (full scan, ~10-20 min, polite 1.1s bet
 Optional deal alerts: set the ACREAGE_NTFY_TOPIC environment variable to an ntfy topic (never put it in a file).
 """
 import json, re, sys, time, html, os, math, statistics, urllib.request, urllib.parse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 UA = "Mozilla/5.0 (AcreageFinder personal scanner)"
@@ -254,7 +254,7 @@ def fit(rows):
 FARM_TYPES = ("Cropping", "Livestock", "Mixed Farming", "Dairy", "Horticulture", "Viticulture", "Specialist")
 def kind(r):
     """house = has a home; bush = bare bush/scrub; farm = working farmland; life = other bare lifestyle land."""
-    if r.get("house"): return "house"
+    if r.get("house") is True: return "house"
     farm = any(t in (r.get("type") or "") for t in FARM_TYPES)
     if "bush" in (r.get("feats") or []) and not farm: return "bush"
     return "farm" if farm else "life"
@@ -308,7 +308,7 @@ def price_one(r, model, pool):
     cs, level = comps_for(r, pool, model)
     if len(cs) < 3: return None, [], level
     hs = 1.0 if r.get("house") else 0.0
-    implied = [c["p"] * (r["a"] / c["a"]) ** model["b"] * math.exp(model["h"] * (hs - (1.0 if c["house"] else 0.0))) for c in cs]
+    implied = [c["p"] * (r["a"] / c["a"]) ** model["b"] * math.exp(model["h"] * (hs - float(c["house"]))) for c in cs]
     fair = statistics.median(implied)
     r["_lo"], r["_hi"] = pctl(implied, 0.25), pctl(implied, 0.75)
     f = set(r.get("feats", [])); g = set(r.get("flags", []))
@@ -351,6 +351,19 @@ def load_sold():
                     "region": None, "a": x["acres"], "p": x["price"], "house": (x.get("bed") or 0) > 0, "bush": False,
                     "feats": [], "type": ty, "sold": x.get("date"), "is_sold": True, "u": x["url"], "src": "fp",
                     "lat": x.get("lat"), "lng": x.get("lng")})
+    # NSW government sales (fetch_nsw_map.py + import_nsw_vg.py): the last two years only
+    try: nsw = json.load(open(os.path.join(HERE, "nsw-sales.json")))
+    except Exception: nsw = []
+    cut = (datetime.now(timezone.utc).date() - timedelta(days=730)).isoformat()
+    seen = {(o["pc"], round(o["a"]), round(o["p"], -4)) for o in out}
+    for x in nsw:
+        if x["date"] < cut or not x.get("lat"): continue
+        key = (x["pc"], round(x["a"]), round(x["p"], -4))
+        if key in seen: continue
+        seen.add(key)
+        out.append({"id": "n" + x["pid"], "s": "NSW", "pc": x["pc"], "sub": x["sub"], "region": x.get("region"), "lga": x.get("lga"),
+                    "a": x["a"], "p": x["p"], "house": 0.5, "bush": False, "feats": [], "type": "", "sold": x["date"], "is_sold": True,
+                    "u": "", "src": "nsw", "addr": x.get("addr"), "lat": x["lat"], "lng": x["lng"]})
     return out
 
 # Farmbuy region -> Bendigo Bank farmland report region, used when a block has no council growth figure
@@ -623,7 +636,8 @@ def finish(rows, scanned, keep_prev=True):
         r["ppa"] = round(r["p"] / r["a"]) if r["p"] else None
         r.pop("_lo", None); r.pop("_hi", None)
     track_history(rows, scanned, {x["id"]: x for x in sold})
-    areas = fill_areas(rows, sold, scanned)
+    areas = fill_areas(rows, [x for x in sold if x.get("src") != "nsw"], scanned)
+    used = {c for r in rows for c in r.get("cids") or []}
     # state medians for the guide
     guide = {}
     for s in STATES:
@@ -638,7 +652,8 @@ def finish(rows, scanned, keep_prev=True):
             "latest": (json.load(open(os.path.join(HERE, "latest-values.json"))) if os.path.exists(os.path.join(HERE, "latest-values.json")) else {}),
             "nsw": (json.load(open(os.path.join(HERE, "nsw-growth.json"))) if os.path.exists(os.path.join(HERE, "nsw-growth.json")) else {}),
             "qbig": (json.load(open(os.path.join(HERE, "qld-big-sales.json")))["sales"] if os.path.exists(os.path.join(HERE, "qld-big-sales.json")) else []),
-            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u", "lat", "lng", "src")} for x in sold if x["a"] >= MIN_ACRES],
+            "sold": [{k: x.get(k) for k in ("id", "sub", "s", "pc", "region", "a", "p", "house", "bush", "sold", "u", "lat", "lng", "src", "addr")} for x in sold
+                     if x["a"] >= MIN_ACRES and (x.get("src") != "nsw" or x["id"] in used)],
             "listings": rows}
     prev_ids = set()
     pth = os.path.join(HERE, "acreage-data.js")

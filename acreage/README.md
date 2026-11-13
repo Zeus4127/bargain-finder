@@ -1,6 +1,6 @@
 # Acreage Finder
 
-Bargain Finder for land: every rural block over 100 acres for sale in Australia (from Farmbuy.com),
+Bargain Finder for land: every rural block of 10+ acres for sale in Australia (from Farmbuy.com),
 each with a fair price, an opening offer, a walk-away price and a verdict, plus farmland price growth
 by state, region and council.
 
@@ -31,6 +31,12 @@ Daily: `./run_daily.sh` runs the sold collectors, the scan and the page build in
 | FarmProperty.com.au /sold | About 9,300 sold farms; price on about 670, sale date and map point from the detail page | `scan_fp_sold.py` |
 | NSW Planning Portal map | Zone and real minimum lot size, for "could be split into N lots" | `scan_acreage.py` |
 | VicPlan map | Zone; minimum lot is the state default for the zone (council schedules can differ) | `scan_acreage.py` |
+| Farm Property for sale | Blocks Farmbuy doesn't have | `scan_fp_sale.py` |
+| NSW government valuation map (maps.six.nsw.gov.au) | Latest sale of every NSW rural and semi-rural property since 2001: price, date, land size, map point. Used for NSW growth by size and as recent sale comparisons | `fetch_nsw_map.py`, `import_nsw_vg.py` |
+| VicPlan, TAS PlanningOnline, WA SLIP maps | Zone and default minimum lot | `scan_acreage.py` |
+| QLD locality boundaries | Suburb to council, for council growth | `qld-localities.json` |
+| QLD State Valuation Service maps | Big station sales 2023–25 (over 500 ha), positions read off the map | `qld-big-sales.json` |
+| Bendigo Bank 2026 mid-year report, NSW and QLD Valuer-General | Newest changes by region and council | `latest-values.json` |
 | Bendigo Bank farmland values | Growth by state, region, council and parcel size | `history/` |
 
 Not used: Domain, realestate.com.au, Facebook and Gumtree (off-limits), REIWA (bot check), Elders (not
@@ -64,5 +70,10 @@ pdftotext -layout 2025-farmland-values-report.pdf b25.txt && python3 history/par
 python3 history/build_history.py history/b2025.json history/b2024.json
 ```
 
-Next: 20-acre and 10-acre blocks (set `MIN_ACRES` in the scanner), and real sale-by-sale growth from
-the free NSW Valuer General sales files.
+## NSW sales
+
+`fetch_nsw_map.py` (rural) and `fetch_nsw_map.py semi` (semi-rural, 10+ acres) download the NSW
+government's public valuation map layers into `nsw-vg/` (not committed). `import_nsw_vg.py` turns them
+into `nsw-sales.json` (not committed) and `nsw-growth.json`: median $/acre by year, and 5, 10 and
+20-year growth from 3-year pooled medians, for NSW, each region and each council, by block size.
+Each property appears once, at its latest sale. The daily run refreshes this on Mondays.
