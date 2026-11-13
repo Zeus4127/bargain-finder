@@ -5,6 +5,7 @@ NSW: bushfire prone land, flood planning area, biodiversity values (clearing lim
 VIC: planning overlays (bushfire, flood, vegetation, environment, landscape, erosion, salinity).
 QLD: regulated vegetation category, strategic cropping land, floodplain assessment area.
 WA:  bushfire prone area.
+TAS: threatened native vegetation, bushfires in the last 10 seasons.
 Saves catch-cache.json as it goes; scan_acreage.py adds the results to each block.
 """
 import json, os, sys, time, urllib.parse, urllib.request
@@ -13,6 +14,7 @@ CACHE = os.path.join(HERE, "catch-cache.json")
 NSW = "https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/ePlanning/"
 QLD = "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Boundaries/AdminBoundariesFramework/MapServer/"
 VIC = "https://plan-gis.mapshare.vic.gov.au/arcgis/rest/services/Planning/Vicplan_PlanningSchemeOverlays/MapServer/0"
+TAS = "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/"
 WA = "https://public-services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Bush_Fire_Prone_Areas/MapServer/23"
 
 def hits(url, lat, lng, fields="*"):
@@ -56,6 +58,13 @@ def check(r):
         if f: c["scl"] = f[0].get("zone") or "yes"
         f = hits(QLD + "15", lat, lng, "objectid")
         if f: c["flood"] = "Floodplain assessment area"
+    elif s == "TAS":
+        f = hits(TAS + "NaturalEnvironmentV2/MapServer/12", lat, lng, "SCHED_NAME")
+        if f is None: return None
+        if f: c["veg"] = "Threatened vegetation: " + (f[0].get("SCHED_NAME") or "listed community")
+        f = hits(TAS + "EmergencyManagementPublic/MapServer/14", lat, lng, "FIRE_TYPE,IGN_SEASON")
+        b = [a for a in (f or []) if "bush" in (a.get("FIRE_TYPE") or "").lower()]
+        if b: c["burnt"] = "Bushfire in " + str(b[0].get("IGN_SEASON") or "the last 10 seasons")
     elif s == "WA":
         f = hits(WA, lat, lng, "designation")
         if f is None: return None
@@ -66,7 +75,7 @@ def check(r):
 def main():
     c = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
     d = json.loads(open(os.path.join(HERE, "acreage-data.js")).read().split("=", 1)[1].strip().rstrip(";"))
-    todo = [r for r in d["listings"] if r["s"] in ("NSW", "VIC", "QLD", "WA") and r.get("lat") and not r.get("approx") and str(r["id"]) not in c]
+    todo = [r for r in d["listings"] if r["s"] in ("NSW", "VIC", "QLD", "WA", "TAS") and r.get("lat") and not r.get("approx") and str(r["id"]) not in c]
     print("catch checks to do:", len(todo), flush=True)
     # four at a time: each government map server sees about one request a second or less
     from concurrent.futures import ThreadPoolExecutor

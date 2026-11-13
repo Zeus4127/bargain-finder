@@ -348,6 +348,7 @@ function catchLine(x){
   if(c.fire)b.push(`🔥 Bushfire prone (${esc(c.fire)}): a house needs a bushfire plan and costs more to build.`);
   if(c.flood)b.push(`🌊 In a mapped flood area (${esc(c.flood)}): check the flood map before you build.`);
   if(c.veg)b.push(`🌳 Protected vegetation (${esc(c.veg)}): you may not be allowed to clear trees.`);
+  if(c.burnt)b.push(`🔥 Burnt recently (${esc(c.burnt)}).`);
   if(c.scl)b.push(`🌾 Strategic cropping land: good soil, but non-farm building is restricted.`);
   const ov=(c.ov||[]).filter(o=>/^(ESO|SLO|EMO|SMO)/.test(o));
   if(ov.length)b.push(`Other overlays: ${ov.map(esc).join(", ")} (environment, landscape, erosion or salinity rules apply).`);
