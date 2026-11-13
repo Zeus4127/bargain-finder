@@ -9,6 +9,7 @@ One request about every 1.1 seconds.
 
   python3 scan_fp_sold.py            # both steps
   python3 scan_fp_sold.py --cards    # list pages only
+  python3 scan_fp_sold.py --from 150 # carry on from list page 150
 """
 import json, os, re, sys, time, html, urllib.request
 
@@ -60,7 +61,7 @@ def parse_cards(page):
         am = ADDR.search(a) or ADDR.search(t)
         if am:
             r["address"], r["state"], r["postcode"] = am.group(1).strip(), am.group(2), am.group(3)
-        pm = re.search(r"SOLD\s+\$?([\d,]+(?:\.\d+)?)", t)
+        pm = re.search(r"SOLD\s+\$?(\d[\d,]*(?:\.\d+)?)", t)
         if pm:
             v = float(pm.group(1).replace(",", ""))
             if v >= 10000:
@@ -105,9 +106,11 @@ def main():
     first = get(BASE + "/sold?pagenumber=1&order=LastUpdateNewest")
     last = max([int(x) for x in re.findall(r"pagenumber=(\d+)", first)] or [1])
     print("sold pages:", last, flush=True)
-    known_before = len(c)
+    state_p = os.path.join(HERE, "fp-sold-state.json")
+    full_done = os.path.exists(state_p)
+    start = int(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv else 1
     stale = 0
-    for n in range(1, last + 1):
+    for n in range(start, last + 1):
         page = first if n == 1 else get(BASE + "/sold?pagenumber=%d&order=LastUpdateNewest" % n)
         cards = parse_cards(page)
         new = 0
@@ -121,12 +124,14 @@ def main():
             save(c)
             print("  page %d/%d  %d sales" % (n, last, len(c)), flush=True)
         # on later runs, stop once a few pages in a row hold nothing new
-        if known_before > 1000:
+        if full_done:
             stale = stale + 1 if new == 0 else 0
             if stale >= 5:
                 print("  caught up at page", n, flush=True)
                 break
     save(c)
+    if n == last and not full_done:
+        json.dump({"full_pass": time.strftime("%Y-%m-%d")}, open(state_p, "w"))
     print("cards done:", len(c), flush=True)
     if "--cards" in sys.argv:
         return
