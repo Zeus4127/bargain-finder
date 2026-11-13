@@ -12,3 +12,4 @@ acreage/ACREAGE_NTFY_TOPIC.txt
 acreage/acreage-finder.html
 acreage/*.before-*
 acreage/sold.log
+acreage/fp-sold.log

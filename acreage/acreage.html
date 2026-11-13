@@ -301,7 +301,7 @@ const tracking=firstDays.length>1;
 const isNew=x=>tracking&&x.first&&(Date.parse(LATEST)-Date.parse(x.first))<=3*864e5;
 function subLine(x){
   const bits=[];
-  if(x.lots>=2)bits.push(`<b>Could split into ${x.lots} lots</b> under the council's ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} minimum lot size (zone ${esc(x.zone||"?")}${x.zone_name?" "+esc(x.zone_name):""}). Subdivision still needs council approval.`);
+  if(x.lots>=2)bits.push(`<b>Could split into ${x.lots} lots</b> under the council's ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} minimum lot size (zone ${esc(x.zone||"?")}${x.zone_name?" "+esc(x.zone_name):""}). ${x.minsrc==="vicdefault"?"That's the Victorian default for this zone; the council's schedule can set a different size, so check it. ":""}Subdivision still needs council approval.`);
   else if(x.minlot_ha)bits.push(`Can't be split: the council's minimum lot size here is ${x.minlot_ha>=1?x.minlot_ha+" ha":Math.round(x.minlot_ha*1e4)+" m²"} (zone ${esc(x.zone||"?")}).`);
   if((x.feats||[]).includes("titles"))bits.push("<b>More than one title.</b> Separate titles can be sold off one at a time without a subdivision.");
   if((x.feats||[]).includes("subdiv"))bits.push("The listing mentions subdivision. Ask for the approval or council advice in writing.");

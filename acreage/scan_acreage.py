@@ -153,6 +153,27 @@ def nsw_planning(lat, lng):
         time.sleep(0.3)
     return out
 
+# ---- VIC planning: zone from VicPlan; minimum lot = the state default for that zone ----
+VIC_PLAN = "https://plan-gis.mapshare.vic.gov.au/arcgis/rest/services/Planning/Vicplan_PlanningSchemeZones/MapServer/0/query"
+VIC_DEFAULT_HA = {"FZ": 40, "RCZ": 40, "GWZ": 40, "GWAZ": 8, "RAZ": 40, "RLZ": 8, "LDRZ": 0.4}
+def vic_planning(lat, lng):
+    q = urllib.parse.urlencode({"geometry": f"{lng},{lat}", "geometryType": "esriGeometryPoint", "inSR": 4326,
+                                "spatialRel": "esriSpatialRelIntersects", "outFields": "ZONE_CODE,ZONE_DESCRIPTION,LGA",
+                                "returnGeometry": "false", "f": "json"})
+    try:
+        with urllib.request.urlopen(urllib.request.Request(f"{VIC_PLAN}?{q}", headers={"User-Agent": UA}), timeout=30) as r:
+            feats = json.loads(r.read().decode()).get("features") or []
+    except Exception:
+        return {}
+    time.sleep(0.3)
+    if not feats: return {}
+    a = feats[0]["attributes"]; code = a.get("ZONE_CODE") or ""
+    out = {"zone": code, "zone_name": (a.get("ZONE_DESCRIPTION") or "").title(), "lga": (a.get("LGA") or "").title()}
+    base = re.match(r"[A-Z]+", code)
+    if base and base.group(0) in VIC_DEFAULT_HA:
+        out["minlot_ha"] = VIC_DEFAULT_HA[base.group(0)]; out["minsrc"] = "vicdefault"
+    return out
+
 # ---- fair-price model --------------------------------------------------------
 STATION_ACRES = 20_000   # bigger holdings are mostly pastoral stations: priced as their own market
 
@@ -252,6 +273,21 @@ def load_sold():
                     "a": x["a"], "p": x["p"], "house": (x.get("bed") or 0) > 0, "bush": "bush" in tags,
                     "feats": ["bush"] if "bush" in tags and not (x.get("bed") or 0) else [], "type": x.get("type") or "",
                     "sold": x.get("sold"), "is_sold": True, "u": x.get("u")})
+    # Farm Property sales (scan_fp_sold.py); skip ones already seen on Farmbuy (same postcode, size and price)
+    try: fp = json.load(open(os.path.join(HERE, "fp-sold-cache.json")))
+    except Exception: fp = {}
+    seen = {(o["pc"], round(o["a"]), round(o["p"], -4)) for o in out}
+    for x in fp.values():
+        if not x.get("price") or not x.get("acres") or not x.get("state"): continue
+        key = (x.get("postcode") or "000", round(x["acres"]), round(x["price"], -4))
+        if key in seen: continue
+        seen.add(key)
+        ty = (x.get("type") or "").strip()
+        ty = {"Grazing": "Livestock", "Mixed": "Mixed Farming", "Irrigation": "Cropping", "Specialty": "Specialist"}.get(ty, ty)
+        out.append({"id": "f" + x["id"], "s": x["state"], "pc": x.get("postcode") or "000",
+                    "sub": re.sub(r"^.*?\b(?:road|rd|lane|ln|highway|hwy|street|st|drive|dr|track|way)\b\s*", "", x.get("address") or "", flags=re.I).strip() or x.get("address"),
+                    "region": None, "a": x["acres"], "p": x["price"], "house": (x.get("bed") or 0) > 0, "bush": False,
+                    "feats": [], "type": ty, "sold": x.get("date"), "is_sold": True, "u": x["url"], "src": "fp"})
     return out
 
 def track_history(rows, scanned, sold_by_id):
@@ -344,10 +380,11 @@ def main():
         pp = os.path.join(HERE, "planning-cache.json")
         try: plan = json.load(open(pp))
         except Exception: plan = {}
-        nsw = [r for r in rows if r["s"] == "NSW" and r.get("lat")]
-        print("NSW planning lookups:", sum(1 for r in nsw if r["id"] not in plan), "new", flush=True)
-        for r in nsw:
-            if r["id"] not in plan: plan[r["id"]] = nsw_planning(r["lat"], r["lng"])
+        look = {"NSW": nsw_planning, "VIC": vic_planning}
+        todo_p = [r for r in rows if r["s"] in look and r.get("lat")]
+        print("Planning lookups (NSW, VIC):", sum(1 for r in todo_p if r["id"] not in plan), "new", flush=True)
+        for r in todo_p:
+            if r["id"] not in plan: plan[r["id"]] = look[r["s"]](r["lat"], r["lng"])
             r.update(plan[r["id"]])
         json.dump(plan, open(pp, "w"))
     return finish(rows, datetime.now(timezone.utc).isoformat(timespec="minutes"))
