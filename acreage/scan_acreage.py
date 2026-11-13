@@ -652,6 +652,40 @@ def finish(rows, scanned, keep_prev=True):
         if not r.get("lat") or r.get("approx"):
             c = cent.get("%s|%s" % (r["s"], (r.get("sub") or "").upper()))
             if c: r["lat"], r["lng"], r["approx"] = c[0], c[1], 1
+    # nearest town of 1,000+ people, nearest city of 100,000+, nearest power substation (straight line)
+    try: places = json.load(open(os.path.join(HERE, "ref", "places.json")))
+    except Exception: places = {}
+    def nearest(r, pts):
+        best = None
+        for p in pts:
+            if abs(p[0] - r["lat"]) > 3 or abs(p[1] - r["lng"]) > 3.5: continue
+            d = km(r, {"lat": p[0], "lng": p[1]})
+            if best is None or d < best[0]: best = (d, p)
+        return best
+    if places:
+        cities = [t for t in places["town"] if t[3]]
+        for r in rows:
+            if not r.get("lat"): continue
+            t = nearest(r, places["town"])
+            if t: r["town"] = [t[1][2], round(t[0])]
+            c = min(((km(r, {"lat": p[0], "lng": p[1]}), p) for p in cities), key=lambda x: x[0])
+            r["city"] = [c[1][2], round(c[0])]
+            sb = nearest(r, places.get("sub") or [])
+            if sb: r["subst"] = [sb[1][2], round(sb[0], 1), sb[1][3]]
+    # average yearly rainfall (Bureau of Meteorology 1991-2020 grid, ref/bom-rainfall-annual.zip)
+    try:
+        import zipfile
+        z = zipfile.ZipFile(os.path.join(HERE, "ref", "bom-rainfall-annual.zip"))
+        lines = z.read(z.namelist()[0]).decode("latin-1").splitlines()
+        hd = {l.split()[0].lower(): float(l.split()[1]) for l in lines[:6]}
+        grid = lines[6:]
+        for r in rows:
+            if not r.get("lat"): continue
+            col = round((r["lng"] - hd["xllcenter"]) / hd["cellsize"]); row = int(hd["nrows"]) - 1 - round((r["lat"] - hd["yllcenter"]) / hd["cellsize"])
+            if 0 <= row < len(grid):
+                vals = grid[row].split()
+                if 0 <= col < len(vals) and float(vals[col]) < hd["nodata_value"] - 1: r["rain"] = round(float(vals[col]))
+    except Exception as e: print("rainfall grid:", e)
     for r in rows:
         r["house"] = r.get("bed", 0) > 0
         if r["house"] and "house" not in r.setdefault("feats", []): r["feats"].insert(0, "house")

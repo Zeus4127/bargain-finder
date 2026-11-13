@@ -344,6 +344,14 @@ function areaInfo(x){
   const mk=x.region&&D.areas?D.areas[x.s+"|"+x.region]:null;
   return {g,rg,label,st,yoy,dir,near,mk};
 }
+function placeLine(x){
+  if(!x.town)return"";const rd=k=>Math.round(k*1.3/5)*5||5;
+  let t=`📍 ${esc(x.town[0])} (town of 1,000+) about ${rd(x.town[1])} km by road`;
+  if(x.city)t+=`, ${esc(x.city[0])} about ${rd(x.city[1])} km`;
+  if(x.approx)t+=" (from the suburb centre)";
+  if(x.rain)t+=`. 🌧️ About ${x.rain} mm of rain a year (${x.rain<350?"very dry: stock and gardens need bores or big tanks":x.rain<550?"dry: tanks and good dams matter":x.rain<800?"fair rainfall":x.rain<1200?"good rainfall":"high rainfall"})`;
+  return `<div class="loc">${t}.</div>`;
+}
 function domLine(x){
   if(x.dom==null)return"";const m=Math.round(x.dom/30.4),b=[];
   b.push(x.dom<45?`New: listed about ${x.dom} days ago`:`For sale about ${m<24?m+" months":(m/12).toFixed(1)+" years"}`);
@@ -407,7 +415,7 @@ function card(x){
     <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
   <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Likely sale price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
   ${x.lo?`<div class="loc">Similar blocks nearby usually ask ${short(x.lo)} to ${short(x.hi)}.</div>`:""}
-  ${subLine(x)}${domLine(x)}${areaLine(x)}${catchLine(x)}
+  ${subLine(x)}${domLine(x)}${placeLine(x)}${areaLine(x)}${catchLine(x)}
   ${t?`<div class="tags">${t}</div>`:""}
   ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
   <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>
