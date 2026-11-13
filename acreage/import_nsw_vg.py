@@ -12,6 +12,7 @@ nsw-sales.json (each sale) and nsw-growth.json (median $/acre each year by area 
 5, 10 and 20-year growth). The data is free under CC BY-NC-ND: fine for personal use, not for sale.
 """
 import io, json, os, re, statistics, sys, zipfile
+from datetime import datetime
 from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -57,6 +58,23 @@ def parse_b(line):
             "nature": f[17].strip(), "purpose": f[18].strip().title(), "addr": " ".join(x for x in (f[7], f[8]) if x).strip().title()}
 
 
+def map_sales():
+    """Sales from fetch_nsw_map.py (the NSW government's public valuation map): each property's latest sale."""
+    for fn in ("rural-sales.json", "semi-rural-sales.json"):
+        p = os.path.join(SRC, fn)
+        if not os.path.exists(p): continue
+        for x in json.load(open(p)):
+            if (x.get("deal_props") or 1) > 1 or x.get("strata") or not x.get("price") or not x.get("area"): continue
+            acres = x["area"] / 4046.86
+            if acres < MIN_ACRES or x["price"] < 10000: continue
+            try: d = datetime.strptime(x["sale_date"], "%d %B %Y").date().isoformat()
+            except Exception: continue
+            yield {"pid": str(x.get("propid")), "dist": "", "sub": (x.get("suburb") or "").title(), "pc": str(x.get("postcode") or ""),
+                   "a": round(acres, 1), "p": int(x["price"]), "date": d, "zone": "", "nature": "", "purpose": "",
+                   "addr": " ".join(v for v in (x.get("house_no"), x.get("street")) if v).title(), "lat": x.get("lat"), "lng": x.get("lng"),
+                   "src": "map"}
+
+
 def band(a):
     return "10-50" if a < 50 else "50-100" if a < 100 else "100-500" if a < 500 else "500+"
 
@@ -71,9 +89,14 @@ def cagr(path, yrs):
 
 def main():
     if not os.path.isdir(SRC):
-        sys.exit("Put the NSW yearly sales zips in %s first." % SRC)
+        sys.exit("Run fetch_nsw_map.py, or put the NSW yearly sales zips in %s, first." % SRC)
     sales, seen = [], set()
+    for r in map_sales():
+        k = (r["pid"], r["date"], r["p"])
+        if k not in seen: seen.add(k); sales.append(r)
+    print("map service:", len(sales), "sales of %g+ acres" % MIN_ACRES, flush=True)
     for fn in sorted(os.listdir(SRC)):
+        if not fn.lower().endswith((".zip", ".dat")): continue
         n = 0
         for line in dat_lines(os.path.join(SRC, fn)):
             r = parse_b(line)
