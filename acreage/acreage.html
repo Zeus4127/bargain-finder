@@ -296,14 +296,13 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     </ul></div>
   <div class="panel"><h3>How the Growth score works</h3>
     <ul class="plain">
-      <li><b>Location (40 points):</b> drive time to a town of 10,000+ people and to a town with the basics, drive time to a city, a well-known holiday area nearby, and the beach. Drive times are straight-line distance × 1.3 at 80 km/h.</li>
-      <li><b>Things to do (15):</b> the nearest national, state or conservation park (federal CAPAD map), the nearest wine region, and how many holiday cabins and farm stays are within 40 km.</li>
-      <li><b>Water and land (15):</b> creek or river, dam or bore, rainfall that isn't too dry or too wet, and size.</li>
-      <li><b>Momentum (20):</b> the area's 20-year land value growth (Bendigo Bank farmland reports), council population growth over 10 years (ABS), and how busy the local market is.</li>
-      <li><b>Upside and price (10):</b> subdivision potential and the price against similar blocks.</li>
-      <li><b>Deal-breakers take points off:</b> flood area, protected vegetation, covenant, no right to build, leasehold, doubtful access, a suspiciously low price.</li>
-      <li><b>Must-haves:</b> a 10,000+ town within 40 minutes (or a holiday town within 30 minutes with a basic town within 20), water on the block, a park, wine region, beach or holiday town close by, and no deal-breaker. <b>⭐ Standout</b> = ticks all of those, scores 68+, and is priced under similar blocks.</li>
-      <li>Checked against history: remote farmland grew fastest in % over the last 10 years from a low base, but swings hard and is slow to sell. This score is built for liveable blocks near towns and things to do, which hold value and are easier to sell. The wine regions and holiday towns are a hand-made list.</li>
+      <li><b>Tested on real history:</b> the weights come from NSW government sales of 10–100 acre blocks in 177 areas, comparing 2012–15 prices with 2022–25. Blocks within 2½ hours of a city grew about 10% a year, against 7.8% for blocks over 4 hours out. Within an hour of a holiday area: about 10% a year against 8–8.6%. Within 20 km of the beach: 10.1% against 8.6% inland. Next to a national park: 10.2% against 9.0%. Areas that were cheap per acre caught up fastest. Being near a wine region made no difference to growth, so it counts for little. These factors explain only part of the differences between areas (about a fifth), which is normal for property.</li>
+      <li><b>Location (38 points):</b> city (12), holiday area (9), beach (6), a 10,000+ town (6), a town with the basics (3), a hospital (2). Drive times are real road times where the router has done them, otherwise straight-line × 1.3.</li>
+      <li><b>Things to do (11):</b> a national or state park (6), wine region (2), holiday cabins and farm stays nearby (3).</li>
+      <li><b>Water and land (17):</b> creek or river from the listing or the state water maps (7), dam, bore or tanks (3), rainfall (3), size (2), gentle slope from terrain data (2). Very steep land loses points.</li>
+      <li><b>Momentum and catch-up (19):</b> 20-year land growth (6), population growth (4), market pace (4), area still cheap against the state (5).</li>
+      <li><b>Upside and price (10):</b> subdivision (3) and price against similar blocks (7). <b>Deal-breakers take points off:</b> flood, protected vegetation, covenant, no right to build, leasehold, doubtful access, a suspiciously low price.</li>
+      <li><b>Must-haves:</b> a 10,000+ town within 45 minutes (or a holiday town within 30 with a basic town within 20), water, a park, wine region, beach or holiday town close by, and no deal-breaker. <b>⭐ Standout</b> = all of those, a score of 68+, and priced under similar blocks.</li>
     </ul></div>
   <div class="panel"><h3>How the fair price works</h3>
     <ul class="plain">
@@ -488,21 +487,25 @@ function myTake(x){
 function growthLine(x){
   if(x.gs==null)return"";const g=x.gx||{},col=x.gs>=70?"var(--ok)":x.gs>=50?"var(--info)":"var(--warn)";
   const badge=x.gstar?"⭐ Standout":x.gok?"✓ Ticks the must-haves":"✗ Misses a must-have";
-  const W=[],f=new Set(x.feats||[]),sm=g.sua?g.sua[1]:999,tm=g.town?g.town[1]:999,cm=g.city?g.city[1]:999,hm=g.hol?g.hol[1]:999,cst=g.coast??999,pk=g.park?g.park[1]:999,wd=g.wine?g.wine[1]:999,rn=x.rain||0,l20=g.land20||0,p10=g.pop10;
-  W.push([sm<=60,g.sua?`${g.sua[0]} (10,000+ people) about ${sm} min`:"no town of 10,000+ near"]);
-  W.push([tm<=15,g.town?`town with the basics (${g.town[0]}) about ${tm} min`:"no town near"]);
-  W.push([cm<=150,g.city?`${g.city[0]} about ${cm} min`:"far from a city"]);
+  const W=[],f=new Set(x.feats||[]),sm=g.sua?g.sua[1]:999,tm=g.town?g.town[1]:999,cm=g.city?g.city[1]:999,hm=g.hol?g.hol[1]:999,cst=g.coast??999,pk=g.park?g.park[1]:999,wd=g.wine?g.wine[1]:999,rn=x.rain||0,l20=g.land20||0,p10=g.pop10,hp=g.hosp?g.hosp[1]:999,road=g.road?" by road":"";
+  W.push([cm<=150,g.city?`${g.city[0]} about ${cm} min${road}`:"far from a city"]);
   W.push([hm<=60,g.hol?`holiday area: ${g.hol[0]} about ${hm} min`:"not near a known holiday area"]);
   W.push([cst<=60,cst<999?`beach about ${cst} km`:"far from the coast"]);
-  W.push([pk<=35,g.park?`${g.park[0]} about ${pk} km`:"no park near"]);
+  W.push([sm<=60,g.sua?`${g.sua[0]} (10,000+ people) about ${sm} min${road}`:"no town of 10,000+ near"]);
+  W.push([tm<=15,g.town?`town with the basics (${g.town[0]}) about ${tm} min${road}`:"no town near"]);
+  W.push([hp<=45,g.hosp?`hospital (${g.hosp[0]}) about ${hp} min`:"no hospital near"]);
+  W.push([pk<=15,g.park?`${g.park[0]} about ${pk} km`:"no park near"]);
   W.push([wd<=50,g.wine?`${g.wine[0]} wine region about ${wd} km`:"no wine region near"]);
   W.push([(g.stays||0)>=20,g.stays?`${g.stays} holiday cabins and farm stays within 40 km`:"few holiday stays nearby (or no data)"]);
-  W.push([f.has("creek")||f.has("river"),f.has("creek")||f.has("river")?"creek or river":"no creek or river mentioned"]);
+  const cr=f.has("creek")||f.has("river");
+  W.push([cr||!!g.mapcreek,cr?"creek or river":g.mapcreek?`${g.mapcreek} runs within 400 m (map)`:"no creek or river found"]);
   W.push([f.has("dam")||f.has("bore")||f.has("tank"),f.has("dam")||f.has("bore")||f.has("tank")?"dam, bore or tanks":"no dam or bore mentioned"]);
   W.push([rn>=450&&rn<=1800,rn?`${rn} mm rain a year`:"rainfall unknown"]);
+  if(g.slope!=null)W.push([g.slope<=10,g.slope<=10?`mostly gentle land (about ${g.slope}% slope)`:`steep in parts (about ${g.slope}% slope)`]);
   W.push([l20>=6,g.land20?`area land values grew ${g.land20}%/yr over 20 years`:"no long-run growth figure"]);
   W.push([(p10||0)>=0.8,p10!=null?`council population growing ${p10}%/yr`:"population growth unknown"]);
   W.push([g.pace==="busy"||g.pace==="normal",`local market ${g.pace||"unknown"}`]);
+  if(g.cheap_area!=null)W.push([g.cheap_area<=0.9,g.cheap_area<=1?`area still cheap: about ${Math.round((1-g.cheap_area)*100)}% under the state's price per acre`:`area already ${Math.round((g.cheap_area-1)*100)}% dearer than the state's price per acre`]);
   W.push([(x.lots||0)>=2,(x.lots||0)>=2?`could be split into ${x.lots} lots`:"no subdivision found"]);
   const yes=W.filter(w=>w[0]).map(w=>w[1]),no=W.filter(w=>!w[0]).map(w=>w[1]);
   const cabin=x.a>=20&&g.hol&&g.hol[1]<=40?`<div>🏕️ Cabins or caravan sites could suit: ${esc(g.hol[0])} is about ${g.hol[1]} min away (check council approval).</div>`:"";

@@ -26,3 +26,6 @@ acreage/android/out/
 acreage/android/assets/
 *.jks
 acreage/fp-sold-all.log
+acreage/drive.log
+acreage/elev.log
+acreage/water.log
