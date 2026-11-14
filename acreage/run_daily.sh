@@ -16,6 +16,9 @@ python3 -I -u scan_catches.py && python3 -I -u scan_acreage.py --rescore || echo
 if [ "$(date +%u)" = 1 ]; then  # Mondays: re-test the prices against real sales and re-learn the asking-to-sale gap
   python3 -I -u backtest.py --tune && python3 -I -u scan_acreage.py --rescore || echo "Backtest step failed; carrying on"
 fi
+python3 -I -u elevation.py || echo "Elevation step failed; carrying on"
+python3 -I -u water_check.py || echo "Creek check step failed; carrying on"
+python3 -I -u drive_times.py || echo "Drive times step failed; carrying on"
 python3 -I -u growth.py || echo "Growth score step failed; carrying on"
 python3 -I -u pulse.py || echo "Market pulse step failed; carrying on"
 python3 -I build_page.py "${1:-acreage-finder.html}"
