@@ -1,12 +1,4 @@
 {
-"alerts": [
-{
-"id": "test-1",
-"when": "2026-11-14T12:50+00:00",
-"title": "Test alert: notifications work",
-"text": "This is a test from setup. Real alerts will be new Standouts and rule matches.",
-"url": ""
-}
-],
+"alerts": [],
 "updated": "2026-11-14T12:36+00:00"
 }
