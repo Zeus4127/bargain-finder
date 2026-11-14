@@ -91,5 +91,6 @@ The free system runs on its own until then. When there's money to spend, in this
 2. **Re-test the prices** with `python3 -I backtest.py --tune` once those sales are in: accuracy should improve outside NSW.
 3. **Pick from the ⭐ Standouts** (Today tab). Each has a dossier: comparisons, an offer plan, cabin and caravan rules
    for its state, and questions for the agent. Ring the agent, check the council, see it in person.
-4. **Phone alerts:** set `ACREAGE_NTFY_TOPIC` in the environment's settings (never in a file) and install the free ntfy
-   app subscribed to the same topic. `alerts.py` then sends each new Standout or rule match once.
+4. **Phone alerts:** built into the Acreage Finder app (1.5+), free. Each refresh writes `alerts-feed.json`
+   (new Standouts and new matches for `alert-rules.json`); the app checks it in the background about every 3 hours,
+   even when closed, and shows a notification that opens the listing. Allow notifications when the app asks.
