@@ -603,7 +603,8 @@ function renderAll(){
 const M=D.model||{b:.4,h:.45};
 const FARM=["Cropping","Livestock","Mixed Farming","Dairy","Horticulture","Viticulture","Specialist"];
 const kindOf=x=>x.house===true?"house":(x.feats||[]).includes("bush")?"bush":FARM.some(t=>(x.type||"").includes(t))?"farm":"life";
-const pool=L.filter(x=>x.p&&x.a<20000&&!x.sold);
+const pool=L.filter(x=>x.p&&x.a<20000&&!x.sold).concat(SOLD.filter(c=>c.p&&c.a&&c.a<20000&&c.pc).map(c=>Object.assign({},c,{is_sold:true,feats:c.bush?["bush"]:[],type:""})));
+const K=D.ask_to_sale||.82;
 function compsFor(subj){
   const a=subj.a,sk=subj.kind;
   const levels=[[c=>c.pc.slice(0,3)===subj.pc.slice(0,3),1/3,3,"district"],[c=>c.pc.slice(0,2)===subj.pc.slice(0,2),1/4,4,"area"],[c=>c.s===subj.s,1/4,4,"state"]];
@@ -644,10 +645,11 @@ function fairFor(st,pc,a,f){
   const subj={id:"_check",s:st,pc:(pc||"000"),a:a,house:!!f.house,feats:f.bush?["bush"]:[],type:""};subj.kind=kindOf(subj);
   const {cs,level,matched}=compsFor(subj);if(cs.length<3)return null;
   const hs=subj.house?1:0;
-  let v=median(cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-Number(c.house||0)))));
+  const adj=c=>c.p*(c.is_sold?1:K)*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-Number(c.house||0)));
+  let v=median(cs.map(adj));
   const mult={creek:1.05,power:1.04,covenant:.75,nobuild:.70,lease:.80,access:.85,flood:.93};
   Object.keys(mult).forEach(k=>{if(f[k])v*=mult[k]});
-  const imp=cs.map(c=>c.p*Math.pow(a/c.a,M.b)*Math.exp(M.h*(hs-Number(c.house||0)))).sort((x,y)=>x-y);
+  const imp=cs.map(adj).sort((x,y)=>x-y);
   const q=t=>{const i=(imp.length-1)*t,l=Math.floor(i),h=Math.min(l+1,imp.length-1);return imp[l]+(imp[h]-imp[l])*(i-l)};
   const m2=v/median(imp);
   return {fair:v,lo:q(.25)*m2,hi:q(.75)*m2,n:cs.length,level,cs,kind:matched?subj.kind:null};
@@ -658,16 +660,16 @@ function check(){
   if(!a||!p){box.innerHTML='<p>Enter the acres and the asking price (or paste the listing and tap Read listing).</p>';return}
   const f={};Object.keys(CF).forEach(k=>f[k]=$("cf-"+k).checked);
   const r=fairFor(s,pc||"000",a,f);if(!r){box.innerHTML="<p>No scan data for that state yet.</p>";return}
-  const ratio=p/r.fair,v=p<r.lo*.5?"why":p<=r.lo*.85?"great":p<=r.lo?"good":p<=r.hi?"fair":p<=r.hi*1.2?"high":"over";
+  const lo=r.lo/K,hi=r.hi/K,ratio=p*K/r.fair,v=p<lo*.5?"why":p<=lo*.85?"great":p<=lo?"good":p<=hi?"fair":p<=hi*1.2?"high":"over";
   const pct=Math.round((1-ratio)*100);
   const near=r.cs.slice(0,6);
   box.innerHTML=`<div class="pills"><span class="pill v-${v}" style="font-size:14px">${VN[v]}</span><span class="pill st">${s}${pc?" "+esc(pc):""}</span></div>
-  <div class="big"><div><small>Asking</small><b>${short(p)}</b></div><div><small>Fair price</small><b>${short(r.fair)}</b></div><div><small>Opening offer</small><b>${short(Math.min(p,r.fair)*.88)}</b></div><div><small>Walk away above</small><b>${short(Math.min(p,r.fair*1.05))}</b></div></div>
-  <p style="margin:0">${pct>=0?`Asking is <b>${pct}% under</b> what similar blocks are listed for.`:`Asking is <b>${-pct}% over</b> what similar blocks are listed for.`} That's ${money(p/a)}/acre for ${acres(a)}. Similar blocks usually ask ${short(r.lo)} to ${short(r.hi)}.${v==="why"?" That's so far under the usual range that there's probably a catch: ask about covenants, clearing rules, the right to build and legal access.":""} Compared with ${r.n} ${r.kind?KN[r.kind]:"blocks of mixed kinds (too few "+KN[kindOf({house:f.house,feats:f.bush?["bush"]:[]})]+" nearby)"} ${r.level==="district"?"in the same postcode district":r.level==="area"?"in the wider area (same first two postcode digits)":"across "+s} of a similar size.</p>
-  ${near.length?`<h3 style="font-size:15px">The blocks it was compared with</h3><ul class="plain">${near.map(x=>`<li><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.sub)} ${x.pc}</a>: ${acres(x.a)} for ${short(x.p)} (${money(x.ppa)}/ac, ${VN[x.v].toLowerCase()})</li>`).join("")}</ul>`:""}`;
+  <div class="big"><div><small>Asking</small><b>${short(p)}</b></div><div><small>Likely sale price</small><b>${short(r.fair)}</b></div><div><small>Opening offer</small><b>${short(Math.min(p,r.fair)*.93)}</b></div><div><small>Walk away above</small><b>${short(Math.min(p,r.fair*1.08))}</b></div></div>
+  <p style="margin:0">${pct>=0?`Asking is <b>${pct}% under</b> what similar blocks are listed for.`:`Asking is <b>${-pct}% over</b> what similar blocks are listed for.`} That's ${money(p/a)}/acre for ${acres(a)}. Similar blocks usually ask ${short(lo)} to ${short(hi)}, and blocks like this usually sell for about ${short(r.fair)}.${v==="why"?" That's so far under the usual range that there's probably a catch: ask about covenants, clearing rules, the right to build and legal access.":""} Compared with ${r.n} ${r.kind?KN[r.kind]:"blocks of mixed kinds (too few "+KN[kindOf({house:f.house,feats:f.bush?["bush"]:[]})]+" nearby)"} ${r.level==="district"?"in the same postcode district":r.level==="area"?"in the wider area (same first two postcode digits)":"across "+s} of a similar size.</p>
+  ${near.length?`<h3 style="font-size:15px">The blocks it was compared with</h3><ul class="plain">${near.map(x=>`<li><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.sub)} ${x.pc}</a>: ${acres(x.a)} for ${short(x.p)} (${money(x.p/x.a)}/ac, ${x.is_sold?"sold"+(x.sold?" "+String(x.sold).slice(0,7):""):VN[x.v]?VN[x.v].toLowerCase():"asking"})</li>`).join("")}</ul>`:""}`;
 }
 
-$("foot").innerHTML=`Listings from Farmbuy.com and FarmProperty.com.au, scanned ${D.scanned?new Date(D.scanned).toLocaleString("en-AU"):"–"}. Fair prices are estimates from asking prices and recent sales of similar blocks, not valuations. Features are read from listing text and can be wrong. Not financial or legal advice.`;
+$("foot").innerHTML=`Listings from Farmbuy.com and FarmProperty.com.au, scanned ${D.scanned?new Date(D.scanned).toLocaleString("en-AU"):"–"}. Likely sale prices are estimates from asking prices and real sales of similar blocks, not valuations. Features are read from listing text and can be wrong. Not financial or legal advice.`;
 
 
 // growth
