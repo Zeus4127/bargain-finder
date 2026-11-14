@@ -141,8 +141,8 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 
 <section class="view" id="v-deals">
   <div class="hero"><div class="ey">All of Australia · 10 acres and up</div>
-    <h2>Is this block a <em>bargain</em>?</h2>
-    <p>Every rural block of 10 acres or more for sale on Farmbuy and Farm Property, priced against similar blocks and recent sales nearby. Each one gets a fair price, an offer to open with, and a price to walk away at.</p></div>
+    <h2>Which blocks will <em>grow</em>?</h2>
+    <p>Every rural block of 10 acres or more for sale on Farmbuy and Farm Property, scored for long-term growth (city, holiday towns, beach, parks, water, the area's growth) and priced against real sales nearby. Each one gets a Growth score, a likely sale price, an offer to open with and a price to walk away at.</p></div>
   <div class="facts" id="facts"></div>
   <div class="filters">
     <div style="display:grid;gap:3px"><span style="font-size:12px;color:var(--muted);font-weight:600">State</span><div class="chips" id="dstate"></div></div>
@@ -153,7 +153,7 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
     <label class="chk" for="dok"><input type="checkbox" id="dok"> Ticks the must-haves (town, water, things to do, no deal-breakers)</label>
   </div>
   <h3>Best deals right now</h3>
-  <p class="what">Ranked by how far under its fair price each block is, with a boost for quality (water, power, a house, good access). Under-offer and sold blocks are left out.</p>
+  <p class="what">Ranked by Growth score first, then by how far under similar blocks the price is. ⭐ Standouts come first. Under-offer and sold blocks are left out.</p>
   <div class="list" id="dlist"></div>
   <div class="panel chart"><h3>Value vs quality</h3>
     <p class="what">Each dot is a block within your filters. Further right means cheaper than its fair price. Higher means better quality. The top-right box holds the best buys. Tap a dot to open it.</p>
@@ -370,7 +370,7 @@ const save=()=>{try{localStorage.setItem("acreage-pref",JSON.stringify(pref))}ca
 if(D.scanned){const d=new Date(D.scanned);$("scanned").textContent=L.length+" blocks · scanned "+d.toLocaleDateString("en-AU",{day:"numeric",month:"short"})}else $("scanned").textContent="no scan data";
 const live=L.filter(x=>x.p&&!gone(x));
 const deals=live.filter(x=>x.v==="great"||x.v==="good"||x.v==="why");
-$("facts").innerHTML=[[L.length,"blocks of 10+ acres"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[deals.length,"cheap for their area"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
+$("facts").innerHTML=[[L.length,"blocks of 10+ acres"],[live.filter(x=>x.p<=300000).length,"for sale under $300k"],[L.filter(x=>x.gok&&!gone(x)).length,"tick the must-haves"],[live.length?short(median(live.map(x=>x.p/x.a)))+"":"–","median per acre"]].map(f=>`<div><b>${typeof f[0]==="number"?f[0].toLocaleString("en-AU"):f[0]}</b><small>${f[1]}</small></div>`).join("");
 function km(a,b){const r=Math.PI/180,dl=(b.lat-a.lat)*r,dg=(b.lng-a.lng)*r,h=Math.sin(dl/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dg/2)**2;return 12742*Math.asin(Math.sqrt(h))}
 function median(a){if(!a.length)return null;a=[...a].sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2}
 $("facts").lastChild.querySelector("b").textContent=live.length?"$"+Math.round(median(live.map(x=>x.p/x.a))).toLocaleString("en-AU"):"–";
@@ -491,7 +491,7 @@ function growthLine(x){
   W.push([cm<=150,g.city?`${g.city[0]} about ${cm} min${road}`:"far from a city"]);
   W.push([hm<=60,g.hol?`holiday area: ${g.hol[0]} about ${hm} min`:"not near a known holiday area"]);
   W.push([cst<=60,cst<999?`beach about ${cst} km`:"far from the coast"]);
-  W.push([sm<=60,g.sua?`${g.sua[0]} (10,000+ people) about ${sm} min${road}`:"no town of 10,000+ near"]);
+  if(!(g.sua&&g.city&&g.sua[0]===g.city[0]))W.push([sm<=60,g.sua?`${g.sua[0]} (10,000+ people) about ${sm} min${road}`:"no town of 10,000+ near"]);
   W.push([tm<=15,g.town?`town with the basics (${g.town[0]}) about ${tm} min${road}`:"no town near"]);
   W.push([hp<=45,g.hosp?`hospital (${g.hosp[0]}) about ${hp} min`:"no hospital near"]);
   W.push([pk<=15,g.park?`${g.park[0]} about ${pk} km`:"no park near"]);
