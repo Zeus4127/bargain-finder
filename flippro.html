@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Flip Pro</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="description" content="Is it a bargain? Paste or screenshot any listing for a fair price, an opening offer and a walk-away price."><link rel="stylesheet" href="web.css">
+<style>
+@font-face{font-family:"BF Sans";font-weight:400;font-display:swap;src:url(fonts/inter-400.woff2) format("woff2")}
+@font-face{font-family:"BF Sans";font-weight:600;font-display:swap;src:url(fonts/inter-600.woff2) format("woff2")}
+@font-face{font-family:"BF Sans";font-weight:700 800;font-display:swap;src:url(fonts/inter-700.woff2) format("woff2")}
+/* Bright cartoon look: sky, sun, grass. No purple, no pink, no dark theme. */
+:root{--sky:#4FB3F0;--sky2:#9ED8FA;--sun:#FFC83D;--sun2:#FFE9A8;--grass:#3DAA5C;--grass2:#DDF3E2;--orange:#F07A1A;--orange2:#FFE6CF;--stop:#D63A2E;--stop2:#FDE3E0;
+  --ink:#1D2B36;--muted:#53626E;--line:#D5E3EC;--card:#FFFFFF;--bg:#F2F9FD;color-scheme:light}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:17px/1.45 "BF Sans",system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-tap-highlight-color:transparent;padding-bottom:84px}
+[hidden]{display:none!important}
+header{position:relative;overflow:hidden;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 22px;color:#fff;
+  background:radial-gradient(60px 34px at 82% 30%,#fff 60%,transparent 62%),radial-gradient(44px 28px at 72% 38%,#fff 60%,transparent 62%),radial-gradient(52px 30px at 90% 40%,#fff 60%,transparent 62%),
+  radial-gradient(70px 70px at 12% 18%,var(--sun) 55%,transparent 57%),linear-gradient(180deg,var(--sky),#6CC3F3)}
+header::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-26px;height:46px;border-radius:50%;background:var(--grass)}
+header .back{color:#fff;text-decoration:none;font-weight:700;font-size:15px;background:rgba(0,0,0,.18);padding:6px 12px;border-radius:999px;display:inline-block}
+header h1{margin:10px 0 2px 64px;font-size:26px;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+header p{margin:0 0 0 64px;font-size:15px;text-shadow:0 1px 0 rgba(0,0,0,.2)}
+main{padding:18px 14px 0;max-width:720px;margin:0 auto}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-top:3px solid var(--sky2);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs button{border:0;background:none;font:700 13px "BF Sans",sans-serif;color:var(--muted);padding:10px 2px 12px;min-height:56px}
+.tabs button[aria-selected=true]{color:var(--ink);background:var(--sun2);border-radius:14px 14px 0 0}
+.tabs b{display:block;font-size:22px;line-height:1}
+.card{background:var(--card);border-radius:22px;padding:16px;margin:0 0 14px;box-shadow:0 4px 0 var(--line),0 8px 18px rgba(30,90,140,.08)}
+h2{margin:0 0 6px;font-size:20px}h3{margin:12px 0 6px;font-size:17px}
+.what{font-size:14px;color:var(--muted);margin:0 0 10px}
+.muted{color:var(--muted)}.small{font-size:14px}
+textarea,input,select{width:100%;font:16px "BF Sans",sans-serif;padding:11px 12px;border:2px solid var(--sky2);border-radius:14px;background:#fff;color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+label.f{display:block;font-size:14px;font-weight:600;margin:8px 0 0}label.f input,label.f select{margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.btn{display:inline-block;border:0;border-radius:16px;padding:12px 16px;font:800 16px "BF Sans",sans-serif;background:var(--grass);color:#fff;box-shadow:0 4px 0 #2B7F43;min-height:48px;margin:8px 6px 0 0;cursor:pointer}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #2B7F43}
+.btn.sun{background:var(--sun);color:var(--ink);box-shadow:0 4px 0 #D9A21E}.btn.sky{background:var(--sky);box-shadow:0 4px 0 #2E8CC7}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--sky2);box-shadow:0 3px 0 var(--line)}
+.btn.small{padding:8px 12px;min-height:40px;font-size:14px}
+.verdict{border-radius:20px;padding:14px 16px;font-size:20px;font-weight:800;margin:0 0 10px}
+.verdict.star{background:var(--sun);color:var(--ink);box-shadow:0 4px 0 #D9A21E;font-size:22px}
+.verdict.ok{background:var(--grass2);color:#1E6B37}.verdict.wr{background:var(--orange2);color:#9A4A06}.verdict.bad{background:var(--stop2);color:#9E2219}.verdict.none{background:#EAF3F9;color:var(--ink)}
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+.num{background:#F5FAFE;border:2px solid var(--line);border-radius:16px;padding:8px 10px}.num span{display:block;font-size:13px;color:var(--muted);font-weight:600}.num b{font-size:21px}.num.roi{grid-column:1/-1;background:#FFF7D6;border-color:#FFC93C}.num.roi b{font-size:32px}.num.roi i{font-style:normal;font-weight:500}
+.conf{display:inline-block;border-radius:999px;padding:3px 10px;font-size:14px;font-weight:700}
+.conf.high{background:var(--grass2);color:#1E6B37}.conf.medium{background:var(--sun2);color:#7A5600}.conf.low{background:var(--orange2);color:#9A4A06}.conf.none{background:#EAF3F9;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:15px}td{padding:6px 2px;border-bottom:1px solid var(--line)}td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+tr.tot td{border-top:2px solid var(--ink);font-weight:800}tr.best td{background:var(--grass2)}
+ul.flags{list-style:none;padding:0;margin:6px 0}ul.flags li{border-radius:14px;padding:8px 10px;margin:6px 0;font-size:15px}
+li.major{background:var(--stop2);border-left:6px solid var(--stop)}li.warn{background:var(--orange2);border-left:6px solid var(--orange)}li.tip{background:#E8F4FC;border-left:6px solid var(--sky)}
+.flip{border:2px solid var(--line);border-radius:18px;padding:10px 12px;margin:8px 0}
+.stages{display:flex;gap:4px;margin:6px 0}.stages span{flex:1;text-align:center;font-size:12px;font-weight:700;padding:5px 2px;border-radius:10px;background:#EAF3F9;color:var(--muted)}
+.stages span.on{background:var(--grass);color:#fff}
+.chip{display:inline-block;border:2px solid var(--sky2);background:#fff;border-radius:999px;padding:6px 12px;font:700 14px "BF Sans",sans-serif;margin:4px 4px 0 0;min-height:36px}
+.chip[aria-pressed=true]{background:var(--sky);border-color:var(--sky);color:#fff}
+.msg{font-size:15px;margin:8px 0 0}.ok{color:#1E6B37}.bad{color:#9E2219}
+details summary{cursor:pointer;font-weight:700;padding:6px 0}
+ol.steps li{margin:4px 0}
+.prog{height:10px;border-radius:999px;background:#EAF3F9;overflow:hidden;margin-top:8px}.prog i{display:block;height:100%;width:0;background:var(--sky);transition:width .2s}
+@media (max-width:380px){.grid3{grid-template-columns:1fr 1fr}.nums{grid-template-columns:1fr 1fr}header h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Bargain Finder</a>
+  <h1>Flip Pro</h1>
+  <p>Buy 30%+ under market. Clean it. Sell it.</p>
+</header>
+<main>
+
+<section data-v="check">
+  <div class="card">
+    <h2>Check a listing</h2>
+    <p class="what">Paste the ad's words, or read a screenshot. It fills in the boxes below; fix anything it got wrong.</p>
+    <textarea id="paste" placeholder="Paste the listing here (title, price, km, place, description)"></textarea>
+    <button class="btn" id="readBtn">Read it</button>
+    <label class="btn sky">Read a screenshot<input type="file" id="shot" accept="image/*" hidden></label>
+    <div class="prog" id="prog" hidden><i id="progB"></i></div><p class="msg muted" id="readMsg"></p>
+  </div>
+  <div class="card">
+    <h2>The listing</h2>
+    <p class="what">Change any box and the numbers update straight away.</p>
+    <label class="f">Title<input id="iTitle"></label>
+    <div class="grid3"><label class="f">Asking $<input id="iPrice" type="number" inputmode="numeric"></label><label class="f">Year<input id="iYear" type="number" inputmode="numeric"></label><label class="f">Km<input id="iKm" type="number" inputmode="numeric"></label></div>
+    <div class="grid2"><label class="f">Place<input id="iLoc"></label><label class="f">Type<select id="iCat"></select></label></div>
+    <h3>Your costs</h3>
+    <div class="grid2"><label class="f">You'd pay $ (blank = asking)<input id="iBuy" type="number" inputmode="numeric"></label><label class="f">Clean-up $<input id="iClean" type="number" inputmode="numeric"></label></div>
+    <div class="grid2"><label class="f">Parts and repairs $<input id="iParts" type="number" inputmode="numeric"></label><label class="f">Travel $<input id="iTravel" type="number" inputmode="numeric"></label></div>
+  </div>
+  <div id="result"></div>
+</section>
+
+
+<section data-v="sold" hidden>
+  <div class="card">
+    <h2>Sold prices</h2>
+    <p class="what">What things really sold for. Flip Pro values a listing from these, never from asking prices alone.</p>
+    <div id="soldSum"></div>
+  </div>
+  <div class="card">
+    <h2>Add eBay sold results (free)</h2>
+    <details><summary>How to get them from eBay Terapeak (5 steps)</summary>
+      <ol class="steps small">
+        <li>On a computer, sign in to ebay.com.au and open <b>Seller Hub</b> (My eBay → Selling → Seller Hub; it's free to turn on).</li>
+        <li>Go to <b>Research</b> (Terapeak product research). It's free for sellers.</li>
+        <li>Type what you're checking, e.g. <i>Hilux SR 2014</i>, set <b>Sold</b> and <b>Last 90 days</b> (or 1 year).</li>
+        <li>Select the results list (drag over it) and copy, or use <b>Download</b> if it's offered.</li>
+        <li>Paste it in the box below and tap <b>Add sold prices</b>. Email the text to yourself to paste it on the phone.</li>
+      </ol>
+      <p class="small muted">A CSV with a title column and a price column works too (date, year and km columns are used if they're there).</p>
+    </details>
+    <label class="f">Type<select id="sCat"></select></label>
+    <textarea id="soldPaste" placeholder="Paste Terapeak sold results or a CSV here"></textarea>
+    <button class="btn" id="soldAdd">Add sold prices</button><p class="msg" id="soldMsg"></p>
+  </div>
+  <div class="card">
+    <h2>Add one sale by hand</h2>
+    <p class="what">Something you sold, or a sold price you saw.</p>
+    <label class="f">Title<input id="mTitle" placeholder="e.g. 2012 Jayco Starcraft 18ft"></label>
+    <div class="grid3"><label class="f">Sold for $<input id="mPrice" type="number" inputmode="numeric"></label><label class="f">Asked $ (if known)<input id="mAsked" type="number" inputmode="numeric"></label><label class="f">Date<input id="mDate" type="date"></label></div>
+    <button class="btn" id="mAdd">Add this sale</button><p class="msg" id="mMsg"></p>
+  </div>
+</section>
+
+
+<section data-v="flips" hidden>
+  <div class="card"><h2>My flips</h2><p class="what">Bought → cleaning up → listed → sold, with the real profit. Each sale teaches the sold prices.</p><div id="flipSum"></div></div>
+  <div id="flipList"></div>
+  <div class="card"><h2>For the learning engine</h2><p class="what">Saves your finished flips as a file the self-learning engine on the PC can read (flip_outcomes.jsonl).</p>
+    <button class="btn ghost" id="labBtn">Save flips for the learning engine</button><p class="msg" id="labMsg"></p></div>
+</section>
+
+
+<section data-v="learned" hidden>
+  <div class="card"><h2>What it learned</h2>
+    <p class="what">Checks its own values against what things really sold for, and tunes itself from your flips. Nothing changes unless the newest 20% of results (kept sealed) agree.</p>
+    <div id="lrnHead"></div>
+    <button class="btn" id="lrnBtn">Learn now</button><button class="btn ghost small" id="lrnOff">Back to plain rules</button><p class="msg" id="lrnMsg"></p>
+  </div>
+  <div id="lrnBody"></div>
+</section>
+
+
+<section data-v="costs" hidden>
+  <div class="card"><h2>Fees and costs</h2>
+    <p class="what">The numbers every profit uses. Checked <span id="chk"></span>. Change them when the rules change.</p>
+    <div id="optBox"></div>
+    <button class="btn" id="optSave">Save</button><button class="btn ghost" id="optReset">Back to defaults</button><p class="msg" id="optMsg"></p>
+  </div>
+</section>
+</main>
+<nav class="tabs" aria-label="Flip Pro">
+  <button data-go="check" aria-selected="true"><b>🔎</b>Check</button>
+  <button data-go="sold" aria-selected="false"><b>🏷️</b>Sold prices</button>
+  <button data-go="flips" aria-selected="false"><b>🔁</b>My flips</button>
+  <button data-go="learned" aria-selected="false"><b>🧠</b>Learned</button>
+  <button data-go="costs" aria-selected="false"><b>🧮</b>Costs</button>
+</nav>
+<script src="guide.js"></script>
+<script src="sales.js"></script>
+<script src="engine.js"></script>
+<script src="flippro.js"></script>
+<script src="ocr/tesseract.min.js"></script>
+<script src="flippro-page.js"></script>
+<script src="web.js"></script></body>
+</html>
