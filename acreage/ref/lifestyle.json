@@ -1,0 +1,36 @@
+{
+"_note": "Hand-made reference list (Claude, Nov 2026): Australia's wine regions (centre of each region, approximate) and well-known holiday and tourist towns. Used for the Growth score's 'things to do' factor. Edit freely.",
+"wine": [
+["Hunter Valley",-32.78,151.29],["Mudgee",-32.6,149.59],["Orange",-33.28,149.1],["Cowra",-33.83,148.69],["Hilltops",-34.32,148.3],
+["Canberra District",-35.1,149.2],["Southern Highlands",-34.5,150.42],["Shoalhaven Coast",-34.87,150.6],["Tumbarumba",-35.78,148.01],["Riverina",-34.28,146.05],
+["New England",-29.9,151.5],["Hastings River",-31.43,152.9],["Gundagai",-35.06,148.1],["Perricoota",-36.13,144.75],
+["Granite Belt",-28.66,151.93],["South Burnett",-26.55,151.85],["Scenic Rim",-28.0,152.95],["Sunshine Coast hinterland",-26.65,152.85],
+["Yarra Valley",-37.7,145.5],["Mornington Peninsula",-38.37,145.03],["Macedon Ranges",-37.38,144.55],["Geelong",-38.15,144.2],["Bellarine",-38.2,144.55],
+["Heathcote",-36.92,144.71],["Bendigo",-36.75,144.28],["Grampians",-37.15,142.5],["Pyrenees",-37.13,143.4],["King Valley",-36.65,146.4],
+["Beechworth and Rutherglen",-36.2,146.6],["Alpine Valleys",-36.73,146.95],["Strathbogie Ranges",-36.85,145.6],["Upper Goulburn",-37.1,145.95],
+["Goulburn Valley",-36.65,145.3],["Gippsland",-38.1,146.6],["Sunbury",-37.58,144.72],["Ballarat",-37.55,143.85],["Henty",-38.1,141.8],["Murray Darling",-34.25,142.2],
+["Barossa Valley",-34.53,138.95],["Eden Valley",-34.65,139.1],["Clare Valley",-33.83,138.6],["McLaren Vale",-35.22,138.55],["Adelaide Hills",-34.98,138.8],
+["Langhorne Creek",-35.3,139.05],["Coonawarra",-37.3,140.83],["Padthaway",-36.6,140.5],["Wrattonbully",-37.1,140.7],["Riverland",-34.2,140.6],
+["Kangaroo Island",-35.8,137.3],["Southern Fleurieu",-35.5,138.5],["Currency Creek",-35.45,138.75],["Mount Benson and Robe",-37.15,139.8],
+["Margaret River",-33.95,115.07],["Great Southern",-34.75,117.6],["Pemberton and Manjimup",-34.4,116.05],["Geographe",-33.5,115.65],
+["Blackwood Valley",-33.95,116.15],["Swan Valley",-31.8,116.02],["Perth Hills",-32.0,116.15],["Peel",-32.6,115.85],
+["Tamar Valley",-41.25,146.95],["Pipers River",-41.1,147.1],["Coal River Valley",-42.75,147.45],["Derwent Valley",-42.75,147.05],
+["Huon Valley",-43.05,147.0],["East Coast Tasmania",-42.1,148.2]
+],
+"holiday": [
+["Stanthorpe",-28.65,151.93],["Byron Bay",-28.64,153.61],["Noosa",-26.39,153.09],["Maleny",-26.76,152.85],["Montville",-26.69,152.89],
+["Tamborine Mountain",-27.93,153.19],["Hervey Bay",-25.29,152.84],["Agnes Water",-24.21,151.9],["Airlie Beach",-20.27,148.72],["Port Douglas",-16.48,145.47],
+["Mission Beach",-17.87,146.1],["Atherton Tablelands",-17.27,145.48],["Toowoomba",-27.56,151.95],["Bundaberg coast",-24.87,152.35],["Yeppoon",-23.13,150.74],
+["Port Macquarie",-31.43,152.91],["Coffs Harbour",-30.3,153.11],["Bellingen",-30.45,152.9],["Yamba",-29.44,153.36],["Kingscliff",-28.26,153.58],
+["Port Stephens",-32.72,152.11],["Forster",-32.18,152.51],["Kiama",-34.67,150.85],["Jervis Bay",-35.05,150.7],["Ulladulla",-35.36,150.47],
+["Batemans Bay",-35.71,150.18],["Merimbula",-36.89,149.91],["Jindabyne",-36.42,148.62],["Bowral",-34.48,150.42],["Kangaroo Valley",-34.73,150.53],
+["Blue Mountains",-33.71,150.31],["Mudgee",-32.6,149.59],["Orange",-33.28,149.1],["Pokolbin",-32.77,151.29],["Armidale",-30.51,151.67],
+["Daylesford",-37.35,144.14],["Bright",-36.73,146.96],["Mansfield",-37.05,146.08],["Lorne",-38.54,143.98],["Apollo Bay",-38.76,143.67],
+["Port Fairy",-38.38,142.24],["Halls Gap",-37.14,142.52],["Phillip Island",-38.49,145.23],["Inverloch",-38.63,145.73],["Lakes Entrance",-37.88,147.98],
+["Healesville",-37.65,145.52],["Echuca",-36.13,144.75],["Victor Harbor",-35.55,138.62],["Hahndorf",-35.03,138.81],["Robe",-37.16,139.76],
+["Port Lincoln",-34.73,135.86],["Margaret River",-33.95,115.07],["Dunsborough",-33.61,115.1],["Denmark",-34.96,117.35],["Albany",-35.02,117.88],
+["Esperance",-33.86,121.89],["Kalbarri",-27.71,114.17],["Exmouth",-21.93,114.13],["Broome",-17.96,122.24],["Pemberton",-34.44,116.04],
+["Launceston",-41.44,147.14],["Bicheno",-41.87,148.3],["Swansea",-42.12,148.07],["Cradle Mountain",-41.6,145.95],["Strahan",-42.15,145.33],
+["Huonville",-43.03,147.05],["Richmond Tasmania",-42.74,147.44],["Darwin rural",-12.6,131.1],["Katherine",-14.47,132.26]
+]
+}

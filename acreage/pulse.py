@@ -48,6 +48,11 @@ def main():
     sva = [a["sold_vs_ask"] for a in areas if a.get("sold_vs_ask")]
     snap["sold_vs_ask"] = round(statistics.median(sva), 3) if sva else None
 
+    # each state: asking $/acre for 10-200 acre blocks, and how many are for sale
+    snap["states"] = {}
+    for st in ("QLD", "NSW", "VIC", "SA", "WA", "TAS", "NT"):
+        v = [r["p"] / r["a"] for r in L if r["s"] == st and r.get("p") and 10 <= r["a"] < 200]
+        if len(v) >= 10: snap["states"][st] = {"ppa": med(v), "n": sum(1 for r in L if r["s"] == st)}
     pulse = load("market-pulse.json", {"days": [], "nsw_months": []})
     pulse["days"] = [x for x in pulse["days"] if x["date"] != today] + [snap]
     pulse["days"].sort(key=lambda x: x["date"])
@@ -117,8 +122,16 @@ def main():
                "sold_vs_fair": round(statistics.median(k["sold"] / k["fair"] for k in done if k.get("fair")), 3) if any(k.get("fair") for k in done) else None,
                "recent": sorted(done, key=lambda k: k.get("sold_d") or "")[-8:]}
 
+    # ---- sales per month by state
+    # Farmbuy's sold list (every sale it shows, since mid 2026; grows each day)
+    spm = defaultdict(lambda: defaultdict(int))
+    for x in load("sold-cache.json", {}).values():
+        if x.get("sold") and x.get("s") and (x.get("a") or 0) >= 10: spm[x["s"]][x["sold"][:7]] += 1
+    months_all = sorted({m for v in spm.values() for m in v})[-24:]
+    sales_months = {"months": months_all, "states": {st: [spm[st].get(m, 0) for m in months_all] for st in spm}}
+
     # ---- add to the page data
-    d["pulse"] = {"latest": pulse["latest"], "days": days[-120:], "nsw_months": pulse.get("nsw_months", [])}
+    d["pulse"] = {"latest": pulse["latest"], "days": days[-120:], "nsw_months": pulse.get("nsw_months", []), "sales_months": sales_months}
     d["picks"] = summary
     open(P("acreage-data.js"), "w").write("window.ACREAGE_DATA=" + json.dumps(d, separators=(",", ":")) + ";\n")
     print("Pulse:", pulse["latest"]["verdict"], "| picks tracked:", len(picks), "| sold so far:", len(done))
