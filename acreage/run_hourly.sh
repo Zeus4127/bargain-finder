@@ -7,4 +7,5 @@ python3 -I -u scan_fp_sale.py || echo "Farm Property for-sale step failed; carry
 python3 -I -u build_listed.py || echo "Listed dates step failed; carrying on"
 python3 -I -u scan_acreage.py
 python3 -I -u scan_catches.py && python3 -I -u scan_acreage.py --rescore || echo "Catch checks failed; carrying on"
+python3 -I -u pulse.py || echo "Market pulse step failed; carrying on"
 python3 -I build_page.py "${1:-acreage-finder.html}"

@@ -5,7 +5,7 @@ its own comparisons) and compare with what it actually sold for. Writes backtest
   python3 -I backtest.py
 """
 import json, os, random, statistics, sys
-sys.argv = [sys.argv[0]]
+ARGS = list(sys.argv); sys.argv = [sys.argv[0]]
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import scan_acreage as S
 
@@ -43,7 +43,21 @@ def main():
         out.append(o)
         print(kind, json.dumps(o["all"]), flush=True)
         for k in ("by_state", "by_size", "by_source"): print("  ", k, {a: (b["median_ratio"], b["median_abs_err"], b["within20"], b["n"]) for a, b in o[k].items() if b})
-    json.dump({"tests": out}, open(os.path.join(HERE, "backtest.json"), "w"), indent=1)
+    res = {"tests": out}
+    if "--tune" in ARGS:   # learn how far under asking blocks really sell, from the latest sales
+        best = None
+        for k in (0.74, 0.78, 0.82, 0.86, 0.90, 0.94):
+            S.ASK_TO_SALE = k; rs = []
+            for t in test:
+                subj = dict(t); subj.pop("is_sold", None)
+                fair, cs, lvl = S.price_one(subj, model, [c for c in asking + sales if c["id"] != t["id"]])
+                if fair: rs.append(fair / t["p"])
+            m = statistics.median(rs); err = statistics.median(abs(x - 1) for x in rs)
+            print("  k", k, "median", round(m, 3), "error", round(err, 3), flush=True)
+            if best is None or abs(m - 1) + err < best[0]: best = (abs(m - 1) + err, k)
+        res["tuned_k"] = best[1]; res["tuned_on"] = d["scanned"][:10]
+        print("tuned ask-to-sale:", best[1])
+    json.dump(res, open(os.path.join(HERE, "backtest.json"), "w"), indent=1)
 
 if __name__ == "__main__":
     main()

@@ -218,7 +218,10 @@ def wa_planning(lat, lng):
     return out
 
 # ---- fair-price model --------------------------------------------------------
-ASK_TO_SALE = float(os.environ.get("ACREAGE_ASK_TO_SALE", "0.82"))
+def _tuned_k():
+    try: return str(json.load(open(os.path.join(HERE, "backtest.json"))).get("tuned_k") or "0.82")
+    except Exception: return "0.82"
+ASK_TO_SALE = float(os.environ.get("ACREAGE_ASK_TO_SALE") or _tuned_k())   # learned weekly by backtest.py --tune
 STATION_ACRES = 20_000   # bigger holdings are mostly pastoral stations: priced as their own market
 
 def solve(XtX, Xty):

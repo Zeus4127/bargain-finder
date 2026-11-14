@@ -118,6 +118,11 @@ footer{font-size:12.5px;color:var(--muted);padding-top:24px}
 
 <main>
 <section class="view" id="v-today" hidden>
+  <div class="panel" id="pulseBox" hidden><h3>📊 Market pulse: is it time to buy?</h3>
+    <p id="pVerdict" style="font-weight:700;margin:4px 0"></p><ul class="plain" id="pNotes"></ul>
+    <div id="pChart" class="chart"></div>
+    <p class="what">Checked every day from what's for sale (asking prices by block size, price cuts, time on market, how many blocks there are for each sale, and how far under asking blocks sell), plus NSW government sale prices month by month. When several of these turn down together, prices are falling and buyers have the upper hand.</p>
+    <p class="what" id="pPicks"></p></div>
   <h3>What's new</h3>
   <p class="what" id="tNote"></p>
   <div class="facts" id="tfacts" style="margin:0;border-radius:14px"></div>
@@ -789,6 +794,21 @@ Object.keys(RF).forEach(id=>{const el=$(id);if(el)el.addEventListener(el.type===
 $("rCopy").addEventListener("click",()=>{const t=JSON.stringify(getRules());(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("rCopy").textContent="Copied! Send it to Claude"}).catch(()=>{prompt("Copy these rules:",t)})});
 $("rClear").addEventListener("click",()=>{setRules({});fillRules();rulesChanged()});
 rulesChanged();
+
+// market pulse and track record
+(function(){
+  const P=D.pulse;if(!P||!P.latest)return;$("pulseBox").hidden=false;
+  $("pVerdict").textContent=P.latest.verdict;
+  $("pNotes").innerHTML=(P.latest.notes||[]).map(n=>`<li>${esc(n)}</li>`).join("");
+  const m=(P.nsw_months||[]).slice(-24);
+  if(m.length>3){const W=640,H=200,pd={l:52,r:10,t:12,b:28},v=m.map(x=>x.ppa),lo=Math.min(...v)*.95,hi=Math.max(...v)*1.05;
+    const X=i=>pd.l+i*(W-pd.l-pd.r)/(m.length-1),Y=y=>H-pd.b-(y-lo)/(hi-lo)*(H-pd.t-pd.b);
+    const path=m.map((x,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(x.ppa).toFixed(1)).join(" ");
+    const ticks=[lo,(lo+hi)/2,hi].map(t=>`<text x="${pd.l-6}" y="${Y(t)+4}" text-anchor="end" font-size="11" fill="currentColor" opacity=".7">$${Math.round(t/1000)}k</text>`).join("");
+    const lab=[0,Math.floor(m.length/2),m.length-1].map(i=>`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7">${m[i].month}</text>`).join("");
+    $("pChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="NSW sale price per acre by month"><path d="${path}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/>${ticks}${lab}</svg><div class="muted" style="font-size:12px">NSW sale price per acre, 10–200 acre blocks (3-month average). The last couple of months fill in as sales are recorded.</div>`}
+  const k=D.picks;if(k)$("pPicks").innerHTML=`<b>Track record:</b> ${k.picks.toLocaleString("en-AU")} blocks called good or great deals are being followed. `+(k.sold?`${k.sold} have sold so far, for a median ${Math.round(k.sold_vs_ask*100)}% of their asking price`+(k.sold_vs_fair?` and ${Math.round(k.sold_vs_fair*100)}% of the app's likely sale price.`:"."):`None have sold yet. Results build up over the coming weeks, and the app re-learns how far under asking blocks sell every Monday.`);
+})();
 renderDeals();renderAll();
 const h=location.hash.slice(1);show(tabs.some(b=>b.dataset.v===h)?h:(pref.tab||"deals"));
 })();
