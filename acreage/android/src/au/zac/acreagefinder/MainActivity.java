@@ -66,6 +66,11 @@ public class MainActivity extends Activity {
         web.setWebChromeClient(new android.webkit.WebChromeClient());
         setContentView(web);
         if (b != null) web.restoreState(b); else web.loadUrl("file:///android_asset/index.html");
+        // background check for new Standouts and rule matches, shown as phone notifications
+        AlertJob.schedule(this);
+        if (android.os.Build.VERSION.SDK_INT >= 33 && checkSelfPermission("android.permission.POST_NOTIFICATIONS") != android.content.pm.PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, 7);
+        new Thread(new Runnable() { public void run() { try { AlertJob.check(getApplicationContext()); } catch (Exception e) { } } }).start();
     }
 
     @Override protected void onSaveInstanceState(Bundle b) { super.onSaveInstanceState(b); web.saveState(b); }

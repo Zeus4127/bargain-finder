@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="au.zac.acreagefinder" android:versionCode="5" android:versionName="1.4">
+    package="au.zac.acreagefinder" android:versionCode="6" android:versionName="1.5">
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="36"/>
   <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
   <application android:label="Acreage Finder" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme" android:allowBackup="true" android:supportsRtl="true" android:usesCleartextTraffic="false">
     <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTask"
@@ -12,5 +14,6 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <service android:name=".AlertJob" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="false"/>
   </application>
 </manifest>

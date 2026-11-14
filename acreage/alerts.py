@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Phone alerts for new Standouts and new matches for "My rules" (alert-rules.json), sent with ntfy.
+"""Phone alerts for new Standouts and new matches for "My rules" (alert-rules.json).
 
-Only sends when the environment variable ACREAGE_NTFY_TOPIC is set (the topic is never stored in a file).
-Remembers what it has already sent in alerted.json, so each block is only announced once.
+Writes alerts-feed.json (the newest alerts). The Acreage Finder phone app checks that file in the background
+every few hours and shows an Android notification for anything new, for free. (ntfy still works too if the
+ACREAGE_NTFY_TOPIC environment variable is set, but isn't needed.) alerted.json remembers what was announced.
 
   ACREAGE_NTFY_TOPIC=your-topic python3 -I alerts.py
 """
@@ -32,6 +33,19 @@ def main():
         sent.add(key)
         if not first: new.append((why, r))
     json.dump(sorted(sent), open(P("alerted.json"), "w"))
+    # the feed the phone app reads: newest first, last 60 days, at most 100
+    from datetime import datetime, timedelta, timezone
+    try: feed = json.load(open(P("alerts-feed.json")))
+    except Exception: feed = {"alerts": []}
+    now = datetime.now(timezone.utc)
+    for why, r in new:
+        feed["alerts"].insert(0, {"id": str(r["id"]), "when": now.isoformat(timespec="minutes"), "title": why + ": " + str(r.get("sub")) + " " + r["s"],
+            "text": f"{round(r['a'])} acres, asking ${r['p']:,.0f}" + (f", Growth {r['gs']}/100" if r.get("gs") is not None else "") + (f", likely sale ${r['fair']:,.0f}" if r.get("fair") else ""),
+            "url": r.get("u") or ""})
+    cut = (now - timedelta(days=60)).isoformat()
+    feed["alerts"] = [a for a in feed["alerts"] if a["when"] >= cut][:100]
+    feed["updated"] = now.isoformat(timespec="minutes")
+    json.dump(feed, open(P("alerts-feed.json"), "w"), indent=0)
     if first: print("alerts: first run, remembered", len(sent), "blocks; nothing sent"); return
     print("alerts: new", len(new), "| sending" if topic else "| no ntfy topic set, not sending")
     for why, r in new[:10]:
