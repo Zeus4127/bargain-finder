@@ -9,4 +9,5 @@ python3 -I -u scan_acreage.py
 python3 -I -u scan_catches.py && python3 -I -u scan_acreage.py --rescore || echo "Catch checks failed; carrying on"
 python3 -I -u growth.py || echo "Growth score step failed; carrying on"
 python3 -I -u pulse.py || echo "Market pulse step failed; carrying on"
+python3 -I -u alerts.py || echo "Alerts step failed; carrying on"
 python3 -I build_page.py "${1:-acreage-finder.html}"

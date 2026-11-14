@@ -77,3 +77,19 @@ government's public valuation map layers into `nsw-vg/` (not committed). `import
 into `nsw-sales.json` (not committed) and `nsw-growth.json`: median $/acre by year, and 5, 10 and
 20-year growth from 3-year pooled medians, for NSW, each region and each council, by block size.
 Each property appears once, at its latest sale. The daily run refreshes this on Mondays.
+
+## When you're ready to buy
+
+The free system runs on its own until then. When there's money to spend, in this order:
+
+1. **Sales records for the other states (about $175–$280 a month).** Cotality (CoreLogic RP Data) or Pricefinder
+   give every sale with land size for QLD, VIC, WA, SA and TAS. Export the last 3–5 years of sales of 10+ acres
+   as CSV (address, suburb, postcode, date, price, land area, and latitude/longitude if offered) into `acreage/sales-import/`.
+   The import would follow `import_nsw_vg.py`: one row per sale, the same `nsw-sales.json` shape (`sub, pc, a, p, date, lat, lng`),
+   then `scan_acreage.py` uses the last two years as comparisons and `growth.py`/the growth tables get real growth per
+   council for every state. One month is enough to pull the history; keep it only if you're actively buying.
+2. **Re-test the prices** with `python3 -I backtest.py --tune` once those sales are in: accuracy should improve outside NSW.
+3. **Pick from the ⭐ Standouts** (Today tab). Each has a dossier: comparisons, an offer plan, cabin and caravan rules
+   for its state, and questions for the agent. Ring the agent, check the council, see it in person.
+4. **Phone alerts:** set `ACREAGE_NTFY_TOPIC` in the environment's settings (never in a file) and install the free ntfy
+   app subscribed to the same topic. `alerts.py` then sends each new Standout or rule match once.

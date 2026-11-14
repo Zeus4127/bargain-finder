@@ -831,7 +831,7 @@ def finish(rows, scanned, keep_prev=True):
     topic = os.environ.get("ACREAGE_NTFY_TOPIC", "").strip()
     try: rules = json.load(open(os.path.join(HERE, "alert-rules.json")))   # "My rules" from the page (no secrets)
     except Exception: rules = {}
-    if keep_prev and prev_ids and topic:
+    if False and keep_prev and prev_ids and topic:   # replaced by alerts.py (Standouts and rule matches)
         for r in rows:
             if r["id"] not in prev_ids and (match_rules(r, rules) if rules else (r.get("v") in ("great", "good") and r["p"] and r["p"] <= 350_000)) and not r["uo"]:
                 msg = f"{r['a']:.0f} ac {r['sub']} {r['s']} ${r['p']:,.0f} ({r['v']} deal)"

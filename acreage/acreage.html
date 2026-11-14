@@ -484,6 +484,26 @@ function myTake(x){
   // keep 5 years: growth plus income, less rates
   const g=growthRate(x),val5=Math.min(x.fair,(x.fair+x.p)/2)*Math.pow(1+g/100,5),inc=yearlyIncome(x),keep5=val5-buy-buyCost+5*(inc.v-hold);
   return{head,good,bad,buy,sell,flip,g,val5,inc,keep5,save:x.p-buy,hold}}
+// Standout dossier: the evidence, an offer range, cabin rules and questions for the agent
+const CABIN={
+ QLD:"Queensland: in the Rural zone, a tourist park, cabins or short-term accommodation usually need a council development approval (often impact assessable). Small nature-based or farm-stay set-ups are easier. Ask the council for its planning scheme rules for the zone.",
+ NSW:"NSW: most rural zones (RU1/RU2) allow farm stay accommodation and eco-tourist facilities with council consent, and a few tents or caravans for camping on farms can be allowed with fewer approvals. A caravan park is often prohibited in RU1 but allowed in some RU2 or tourism zones. Check the council's LEP for the zone.",
+ VIC:"Victoria: in the Farming or Rural Living Zone, group accommodation, a host farm or cabins need a planning permit, and a caravan park usually does too. Ask the council about the zone's schedule.",
+ TAS:"Tasmania: visitor accommodation in the Rural or Agriculture zone is often allowed with a permit, and small numbers of cabins are common. Check the council's local provisions.",
+ SA:"South Australia: tourist accommodation in rural zones needs development approval under the Planning and Design Code. Check the zone's rules on the SA PlanSA site.",
+ WA:"Western Australia: holiday homes, chalets or a caravan park on rural land need council approval under its local planning scheme, and some shires are stricter than others.",
+ NT:"Northern Territory: tourist accommodation on rural land needs development consent under the NT Planning Scheme."};
+function dossier(x){
+  if(!x.gstar)return"";const k=v=>"$"+Math.round(v/1000)+"k";
+  const cs=(x.cids||[]).map(i=>byId[i]).filter(Boolean).slice(0,6);
+  const comps=cs.length?"<ul class=\"plain\" style=\"margin:4px 0\">"+cs.map(c=>`<li>${esc(c.sub||"")} ${esc(c.pc||"")}: ${acres(c.a)} for ${short(c.p)} (${money(c.p/c.a)}/ac${c.is_sold||c.sold?", sold"+(c.sold?" "+String(c.sold).slice(0,7):""):", asking"})</li>`).join("")+"</ul>":"";
+  const q=["Why are the owners selling, and how long has it been for sale?","Has it had any offers, and what did similar blocks nearby sell for?","Is there legal road access the whole way in, and who maintains the road?","Any easements, covenants, or native vegetation that can't be cleared?","Water: licences, bores (how deep, how much), dam sizes, does the creek run all year?","Power and phone: is there a grid connection, and how far is the nearest pole?","Flood and bushfire: has it flooded or burnt, and what bushfire rating would a house need?","Has the council approved a house site, cabins or anything else? Any DA history?"];
+  return `<details class="loc" style="border:2px solid var(--ok);border-radius:12px;padding:8px 10px;margin-top:8px"><summary><b>⭐ Standout dossier</b></summary>
+   <div style="margin-top:6px"><b>Offer plan:</b> open around ${k(x.offer||x.fair*.93)}, likely sale price about ${k(x.fair)}, walk away above ${k(x.walk||x.fair*1.08)}. Asking is ${k(x.p)}.</div>
+   ${comps?`<div style="margin-top:6px"><b>What it was compared with:</b>${comps}</div>`:""}
+   <div style="margin-top:6px"><b>Cabins or caravan sites:</b> ${CABIN[x.s]||"Check the council's planning rules for the zone."}${x.zone?` This block's zone: ${esc(x.zone)}${x.zone_name&&x.zone_name!==x.zone?" ("+esc(x.zone_name)+")":""}.`:""}</div>
+   <div style="margin-top:6px"><b>Ask the agent:</b><ol style="margin:4px 0 0 18px;padding:0">${q.map(t=>`<li>${t}</li>`).join("")}</ol></div>
+   <div style="margin-top:6px"><b>Before you offer:</b> look at it on Google Maps satellite, drive the road in, get a title search (about $30), ring the council about the zone and any approvals, and book a building and pest check if there's a house.</div></details>`}
 function growthLine(x){
   if(x.gs==null)return"";const g=x.gx||{},col=x.gs>=70?"var(--ok)":x.gs>=50?"var(--info)":"var(--warn)";
   const badge=x.gstar?"⭐ Standout":x.gok?"✓ Ticks the must-haves":"✗ Misses a must-have";
@@ -599,7 +619,7 @@ function card(x){
     <div class="ask"><b>${x.p?short(x.p):"–"}</b><small>${esc((x.pt||"").slice(0,38))}</small></div></div>
   <div class="nums"><div><small>Size</small><span>${acres(x.a)}</span></div><div><small>Likely sale price</small><span>${short(x.fair)}</span></div><div><small>Opening offer</small><span>${x.offer?short(x.offer):"–"}</span></div><div><small>Walk away above</small><span>${x.walk?short(x.walk):"–"}</span></div></div>
   ${x.lo?`<div class="loc">Similar blocks nearby usually ask ${short(x.lo)} to ${short(x.hi)}.</div>`:""}
-  ${subLine(x)}${growthLine(x)}${takeLine(x)}${domLine(x)}${placeLine(x)}${costLine(x)}${incomeLine(x)}${areaLine(x)}${catchLine(x)}
+  ${subLine(x)}${growthLine(x)}${dossier(x)}${takeLine(x)}${domLine(x)}${placeLine(x)}${costLine(x)}${incomeLine(x)}${areaLine(x)}${catchLine(x)}
   ${t?`<div class="tags">${t}</div>`:""}
   ${x.desc?`<p class="desc">${esc(x.desc)}</p>`:""}
   <div class="links"><a href="${esc(x.u)}" target="_blank" rel="noopener">Open listing ↗</a><span class="muted num" style="font-size:13px">${x.ppa?money(x.ppa)+"/ac":""}${x.q!=null?" · quality "+x.q+"/100":""}</span><button class="more" type="button" data-id="${esc(x.id)}">Why this verdict?</button></div>
