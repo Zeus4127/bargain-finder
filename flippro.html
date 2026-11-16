@@ -44,7 +44,8 @@ label.f{display:block;font-size:14px;font-weight:600;margin:8px 0 0}label.f inpu
 .verdict.ok{background:var(--grass2);color:#1E6B37}.verdict.wr{background:var(--orange2);color:#9A4A06}.verdict.bad{background:var(--stop2);color:#9E2219}.verdict.none{background:#EAF3F9;color:var(--ink)}
 .nums{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
 .num{background:#F5FAFE;border:2px solid var(--line);border-radius:16px;padding:8px 10px}.num span{display:block;font-size:13px;color:var(--muted);font-weight:600}.num b{font-size:21px}.num.roi{grid-column:1/-1;background:#FFF7D6;border-color:#FFC93C}.num.roi b{font-size:32px}.num.roi i{font-style:normal;font-weight:500}
-.um{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}.um .big{grid-row:span 2;min-width:76px;text-align:center;background:#FFF7D6;border:2px solid #FFC93C;border-radius:16px;padding:8px 6px;font-size:26px;font-weight:800;line-height:1.05}.um .big small{display:block;font-size:11px;font-weight:600;color:var(--muted)}.um .big.bad{background:var(--stop2);border-color:#F2A49C}.um .big.none{background:#EAF3F9;border-color:var(--line);font-size:18px}.um h3{margin:0;font-size:16px;overflow-wrap:anywhere}.um .rank{font-size:13px;color:var(--muted);font-weight:700}
+.um{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}.um .big{grid-row:span 2;min-width:76px;text-align:center;background:#FFF7D6;border:2px solid #FFC93C;border-radius:16px;padding:8px 6px;font-size:26px;font-weight:800;line-height:1.05}.um .big small{display:block;font-size:11px;font-weight:600;color:var(--muted)}.um .big.bad{background:var(--stop2);border-color:#F2A49C}.um .big.none{background:#EAF3F9;border-color:var(--line);font-size:18px}.um h3{margin:0;font-size:16px;overflow-wrap:anywhere}.um .rank{font-size:13px;color:var(--muted);font-weight:700}.um .pn{font-weight:700}.um .pn.dn{color:#1E6B37}.um .pn.up{color:#9A4A06}
+.dt{display:grid;grid-template-columns:1fr 92px 64px;gap:6px;align-items:end;border-top:1px solid var(--line);padding:8px 0}.dt input,.dt select{width:100%}.dt .t{grid-column:1/-1;font-size:14px}
 .conf{display:inline-block;border-radius:999px;padding:3px 10px;font-size:14px;font-weight:700}
 .conf.high{background:var(--grass2);color:#1E6B37}.conf.medium{background:var(--sun2);color:#7A5600}.conf.low{background:var(--orange2);color:#9A4A06}.conf.none{background:#EAF3F9;color:var(--muted)}
 table{width:100%;border-collapse:collapse;font-size:15px}td{padding:6px 2px;border-bottom:1px solid var(--line)}td:last-child{text-align:right;font-weight:700;white-space:nowrap}
@@ -75,7 +76,7 @@ ol.steps li{margin:4px 0}
   <div class="card">
     <h2>Check a listing</h2>
     <p class="what">Paste the ad's words, or read a screenshot. It fills in the boxes below; fix anything it got wrong.</p>
-    <textarea id="paste" placeholder="Paste the listing here (title, price, km, place, description)"></textarea>
+    <textarea id="paste" aria-label="The listing's words" placeholder="Paste the listing here (title, price, km, place, description)"></textarea>
     <button class="btn" id="readBtn">Read it</button>
     <label class="btn sky">Read a screenshot<input type="file" id="shot" accept="image/*" hidden></label>
     <div class="prog" id="prog" hidden><i id="progB"></i></div><p class="msg muted" id="readMsg"></p>
@@ -113,7 +114,7 @@ ol.steps li{margin:4px 0}
       <p class="small muted">A CSV with a title column and a price column works too (date, year and km columns are used if they're there).</p>
     </details>
     <label class="f">Type<select id="sCat"></select></label>
-    <textarea id="soldPaste" placeholder="Paste Terapeak sold results or a CSV here"></textarea>
+    <textarea id="soldPaste" aria-label="Sold results to add" placeholder="Paste Terapeak sold results or a CSV here"></textarea>
     <button class="btn" id="soldAdd">Add sold prices</button><p class="msg" id="soldMsg"></p>
   </div>
   <div class="card">
@@ -148,16 +149,18 @@ ol.steps li{margin:4px 0}
   <div class="card">
     <h2>Under market finder</h2>
     <p class="what">Paste listings from your own saved-search alerts or shares, one per line, like <i>2014 Hilux SR, $14,000, Warwick QLD, 85 km away</i>. A CSV or saved eBay results work too. They're ranked by <b>profit % after all costs</b>: selling fee, travel or towing, repairs, safety certificate, duty and transfer. Values come from your sold prices.</p>
-    <textarea id="umPaste" placeholder="One listing per line: title, $price, place, NN km away"></textarea>
+    <textarea id="umPaste" aria-label="Listings to rank, one per line" placeholder="One listing per line: title, $price, place, NN km away"></textarea>
     <button class="btn" id="umRun">Rank them</button><button class="btn ghost small" id="umClear">Clear the list</button><p class="msg" id="umMsg"></p>
     <details><summary>Travel and repair guesses</summary>
-      <div class="grid2"><label class="f">Home state<select id="umHome"></select></label><label class="f">Top list: at least % under<input id="umMinUnder" type="number" inputmode="numeric"></label></div>
+      <div class="grid2"><label class="f">Home town<select id="umTown"></select></label><label class="f">Home state<select id="umHome"></select></label></div>
+      <div class="grid2"><label class="f">Top list: at least % under<input id="umMinUnder" type="number" inputmode="numeric"></label></div>
       <div class="grid2"><label class="f">Driving $ per km<input id="umPerKm" type="number" step="any" inputmode="decimal"></label><label class="f">Towing $ per km<input id="umTowPerKm" type="number" step="any" inputmode="decimal"></label></div>
       <div class="grid2"><label class="f">Repairs if it needs work %<input id="umNeeds" type="number" inputmode="numeric"></label><label class="f">Repairs if not running %<input id="umDead" type="number" inputmode="numeric"></label></div>
-      <p class="small muted">No distance in the listing? It guesses from the state: 250 km in your state, 350 next door, 1500 further. Add "85 km away" to a line to use the real distance.</p>
+      <p class="small muted">No distance in the listing? Known towns use the road distance from your home town. Otherwise it guesses from the state: 250 km in your state, 350 next door, 1500 further. Add "85 km away" to a line to use the real distance.</p>
       <button class="btn ghost small" id="umSave">Save</button>
     </details>
   </div>
+  <div id="umTest"></div>
   <div id="umList"></div>
 </section>
 
@@ -183,6 +186,7 @@ ol.steps li{margin:4px 0}
 <script src="engine.js"></script>
 <script src="flippro.js"></script>
 <script src="undermarket.js"></script>
+<script src="dealtest.js"></script>
 <script src="ocr/tesseract.min.js"></script>
 <script src="flippro-page.js"></script>
 <script src="web.js"></script></body>
