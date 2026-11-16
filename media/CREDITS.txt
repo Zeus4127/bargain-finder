@@ -1,0 +1,5 @@
+Stock photos and videos for the Bargain Finder front page, from Pexels (pexels.com), downloaded 16 Nov 2026 with zac's OK.
+Pexels licence: free for commercial use, no attribution required (pexels.com/license). Raw files are in media_raw\, compressed copies in media\.
+Photos (Pexels ids): 8229756 hero road, 38212765 caravan road, 35751901 Tenterfield road, 32915493 + 17147177 utes, 3927311 + 37114015 caravans,
+15267106 boat, 37517717 trailer hitch, 20296343 motorbike, 9229821 mower, 6870295 mechanic, 7144207 keys handshake, 97075 car key.
+Videos (Pexels ids): 27025794 outback drive, 8152829 caravan dirt road, 8987018 man inspecting a car.
