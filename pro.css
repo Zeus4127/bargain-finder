@@ -1,17 +1,17 @@
-/* BARGAIN FINDER DESIGN SYSTEM (6.0). Loaded LAST on every app screen (Check, Flip Pro), so all of them share one
+/* BARGAIN FINDER DESIGN SYSTEM (6.1, road-sign charcoal + safety yellow + off-white). Loaded LAST on every app screen (Check, Flip Pro), so all of them share one
    brand: navy ink, a clear blue for actions, gold for highlights, green/amber/red only for meaning.
    Matches the website. Light only. Calm, professional, no cartoon touches. */
 :root{
-  --bf-ink:#0B1620;--bf-ink2:#22313D;--bf-muted:#5B6975;--bf-line:#E3E9EE;--bf-bg:#F4F7F9;--bf-surface:#FFFFFF;
-  --bf-blue:#1167A8;--bf-blue-soft:#E8F1F9;--bf-gold:#FFC23D;--bf-gold-soft:#FFF6DC;
-  --bf-ok:#1B7A44;--bf-ok-soft:#E5F4EA;--bf-warn:#94570A;--bf-warn-soft:#FDF2DF;--bf-stop:#B8322A;--bf-stop-soft:#FBE8E6;
-  --bf-r:16px;--bf-shadow:0 1px 2px rgba(11,22,32,.05),0 4px 16px rgba(11,22,32,.05);
+  --bf-ink:#1C1F21;--bf-ink2:#33393D;--bf-muted:#62676B;--bf-line:#E2DCCD;--bf-bg:#F7F4EC;--bf-surface:#FFFFFF;
+  --bf-blue:#1C1F21;--bf-blue-soft:#F1EAD5;--bf-gold:#FFC20E;--bf-gold-soft:#FFF4CC;
+  --bf-ok:#0B6B3A;--bf-ok-soft:#E3F1E8;--bf-warn:#94570A;--bf-warn-soft:#FDF2DF;--bf-stop:#B8322A;--bf-stop-soft:#FBE8E6;
+  --bf-r:16px;--bf-shadow:0 1px 2px rgba(28,31,33,.05),0 4px 16px rgba(28,31,33,.05);
   /* the Check screen's tokens */
   --bg:var(--bf-bg);--surface:var(--bf-surface);--ink:var(--bf-ink);--muted:var(--bf-muted);--line:var(--bf-line);
   --accent:var(--bf-blue);--accent-soft:var(--bf-blue-soft);--ok:var(--bf-ok);--ok-soft:var(--bf-ok-soft);--warn:var(--bf-warn);--warn-soft:var(--bf-warn-soft);
   --stop:var(--bf-stop);--stop-soft:var(--bf-stop-soft);--info:var(--bf-blue);--info-soft:var(--bf-blue-soft);--head:var(--bf-bg);
   /* Flip Pro's tokens */
-  --sky:var(--bf-blue);--sky2:#BBD3E6;--sun:var(--bf-gold);--sun2:var(--bf-gold-soft);--grass:var(--bf-ok);--grass2:var(--bf-ok-soft);
+  --sky:var(--bf-blue);--sky2:#E2D6B0;--sun:var(--bf-gold);--sun2:var(--bf-gold-soft);--grass:var(--bf-ok);--grass2:var(--bf-ok-soft);
   --orange:var(--bf-warn);--orange2:var(--bf-warn-soft);--stop2:var(--bf-stop-soft);--card:var(--bf-surface);
   color-scheme:light}
 body{background:var(--bf-bg)!important;color:var(--bf-ink);-webkit-font-smoothing:antialiased;letter-spacing:-.003em}
@@ -19,12 +19,12 @@ h1,h2,h3{letter-spacing:-.02em}
 :focus-visible{outline:3px solid var(--bf-gold)!important;outline-offset:2px}
 
 /* ---------- top bar (Check) ---------- */
-.top{background:rgba(255,255,255,.94)!important;backdrop-filter:saturate(1.5) blur(12px);border-bottom:1px solid var(--bf-line)!important;box-shadow:0 1px 0 rgba(11,22,32,.02)}
+.top{background:rgba(255,255,255,.94)!important;backdrop-filter:saturate(1.5) blur(12px);border-bottom:1px solid var(--bf-line)!important;box-shadow:0 1px 0 rgba(28,31,33,.02)}
 .top h1{font-weight:800!important;letter-spacing:-.025em}
-.live{color:var(--bf-muted)!important}.dot{background:var(--bf-ok)!important;box-shadow:0 0 0 3px rgba(27,122,68,.15)!important}
+.live{color:var(--bf-muted)!important}.dot{background:var(--bf-ok)!important;box-shadow:0 0 0 3px rgba(11,107,58,.15)!important}
 
 /* ---------- hero (Check home) ---------- */
-.bhero{background:radial-gradient(90% 120% at 100% 0%,rgba(255,194,61,.22),transparent 55%),linear-gradient(160deg,#0B1620,#163247)!important}
+.bhero{background:radial-gradient(90% 120% at 100% 0%,rgba(255,194,14,.22),transparent 55%),linear-gradient(160deg,#1C1F21,#2C3236)!important}
 .bhero::after{display:none!important}
 .bhero .ey{color:var(--bf-gold)!important;letter-spacing:.16em}
 .bhero h2.big{font-weight:900!important;letter-spacing:-.04em!important}
@@ -58,14 +58,14 @@ textarea:focus,input:focus,select:focus{outline:none!important;border-color:var(
 input[type=checkbox],input[type=radio],input[type=range]{accent-color:var(--bf-blue)}
 
 /* ---------- bottom tab bar (both screens) ---------- */
-.tabs{background:rgba(255,255,255,.96)!important;backdrop-filter:saturate(1.5) blur(14px);border-top:1px solid var(--bf-line)!important;box-shadow:0 -4px 20px rgba(11,22,32,.04)}
+.tabs{background:rgba(255,255,255,.96)!important;backdrop-filter:saturate(1.5) blur(14px);border-top:1px solid var(--bf-line)!important;box-shadow:0 -4px 20px rgba(28,31,33,.04)}
 .tabs button{color:var(--bf-muted)!important;font-weight:600!important;font-size:12px!important;background:none!important;border-radius:0!important;position:relative}
 .tabs button svg{width:24px;height:24px;stroke-width:1.9}
 .tabs button[aria-selected="true"]{color:var(--bf-blue)!important;background:none!important}
 .tabs button[aria-selected="true"]::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;border-radius:0 0 3px 3px;background:var(--bf-blue)}
 
 /* ---------- Flip Pro ---------- */
-body.fp header{background:linear-gradient(160deg,#0B1620,#163247)!important;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 18px!important;overflow:hidden}
+body.fp header{background:linear-gradient(160deg,#1C1F21,#2C3236)!important;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 18px!important;overflow:hidden}
 body.fp header::after{display:none!important}
 body.fp header h1{margin:12px 0 2px!important;font-size:26px!important;font-weight:900!important;letter-spacing:-.035em;text-shadow:none!important}
 body.fp header p{margin:0!important;text-shadow:none!important;color:rgba(255,255,255,.75)!important;font-size:15px!important}
@@ -95,3 +95,9 @@ body.fp ul.flags li.warn{background:var(--bf-warn-soft)}body.fp ul.flags li.warn
 body.fp .fchips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 body.fp .fchip{font:600 12px/1 "BF Sans",sans-serif;padding:6px 9px;border-radius:999px;background:var(--bf-warn-soft);color:var(--bf-warn);border:1px solid #F1D29E}
 body.fp .um .pn.dn{color:var(--bf-ok)!important}body.fp .um .pn.up{color:var(--bf-warn)!important}
+
+/* ---------- 6.1 road-sign touches ---------- */
+.bhero,body.fp header{border-bottom:8px solid transparent!important;border-image:repeating-linear-gradient(-45deg,#1C1F21 0 12px,#FFC20E 12px 24px) 8!important}
+.btn.sun{box-shadow:0 3px 0 #1C1F21!important}
+.tabs button[aria-selected="true"]::before{background:#FFC20E!important;height:4px}
+.facts b{color:#FFC20E!important;font-family:"BF Mono",ui-monospace,monospace}
