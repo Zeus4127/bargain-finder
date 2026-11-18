@@ -95,3 +95,37 @@ body.fp ul.flags li.warn{background:var(--bf-warn-soft)}body.fp ul.flags li.warn
 body.fp .fchips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 body.fp .fchip{font:600 12px/1 "BF Sans",sans-serif;padding:6px 9px;border-radius:999px;background:var(--bf-warn-soft);color:var(--bf-warn);border:1px solid #F1D29E}
 body.fp .um .pn.dn{color:var(--bf-ok)!important}body.fp .um .pn.up{color:var(--bf-warn)!important}
+
+/* ---------- 6.2: wide screens (laptop and desktop) ----------
+   Everything here is inside one media query, so phones and the Android app are untouched. */
+@media (min-width:960px){
+  /* Check: wider page, menu moves into the top bar, panels sit in two columns */
+  .top{padding-left:max(24px,calc((100vw - 1080px)/2))!important;padding-right:max(24px,calc((100vw - 1080px)/2))!important;min-height:44px}
+  .wrap{max-width:1080px!important;padding-bottom:110px!important}
+  .sheet .wrap{max-width:760px!important}
+  body:not(.fp) .tabs{top:5px!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);width:auto!important;display:flex!important;gap:4px;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none}
+  body:not(.fp) .tabs button{display:flex!important;flex-direction:row!important;align-items:center;gap:7px;padding:9px 14px!important;min-height:0!important;font-size:14px!important;border-radius:10px!important;cursor:pointer}
+  body:not(.fp) .tabs button svg{width:18px;height:18px}
+  body:not(.fp) .tabs button:hover{background:var(--bf-bg)!important}
+  body:not(.fp) .tabs button[aria-selected="true"]{background:var(--bf-blue-soft)!important}
+  body:not(.fp) .tabs button[aria-selected="true"]::before{display:none}
+  .mbar{left:50%!important;right:auto!important;transform:translateX(-50%);width:min(560px,90vw);bottom:18px!important;border:1px solid var(--bf-line)!important;border-radius:18px;padding:10px 12px 10px 18px!important;box-shadow:0 10px 30px rgba(11,22,32,.14)!important}
+  section[data-v="home"]:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px;align-items:start}
+  section[data-v="home"]>.bhero,section[data-v="home"]>.facts,section[data-v="home"]>.gets,section[data-v="home"]>#nudges,section[data-v="home"]>.tipbox,section[data-v="home"]>.what{grid-column:1/-1}
+  section[data-v="home"]>.bhero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:44px;align-content:center;padding:44px 40px!important;margin:18px 0 0!important;border-radius:20px 20px 0 0}
+  section[data-v="home"]>.bhero>*{grid-column:1}
+  section[data-v="home"]>.bhero>.quick{grid-column:2;grid-row:1/span 8;align-self:center}
+  section[data-v="home"]>.bhero h2.big{font-size:44px!important;line-height:1.05!important}
+  section[data-v="home"]>.facts{margin:0 0 16px!important;border-radius:0 0 20px 20px;padding:18px!important}
+  .wrap>section:not([data-v="home"]){max-width:760px;margin-left:auto;margin-right:auto}
+
+  /* Flip Pro: the form on the left, the answer beside it on the right */
+  body.fp header{padding-left:max(24px,calc((100vw - 1100px)/2))!important;padding-right:max(24px,calc((100vw - 1100px)/2))!important}
+  body.fp main{max-width:1100px!important}
+  body.fp main>section:not([data-v="check"]):not([data-v="rank"]){max-width:760px;margin-left:auto;margin-right:auto}
+  body.fp section[data-v="check"]:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px;align-items:start}
+  body.fp section[data-v="check"]>.card{grid-column:1}
+  body.fp #result{grid-column:2;grid-row:1/span 2}
+  body.fp #result:empty::before{content:"The verdict, profit and red flags show here once you paste a listing or fill in the boxes.";display:block;padding:56px 28px;border:2px dashed var(--bf-line);border-radius:16px;color:var(--bf-muted);text-align:center;font-size:16px}
+  body.fp .tabs{left:50%!important;right:auto!important;transform:translateX(-50%);width:min(640px,92vw);bottom:16px!important;border:1px solid var(--bf-line)!important;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(11,22,32,.14)!important}
+}
