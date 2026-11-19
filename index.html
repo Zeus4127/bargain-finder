@@ -114,8 +114,10 @@ input[type=range]{width:100%;accent-color:var(--sky);height:28px}
 .hcard b{display:block;font:900 2.4rem/1 var(--f);letter-spacing:-.04em;color:var(--sun)}.hcard h3{margin-top:.8rem;font:800 1.2rem/1.2 var(--f)}.hcard p{margin-top:.5rem;color:rgba(255,255,255,.7);font-size:.97rem}
 @media (max-width:860px){.hgrid{grid-template-columns:1fr}}
 /* category rail */
-.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(15rem,1fr);gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.6rem;margin-top:2.6rem;scrollbar-width:thin}
-.rail a{scroll-snap-align:start;position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;color:#fff;text-decoration:none;isolation:isolate}
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.6rem}
+@media (max-width:900px){.rail{grid-template-columns:repeat(2,1fr);gap:.7rem}}
+.rail a{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;color:#fff;text-decoration:none;isolation:isolate}
+@media (max-width:520px){.rail a{aspect-ratio:1/1}.rail b{font-size:1.05rem!important}.rail small{font-size:.8rem}.rail span{left:.8rem!important;right:.8rem!important;bottom:.8rem!important}}
 .rail img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s}.rail a:hover img{transform:scale(1.06)}
 .rail a::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(11,22,32,.85),rgba(11,22,32,0) 55%)}
 .rail span{position:absolute;left:1.1rem;right:1.1rem;bottom:1.1rem}.rail b{display:block;font:800 1.35rem/1.1 var(--f);letter-spacing:-.02em}.rail small{opacity:.85}
@@ -155,6 +157,28 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
 .sign b{font:800 1.1rem/1 var(--f);color:var(--sun)}
 .steps h3{font:800 1.25rem/1.2 var(--f);letter-spacing:-.02em}.steps p{margin-top:.5rem;color:var(--muted);font-size:.97rem}
 @media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* live value chart */
+.dep .seg{margin-bottom:.9rem}
+.depPick{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.depPick button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:.45rem .8rem .45rem .55rem;font:600 .86rem/1 var(--f);cursor:pointer;color:var(--ink2);display:inline-flex;align-items:center;gap:.45rem}
+.depPick button i{width:12px;height:12px;border-radius:50%;border:2px solid #C5CED6;flex:none}
+.depPick button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+.depPick button[aria-pressed="true"] i{border-color:transparent}
+.depBar{display:flex;flex-wrap:wrap;gap:.8rem 1.2rem;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.depOwn{display:flex;gap:.4rem;flex:1 1 22rem;max-width:30rem}.depOwn input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:.55rem .9rem;font:500 .92rem/1 var(--f);background:var(--soft)}
+.depOwn input:focus{outline:none;border-color:var(--sky2);background:#fff}
+.depYrs{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;font-weight:700;font-size:.92rem}
+.depYrs select{margin-left:.3rem;border:1.5px solid var(--line);border-radius:10px;padding:.4rem .5rem;font:600 .92rem/1 var(--f);background:#fff;color:var(--ink)}
+.seg.mini{margin:0!important}.seg.mini button{padding:.42rem .75rem;font-size:.82rem}
+.depChart{position:relative}
+.depTip{position:absolute;top:0;pointer-events:none;background:var(--ink);color:#fff;border-radius:12px;padding:.6rem .75rem;font-size:.84rem;line-height:1.45;box-shadow:0 14px 30px rgba(0,0,0,.25);min-width:11rem;transform:translateX(-50%)}
+.depTip b{display:block;font-size:.9rem;margin-bottom:.2rem}.depTip i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.4rem}
+.keep{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.6rem;margin-top:1.2rem}
+.keep>div{background:var(--soft);border-radius:14px;padding:.8rem .9rem}
+.keep small{display:block;font-weight:600;color:var(--muted);font-size:.8rem}.keep b{font:900 1.5rem/1.1 var(--f);letter-spacing:-.02em}
+.keep .bar{height:6px;border-radius:9px;background:#E3E9EE;margin-top:.5rem;overflow:hidden}.keep .bar span{display:block;height:100%;border-radius:9px}
+@media (max-width:600px){.depYrs{width:100%}.depOwn{flex-basis:100%;max-width:none}}
 </style>
 </head>
 <body>
@@ -202,11 +226,11 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
 </div></section>
 
 <div class="proof" aria-label="By the numbers"><div class="wrap">
-  <div><b data-count="1628">1,628</b><small>Real auction results built in</small></div>
-  <div><b data-count="56">56</b><small>Car makes it knows, Toyota to Xpeng</small></div>
-  <div><b data-count="11">11</b><small>Kinds of red flag it checks for</small></div>
-  <div><b data-count="55">55</b><small>Towns with real road distances</small></div>
-  <div><b>0 bytes</b><small>Uploaded. It all runs on your phone</small></div>
+  <div><b data-count="1628">1,628</b><small>Real auction results</small></div>
+  <div><b data-count="56">56</b><small>Car makes</small></div>
+  <div><b data-count="11">11</b><small>Red flag checks</small></div>
+  <div><b data-count="55">55</b><small>Towns mapped</small></div>
+  <div><b>0 bytes</b><small>Uploaded</small></div>
 </div></div>
 
 <!-- PRODUCT -->
@@ -228,12 +252,23 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
   </div>
 </div></section>
 
-<!-- CHART: how fast they lose value (engine output) -->
+<!-- CHART: how fast they lose value (drawn live by the real engine, on this device) -->
 <section aria-labelledby="depH"><div class="wrap">
   <div class="stack reveal" style="max-width:46rem"><p class="eyebrow">Price trends</p><h2 class="h2" id="depH">How fast do they lose value?</h2>
-    <p class="lead">What Bargain Finder says a typical one is worth at each age, at about 15,000 km a year. Utes hold their value far better than everyday cars, which is why a cheap ute is rarely a mistake.</p></div>
-  <div class="panel reveal" style="margin-top:2rem"><svg viewBox="0 0 720 320" role="img" aria-labelledby="chartT" class="chart"><line x1="64" x2="700" y1="276" y2="276" stroke="#E3E9EE"/><text x="54" y="280" text-anchor="end" class="ax">$0k</text><line x1="64" x2="700" y1="239.42857142857144" y2="239.42857142857144" stroke="#E3E9EE"/><text x="54" y="243.42857142857144" text-anchor="end" class="ax">$10k</text><line x1="64" x2="700" y1="202.85714285714286" y2="202.85714285714286" stroke="#E3E9EE"/><text x="54" y="206.85714285714286" text-anchor="end" class="ax">$20k</text><line x1="64" x2="700" y1="166.28571428571428" y2="166.28571428571428" stroke="#E3E9EE"/><text x="54" y="170.28571428571428" text-anchor="end" class="ax">$30k</text><line x1="64" x2="700" y1="129.71428571428572" y2="129.71428571428572" stroke="#E3E9EE"/><text x="54" y="133.71428571428572" text-anchor="end" class="ax">$40k</text><line x1="64" x2="700" y1="93.14285714285714" y2="93.14285714285714" stroke="#E3E9EE"/><text x="54" y="97.14285714285714" text-anchor="end" class="ax">$50k</text><line x1="64" x2="700" y1="56.571428571428584" y2="56.571428571428584" stroke="#E3E9EE"/><text x="54" y="60.571428571428584" text-anchor="end" class="ax">$60k</text><line x1="64" x2="700" y1="20" y2="20" stroke="#E3E9EE"/><text x="54" y="24" text-anchor="end" class="ax">$70k</text><text x="64" y="296" text-anchor="middle" class="ax">1</text><text x="121.81818181818181" y="296" text-anchor="middle" class="ax">2</text><text x="179.63636363636363" y="296" text-anchor="middle" class="ax">3</text><text x="237.45454545454547" y="296" text-anchor="middle" class="ax">4</text><text x="295.27272727272725" y="296" text-anchor="middle" class="ax">5</text><text x="353.09090909090907" y="296" text-anchor="middle" class="ax">6</text><text x="410.90909090909093" y="296" text-anchor="middle" class="ax">7</text><text x="468.72727272727275" y="296" text-anchor="middle" class="ax">8</text><text x="526.5454545454545" y="296" text-anchor="middle" class="ax">9</text><text x="584.3636363636364" y="296" text-anchor="middle" class="ax">10</text><text x="642.1818181818181" y="296" text-anchor="middle" class="ax">11</text><text x="700" y="296" text-anchor="middle" class="ax">12</text><text x="382" y="314" text-anchor="middle" class="ax">Age in years (about 15,000 km a year)</text><polyline fill="none" stroke="#1167A8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="64.0,52.5 121.8,52.5 179.6,59.9 237.5,74.9 295.3,86.9 353.1,99.0 410.9,111.1 468.7,119.8 526.5,131.9 584.4,141.1 642.2,151.3 700.0,161.9"/><circle cx="64.0" cy="52.5" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 1 years old: about $61,100</title></circle><circle cx="121.8" cy="52.5" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 2 years old: about $61,100</title></circle><circle cx="179.6" cy="59.9" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 3 years old: about $59,100</title></circle><circle cx="237.5" cy="74.9" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 4 years old: about $55,000</title></circle><circle cx="295.3" cy="86.9" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 5 years old: about $51,700</title></circle><circle cx="353.1" cy="99.0" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 6 years old: about $48,400</title></circle><circle cx="410.9" cy="111.1" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 7 years old: about $45,100</title></circle><circle cx="468.7" cy="119.8" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 8 years old: about $42,700</title></circle><circle cx="526.5" cy="131.9" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 9 years old: about $39,400</title></circle><circle cx="584.4" cy="141.1" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 10 years old: about $36,900</title></circle><circle cx="642.2" cy="151.3" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 11 years old: about $34,100</title></circle><circle cx="700.0" cy="161.9" r="4" fill="#1167A8"><title>Toyota Hilux SR5, 12 years old: about $31,200</title></circle><polyline fill="none" stroke="#E09A00" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="64.0,84.7 121.8,96.4 179.6,108.1 237.5,119.8 295.3,129.0 353.1,138.5 410.9,147.6 468.7,154.6 526.5,164.1 584.4,171.0 642.2,179.1 700.0,187.5"/><circle cx="64.0" cy="84.7" r="4" fill="#E09A00"><title>Ford Ranger XLT, 1 years old: about $52,300</title></circle><circle cx="121.8" cy="96.4" r="4" fill="#E09A00"><title>Ford Ranger XLT, 2 years old: about $49,100</title></circle><circle cx="179.6" cy="108.1" r="4" fill="#E09A00"><title>Ford Ranger XLT, 3 years old: about $45,900</title></circle><circle cx="237.5" cy="119.8" r="4" fill="#E09A00"><title>Ford Ranger XLT, 4 years old: about $42,700</title></circle><circle cx="295.3" cy="129.0" r="4" fill="#E09A00"><title>Ford Ranger XLT, 5 years old: about $40,200</title></circle><circle cx="353.1" cy="138.5" r="4" fill="#E09A00"><title>Ford Ranger XLT, 6 years old: about $37,600</title></circle><circle cx="410.9" cy="147.6" r="4" fill="#E09A00"><title>Ford Ranger XLT, 7 years old: about $35,100</title></circle><circle cx="468.7" cy="154.6" r="4" fill="#E09A00"><title>Ford Ranger XLT, 8 years old: about $33,200</title></circle><circle cx="526.5" cy="164.1" r="4" fill="#E09A00"><title>Ford Ranger XLT, 9 years old: about $30,600</title></circle><circle cx="584.4" cy="171.0" r="4" fill="#E09A00"><title>Ford Ranger XLT, 10 years old: about $28,700</title></circle><circle cx="642.2" cy="179.1" r="4" fill="#E09A00"><title>Ford Ranger XLT, 11 years old: about $26,500</title></circle><circle cx="700.0" cy="187.5" r="4" fill="#E09A00"><title>Ford Ranger XLT, 12 years old: about $24,200</title></circle><polyline fill="none" stroke="#1B7A44" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="64.0,177.6 121.8,183.8 179.6,189.7 237.5,195.9 295.3,200.7 353.1,205.4 410.9,210.2 468.7,213.8 526.5,218.6 584.4,222.2 642.2,226.3 700.0,230.7"/><circle cx="64.0" cy="177.6" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 1 years old: about $26,900</title></circle><circle cx="121.8" cy="183.8" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 2 years old: about $25,200</title></circle><circle cx="179.6" cy="189.7" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 3 years old: about $23,600</title></circle><circle cx="237.5" cy="195.9" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 4 years old: about $21,900</title></circle><circle cx="295.3" cy="200.7" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 5 years old: about $20,600</title></circle><circle cx="353.1" cy="205.4" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 6 years old: about $19,300</title></circle><circle cx="410.9" cy="210.2" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 7 years old: about $18,000</title></circle><circle cx="468.7" cy="213.8" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 8 years old: about $17,000</title></circle><circle cx="526.5" cy="218.6" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 9 years old: about $15,700</title></circle><circle cx="584.4" cy="222.2" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 10 years old: about $14,700</title></circle><circle cx="642.2" cy="226.3" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 11 years old: about $13,600</title></circle><circle cx="700.0" cy="230.7" r="4" fill="#1B7A44"><title>Toyota Corolla Ascent, 12 years old: about $12,400</title></circle></svg><div class="legend"><span><i style="background:#1167A8"></i>Toyota Hilux SR5</span><span><i style="background:#E09A00"></i>Ford Ranger XLT</span><span><i style="background:#1B7A44"></i>Toyota Corolla Ascent</span></div>
-    <p class="fine">Source: the Bargain Finder engine's value for a typical one in good order, 17 Nov 2026. Real listings vary with condition, km and options. Tap a point to see its value.</p></div>
+    <p class="lead">Pick what you're looking at and the years you care about. Each line is what Bargain Finder says a typical one is worth, worked out right here by the same engine as the app.</p></div>
+  <div class="panel reveal dep" style="margin-top:2rem">
+    <div class="seg" role="group" aria-label="What kind of vehicle?" id="depType"></div>
+    <div class="depPick" id="depPick" role="group" aria-label="Models to compare (up to 5)"></div>
+    <div class="depBar">
+      <form id="depOwn" class="depOwn" autocomplete="off"><input id="depOwnT" placeholder="Or type any make and model, e.g. Toyota Prado GXL" aria-label="Add your own make and model"><button class="btn ink sm" type="submit">Add</button></form>
+      <div class="depYrs"><label>From <select id="depFrom" aria-label="From year"></select></label><label>to <select id="depTo" aria-label="To year"></select></label>
+        <div class="seg mini" role="group" aria-label="Show as"><button type="button" data-view="dollars" aria-pressed="true">$ value</button><button type="button" data-view="pct" aria-pressed="false">% kept</button></div></div>
+    </div>
+    <div class="depChart"><svg id="depSvg" viewBox="0 0 760 340" role="img" aria-labelledby="depH" class="chart"></svg><div class="depTip" id="depTip" hidden></div></div>
+    <div class="legend" id="depLeg"></div>
+    <div class="keep" id="depKeep"></div>
+    <p class="fine" id="depNote">Loading the engine…</p>
+  </div>
 </div></section>
 
 <!-- PROFIT CALCULATOR: the real Flip Pro maths -->
@@ -379,7 +414,7 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
 
   /* nav turns solid after the hero */
-  var nav = $("nav"), onScroll = function () { nav.classList.toggle("solid", scrollY > innerHeight * 0.6); };
+  var nav = $("nav"), onScroll = function () { nav.classList.toggle("solid", scrollY > 8); };   // solid as soon as the page moves, so nothing slides under see-through text
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
   /* rotating word */
@@ -466,6 +501,104 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
   }
   var calcSeen = new ("IntersectionObserver" in window ? IntersectionObserver : function () { this.observe = function () { calc(); }; })(function (es) { if (es[0].isIntersecting) { calc(); calcSeen.disconnect(); } }, { rootMargin: "300px" });
   calcSeen.observe($("profit"));
+
+  /* VALUE CHART: every point is the real engine valuing a typical ad for that year, on this device */
+  var DEP_TYPES = [
+    ["ute", "Utes and 4WDs", [["Toyota Hilux SR5", "Toyota Hilux SR5 dual cab 4x4 auto"], ["Ford Ranger XLT", "Ford Ranger XLT dual cab"], ["Isuzu D-Max LS-U", "Isuzu D-Max LS-U"], ["Mitsubishi Triton GLS", "Mitsubishi Triton GLS"], ["Mazda BT-50 XT", "Mazda BT-50 XT"], ["VW Amarok V6", "Volkswagen Amarok V6", 2017], ["Toyota Prado GXL", "Toyota Prado GXL"], ["LandCruiser 200 GXL", "Toyota Landcruiser 200 Series GXL", 2008, 2021], ["Nissan Patrol Ti", "Nissan Patrol Ti"]]],
+    ["car", "Cars", [["Toyota Corolla Ascent", "Toyota Corolla Ascent"], ["Hyundai i30 Active", "Hyundai i30 Active"], ["Mazda CX-5 Maxx", "Mazda CX-5 Maxx", 2012], ["Toyota RAV4 GX", "Toyota RAV4 GX"], ["Tesla Model 3", "Tesla Model 3", 2019], ["Ford Mustang GT", "Ford Mustang GT", 2016], ["Ford Falcon XR6", "Ford Falcon XR6", 2002, 2016], ["Holden Commodore SS", "Holden Commodore SS", 2006, 2017]]],
+    ["sxs", "Side-by-sides and quads", [["Polaris RZR XP 1000", "Polaris RZR XP 1000", 2014], ["Can-Am Maverick X3", "Can-Am Maverick X3", 2017], ["Polaris Sportsman 570", "Polaris Sportsman 570 quad", 2014], ["Can-Am Outlander 650", "Can-Am Outlander 650 quad"]]],
+    ["bike", "Motorbikes", [["Honda CRF250L", "Honda CRF250L", 2013], ["Yamaha YZ250F", "Yamaha YZ250F"], ["KTM 300 EXC", "KTM 300 EXC"], ["Suzuki DR650", "Suzuki DR650"], ["Kawasaki Ninja 650", "Kawasaki Ninja 650", 2017], ["Harley Street Glide", "Harley-Davidson Street Glide"]]],
+    ["water", "Jet skis and boats", [["Yamaha WaveRunner VX", "Yamaha WaveRunner VX jet ski"], ["Sea-Doo GTI 130", "Sea-Doo GTI 130 jet ski", 2011], ["Quintrex 420 tinnie", "Quintrex 420 tinnie boat 30hp"]]],
+    ["tow", "Campers and trailers", [["Jayco Swan camper", "Jayco Swan camper trailer"], ["Box trailer 7x5 tandem", "Box trailer 7x5 tandem"]]]
+  ];
+  var DEP_COL = ["#1167A8", "#E09A00", "#1B7A44", "#C2410C", "#22313D"], NOW = new Date().getFullYear();
+  var dep = { type: 0, on: [0, 1, 2], own: [], from: NOW - 15, to: NOW - 1, view: "dollars", cache: {} };
+  function depVal(text, yr, isCar) {   // the engine's fair price for a typical one from that year
+    var key = text + "|" + yr; if (key in dep.cache) return dep.cache[key];
+    var r = null;
+    try { var x = BF.parse(yr + " " + text + "\n$1" + (isCar ? "\n" + Math.max(5000, (NOW - yr) * 15000) + " km" : "") + "\nListed today in Toowoomba, QLD"), v = BF.value(x, []);
+      if (v && v.fair > 0) r = { v: v.fair, low: v.conf === "low" }; } catch (e) {}
+    return (dep.cache[key] = r);
+  }
+  function depSeries() {
+    var t = DEP_TYPES[dep.type], list = dep.on.map(function (i) { return t[2][i]; }).concat(dep.own), isCar = t[0] === "ute" || t[0] === "car";
+    return list.slice(0, 5).map(function (m, k) {
+      var pts = [];
+      for (var y = dep.from; y <= dep.to; y++) { if ((m[2] && y < m[2]) || (m[3] && y > m[3])) continue; var p = depVal(m[1], y, isCar || m.own); if (p) pts.push({ y: y, v: p.v, low: p.low }); }
+      return { name: m[0], col: DEP_COL[k], pts: pts };
+    });
+  }
+  function depDraw() {
+    // draw at the real on-screen width, so the labels stay readable on a phone instead of shrinking
+    var S = depSeries(), svg = $("depSvg"), W = Math.round(Math.max(300, Math.min(760, svg.parentNode.clientWidth || 760))), H = W < 520 ? 290 : 340, L = W < 520 ? 48 : 66, R = 14, T = 16, B = 46;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    var shown = S.filter(function (s) { return s.pts.length; });
+    var newest = function (s) { return s.pts[s.pts.length - 1].v; };
+    var val = function (s, p) { return dep.view === "pct" ? p.v / newest(s) * 100 : p.v; };
+    var max = Math.max.apply(null, [1].concat([].concat.apply([], shown.map(function (s) { return s.pts.map(function (p) { return val(s, p); }); }))));
+    var step = dep.view === "pct" ? 25 : [1000, 2000, 5000, 10000, 20000, 25000].filter(function (st) { return max / st <= 7; })[0] || 50000;
+    var top = Math.ceil(max / step) * step, yrs = dep.to - dep.from || 1;
+    var X = function (y) { return L + (y - dep.from) / yrs * (W - L - R); }, Y = function (v) { return T + (1 - v / top) * (H - T - B); };
+    var lab = function (v) { return dep.view === "pct" ? Math.round(v) + "%" : v >= 1000 ? "$" + (v / 1000) + "k" : "$" + v; };
+    var g = "";
+    for (var v = 0; v <= top; v += step) g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="#E3E9EE"/><text x="' + (L - 10) + '" y="' + (Y(v) + 4) + '" text-anchor="end" class="ax">' + lab(v) + "</text>";
+    var every = Math.max(1, Math.ceil(yrs * 46 / (W - L - R)));   // about one year label per 46px
+    for (var y = dep.from; y <= dep.to; y++) if ((dep.to - y) % every === 0) g += '<text x="' + X(y) + '" y="' + (H - B + 20) + '" text-anchor="middle" class="ax">' + y + "</text>";
+    g += '<text x="' + ((L + W - R) / 2) + '" y="' + (H - 6) + '" text-anchor="middle" class="ax">' + (W < 520 ? "Year made (cars ~15,000 km/yr)" : "Year it was made (cars at about 15,000 km a year)") + "</text>";
+    shown.forEach(function (s) {
+      g += '<polyline fill="none" stroke="' + s.col + '" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="' + s.pts.map(function (p) { return X(p.y).toFixed(1) + "," + Y(val(s, p)).toFixed(1); }).join(" ") + '"/>';
+      s.pts.forEach(function (p) { g += '<circle cx="' + X(p.y).toFixed(1) + '" cy="' + Y(val(s, p)).toFixed(1) + '" r="4" fill="' + (p.low ? "#fff" : s.col) + '" stroke="' + s.col + '" stroke-width="2"/>'; });
+    });
+    g += '<line id="depCur" x1="0" x2="0" y1="' + T + '" y2="' + (H - B) + '" stroke="#5B6975" stroke-dasharray="3 4" visibility="hidden"/>';
+    svg.innerHTML = g;
+    $("depLeg").innerHTML = S.map(function (s) { return '<span><i style="background:' + s.col + '"></i>' + esc(s.name) + (s.pts.length ? "" : " (can't value this one)") + "</span>"; }).join("");
+    $("depKeep").innerHTML = shown.filter(function (s) { return s.pts.length > 1; }).map(function (s) {
+      var a = s.pts[0], b = s.pts[s.pts.length - 1], k = Math.round(a.v / b.v * 100);
+      return '<div><small>' + esc(s.name) + ": a " + a.y + " vs a " + b.y + "</small><b>" + k + "% kept</b><small>" + money(b.v) + " → " + money(a.v) + '</small><div class="bar"><span style="width:' + Math.min(100, k) + "%;background:" + s.col + '"></span></div></div>';
+    }).join("");
+    $("depNote").textContent = "Worked out just now by the Bargain Finder engine, for a typical one in good order. Hollow dots are rough guesses. Real ads vary with condition, km and options. Caravans aren't charted: they can't be valued from the model alone.";
+    svg.onpointermove = function (e) {
+      var r = svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W, yr = Math.round(dep.from + (px - L) / (W - L - R) * yrs);
+      yr = Math.max(dep.from, Math.min(dep.to, yr));
+      var rows = shown.map(function (s) { var p = s.pts.filter(function (q) { return q.y === yr; })[0]; return p ? '<div><i style="background:' + s.col + '"></i>' + esc(s.name) + ": " + (dep.view === "pct" ? Math.round(val(s, p)) + "%" : money(p.v)) + (p.low ? " (rough)" : "") + "</div>" : ""; }).join("");
+      var tip = $("depTip"), cur = $("depCur");
+      if (!rows) { tip.hidden = true; cur.setAttribute("visibility", "hidden"); return; }
+      cur.setAttribute("x1", X(yr)); cur.setAttribute("x2", X(yr)); cur.setAttribute("visibility", "visible");
+      tip.innerHTML = "<b>A " + yr + "</b>" + rows; tip.hidden = false;
+      tip.style.left = Math.max(90, Math.min(r.width - 90, X(yr) / W * r.width)) + "px";
+    };
+    svg.onpointerleave = function () { $("depTip").hidden = true; var c = $("depCur"); if (c) c.setAttribute("visibility", "hidden"); };
+  }
+  function depUI() {
+    var t = DEP_TYPES[dep.type];
+    $("depType").innerHTML = DEP_TYPES.map(function (d, i) { return '<button type="button" data-t="' + i + '" aria-pressed="' + (i === dep.type) + '">' + esc(d[1]) + "</button>"; }).join("");
+    var k = 0;
+    $("depPick").innerHTML = t[2].map(function (m, i) { var on = dep.on.indexOf(i) >= 0, c = on ? DEP_COL[k++] : ""; return '<button type="button" data-m="' + i + '" aria-pressed="' + on + '"><i' + (on ? ' style="background:' + c + '"' : "") + "></i>" + esc(m[0]) + "</button>"; }).join("") +
+      dep.own.map(function (m, j) { return '<button type="button" data-own="' + j + '" aria-pressed="true" title="Remove"><i style="background:' + DEP_COL[k++] + '"></i>' + esc(m[0]) + " ✕</button>"; }).join("");
+    [].forEach.call($("depType").children, function (b) { b.onclick = function () { dep.type = +b.dataset.t; dep.on = [0, 1, 2].filter(function (i) { return DEP_TYPES[dep.type][2][i]; }); dep.own = []; depUI(); }; });
+    [].forEach.call(document.querySelectorAll("[data-m]"), function (b) { b.onclick = function () {
+      var i = +b.dataset.m, at = dep.on.indexOf(i);
+      if (at >= 0) { if (dep.on.length + dep.own.length > 1) dep.on.splice(at, 1); } else if (dep.on.length + dep.own.length < 5) dep.on.push(i); else return;
+      dep.on.sort(function (a, c) { return a - c; }); depUI(); }; });
+    [].forEach.call(document.querySelectorAll("[data-own]"), function (b) { b.onclick = function () { dep.own.splice(+b.dataset.own, 1); depUI(); }; });
+    depDraw();
+  }
+  function depStart() {
+    var opts = ""; for (var y = NOW; y >= NOW - 30; y--) opts += "<option>" + y + "</option>";
+    $("depFrom").innerHTML = opts; $("depTo").innerHTML = opts; $("depFrom").value = dep.from; $("depTo").value = dep.to;
+    $("depFrom").onchange = $("depTo").onchange = function () { var a = +$("depFrom").value, b = +$("depTo").value; dep.from = Math.min(a, b); dep.to = Math.max(a, b); if (dep.from === dep.to) dep.from--; depDraw(); };
+    [].forEach.call(document.querySelectorAll("[data-view]"), function (b) { b.onclick = function () { dep.view = b.dataset.view; [].forEach.call(document.querySelectorAll("[data-view]"), function (o) { o.setAttribute("aria-pressed", o === b); }); depDraw(); }; });
+    var rz; addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(depDraw, 150); });
+    $("depOwn").onsubmit = function (e) { e.preventDefault(); var t = $("depOwnT").value.trim(); if (!t) return;
+      if (dep.on.length + dep.own.length >= 5) { if (dep.on.length) dep.on.pop(); else dep.own.shift(); }
+      var m = [t.slice(0, 40), t]; m.own = true; dep.own.push(m); $("depOwnT").value = ""; depUI(); };
+    depUI();
+  }
+  var depSeen = new ("IntersectionObserver" in window ? IntersectionObserver : function (cb) { this.observe = function () { cb([{ isIntersecting: true }]); }; this.disconnect = function () {}; })(function (es) {
+    if (!es[0].isIntersecting) return; depSeen.disconnect();
+    load(ENGINE).then(depStart).catch(function () { $("depNote").textContent = "Couldn't load the engine to draw this chart. Try reloading the page."; });
+  }, { rootMargin: "300px" });
+  depSeen.observe($("depSvg"));
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();
