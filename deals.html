@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en-AU" data-bf-noscramble>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1620">
+<title>Deals board · Bargain Finder</title>
+<meta name="description" content="Paste your saved-search alerts and see every listing as a card: asking price, fair price, how far under market, price drops, km, year and town. Free, and nothing leaves your device.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-180.png">
+<style>
+@font-face{font-family:"BF Sans";font-weight:400;font-display:swap;src:url(fonts/inter-400.woff2) format("woff2")}
+@font-face{font-family:"BF Sans";font-weight:600;font-display:swap;src:url(fonts/inter-600.woff2) format("woff2")}
+@font-face{font-family:"BF Sans";font-weight:700 900;font-display:swap;src:url(fonts/inter-700.woff2) format("woff2")}
+@font-face{font-family:"BF Mono";font-weight:500;font-display:swap;src:url(fonts/mono-500.woff2) format("woff2")}
+:root{--ink:#0B1620;--ink2:#22313D;--muted:#5B6975;--line:#E3E9EE;--soft:#F4F7F9;--sun:#FFC23D;--sky:#1677B8;--sky2:#4FB3F0;--grass:#1F8A4C;--red:#C8372D;
+  --f:"BF Sans",system-ui,-apple-system,sans-serif;--m:"BF Mono",ui-monospace,Menlo,monospace;--r:20px;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--soft);color:var(--ink);font:400 1rem/1.55 var(--f);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}a{color:inherit}p{margin:0}h1,h2,h3{margin:0}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:8px}
+.wrap{max-width:76rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.75rem}
+.brand{display:flex;align-items:center;gap:.55rem;font:900 1.1rem/1 var(--f);letter-spacing:-.03em;text-decoration:none}.brand img{width:32px;height:32px;border-radius:9px}
+nav{display:flex;gap:1.2rem;font:600 .93rem/1 var(--f)}nav a{text-decoration:none;opacity:.75}nav a[aria-current]{opacity:1;box-shadow:0 2px 0 var(--sun)}
+@media (max-width:560px){nav a.hide-sm{display:none}.brand span{display:none}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font:700 .95rem/1 var(--f);padding:.8rem 1.15rem;border-radius:999px;border:0;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.sun{background:var(--sun);color:#1B1300}.btn.ink{background:var(--ink);color:#fff}.btn.line{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}.btn.sm{padding:.55rem .85rem;font-size:.85rem}
+.top{background:var(--ink);color:#fff;padding:2.4rem 0 2rem}
+.eyebrow{font:600 .72rem/1 var(--m);letter-spacing:.16em;text-transform:uppercase;color:var(--sun)}
+.top h1{font:900 clamp(2rem,5vw,3.2rem)/1.02 var(--f);letter-spacing:-.04em;margin-top:.7rem}
+.top p.lead{color:rgba(255,255,255,.75);margin-top:.7rem;max-width:58ch}
+.paste{margin-top:1.4rem;background:#fff;color:var(--ink);border-radius:var(--r);padding:1rem;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.paste textarea{width:100%;height:5.6rem;resize:vertical;border:1.5px solid var(--line);border-radius:14px;padding:.75rem .85rem;font:500 .95rem/1.45 var(--f);background:var(--soft);color:var(--ink)}
+.paste textarea:focus{outline:none;border-color:var(--sky2);background:#fff}
+.prow{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:.7rem}.prow .msg{font-size:.88rem;color:var(--muted);flex:1 1 14rem}
+.bar{position:sticky;top:57px;z-index:10;background:var(--soft);padding:.9rem 0 .6rem;border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;padding-bottom:.35rem}.chips::-webkit-scrollbar{display:none}
+@media (min-width:900px){.chips{flex-wrap:wrap;overflow:visible}}
+.chip{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:.45rem .8rem;font:700 .84rem/1 var(--f);color:var(--ink2);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chips .sep{flex:none;width:1px;background:var(--line);margin:0 .2rem}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-top:.45rem;font-size:.88rem;color:var(--muted)}
+.meta select{border:1.5px solid var(--line);border-radius:10px;padding:.35rem .5rem;font:600 .86rem/1 var(--f);background:#fff;color:var(--ink)}
+.example{background:#FFF6DC;border:1px dashed #E0B44A;color:#5A4300;border-radius:14px;padding:.7rem .9rem;margin-top:1rem;font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(17.5rem,1fr));gap:1rem;padding:1.1rem 0 3rem}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 14px 34px rgba(11,22,32,.06)}
+.ph{position:relative;aspect-ratio:16/10;background:#22313D}.ph img{width:100%;height:100%;object-fit:cover}
+.ph .stock{position:absolute;right:.5rem;bottom:.5rem;font:600 .62rem/1 var(--m);letter-spacing:.08em;text-transform:uppercase;background:rgba(11,22,32,.6);color:#fff;border-radius:6px;padding:.3rem .4rem}
+.badge{position:absolute;left:.6rem;top:.6rem;border-radius:999px;padding:.4rem .7rem;font:900 .9rem/1 var(--f);letter-spacing:-.01em;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.b-good{background:var(--grass);color:#fff}.b-fair{background:#fff;color:var(--ink)}.b-bad{background:var(--red);color:#fff}.b-none{background:rgba(255,255,255,.9);color:var(--muted)}
+.drop{position:absolute;left:.6rem;top:2.75rem;background:var(--sun);color:#1B1300;border-radius:999px;padding:.32rem .6rem;font:800 .76rem/1 var(--f)}
+.body{padding:.9rem 1rem 1rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.body h3{font:800 1.05rem/1.25 var(--f);letter-spacing:-.01em}
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}.prices div{background:var(--soft);border-radius:12px;padding:.5rem .6rem}
+.prices span{display:block;font:600 .62rem/1.2 var(--m);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.prices b{font:900 1.15rem/1.2 var(--f);font-variant-numeric:tabular-nums}
+.facts{display:flex;flex-wrap:wrap;gap:.3rem .9rem;font-size:.86rem;color:var(--ink2)}.facts span{white-space:nowrap}
+.note{font-size:.84rem;color:var(--muted)}.note b{color:var(--ink)}
+.flags{display:flex;flex-wrap:wrap;gap:.3rem}.flags span{background:#FDECEA;color:var(--red);border-radius:999px;padding:.25rem .55rem;font:700 .74rem/1.2 var(--f)}
+.acts{display:flex;gap:.4rem;margin-top:auto;padding-top:.3rem}.acts .btn{flex:1}
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted)}.empty h2{color:var(--ink);font:900 1.5rem/1.2 var(--f);margin-bottom:.5rem}
+footer{background:var(--ink);color:rgba(255,255,255,.7);padding:1.8rem 0;font-size:.88rem}footer a{color:#fff}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="index.html"><img src="icons/icon-192.png" alt=""><span>Bargain Finder</span></a>
+  <nav aria-label="Pages"><a href="app.html">Check a listing</a><a href="flippro.html" class="hide-sm">Flip Pro</a><a href="deals.html" aria-current="page">Deals board</a></nav>
+</div></header>
+
+<main>
+<section class="top"><div class="wrap">
+  <p class="eyebrow">Deals board</p>
+  <h1>Every listing, one glance.</h1>
+  <p class="lead">Paste your saved-search alerts or a list of ads. Each one becomes a card with the asking price, the fair price and how far under market it is. Paste the same list again later and price drops are flagged.</p>
+  <form class="paste" id="pasteF" autocomplete="off">
+    <textarea id="pasteT" aria-label="Paste listings" placeholder="One listing per line, e.g.&#10;2016 Toyota Hilux SR5 dual cab 168,000 km, $27,500, Warwick QLD&#10;Or paste a whole Carsales, Gumtree or Marketplace alert email"></textarea>
+    <div class="prow"><button class="btn ink" type="submit">Add to the board</button><button class="btn line" type="button" id="exBtn">Show examples</button><span class="msg" id="msg" aria-live="polite">Nothing you paste leaves this device. The board shares its list with Flip Pro.</span></div>
+  </form>
+</div></section>
+
+<div class="bar"><div class="wrap">
+  <div class="chips" role="group" aria-label="Filters" id="chips"></div>
+  <div class="meta"><span id="count"></span><label>Sort <select id="sort" aria-label="Sort by"><option value="under">Most under market</option><option value="drop">Biggest price drop</option><option value="cheap">Cheapest</option><option value="near">Nearest</option><option value="new">Newest</option></select></label></div>
+</div></div>
+
+<div class="wrap">
+  <div class="example" id="exNote" hidden>These are <b>example listings</b> to show how the board works. They aren't real ads. Paste your own above to replace them.</div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+</div>
+</main>
+
+<footer><div class="wrap">Values come from the Bargain Finder engine on this device: sold prices you've added in <a href="flippro.html">Flip Pro</a> first, then the built-in price guide and auction results. Photos are stock pictures of that kind of vehicle, not the ad's own photo. <a href="index.html">Back to the home page</a>.</div></footer>
+
+<script src="guide.js"></script>
+<script src="sales.js"></script>
+<script src="engine.js"></script>
+<script src="flippro.js"></script>
+<script src="undermarket.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var store = { get: function (k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+  var money = function (n) { return n == null ? "-" : (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-AU"); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var today = function () { return new Date().toISOString().slice(0, 10); };
+
+  // the same saved list, sold prices and settings as Flip Pro, so both pages agree
+  var items = store.get("fp_um_items", []), db = store.get("fp_sold", []), opts = Object.assign({}, FP.DEFAULTS, store.get("fp_opts", {}));
+  var cfg = Object.assign({}, UM.CFG, store.get("fp_um", {})), examples = null;
+  var F = { type: "all", price: "any", dist: "any", under: false }, sortBy = "under";
+
+  var TYPES = [["all", "All"], ["car", "Cars and utes"], ["bike", "Bikes and quads"], ["caravan", "Caravans"], ["boat", "Boats and jet skis"], ["trailer", "Trailers"], ["other", "Other"]];
+  var PRICES = [["any", "Any price"], ["5", "Under $5k"], ["20", "$5k to $20k"], ["50", "$20k to $50k"], ["50+", "$50k+"]];
+  var DISTS = [["any", "Any distance"], ["100", "Within 100 km"], ["300", "Within 300 km"]];
+  var FLAG = { wovr: "Written off", nopapers: "No papers", stolen: "Stolen check", finance: "Finance owing", scam: "Scam signs", odometer: "Low km for its age", rust: "Rust", needswork: "Needs work", norego: "No rego", flood: "Flood damage", hail: "Hail damage", toogood: "Too good to be true" };
+
+  function photo(r, e) {   // a stock photo of that kind of thing (the ad's own photo isn't in pasted text)
+    var t = (r.title || "").toLowerCase();
+    if (r.cat === "caravan") return "caravan-modern"; if (r.cat === "trailer") return "trailer-hitch"; if (r.cat === "boat") return "boat-trailer";
+    if (r.cat === "bike") return /rzr|maverick|side.?by|buggy|sxs|utv|can.?am x3/.test(t) ? "rzr-turbo" : /quad|atv|sportsman|outlander|four.?wheeler/.test(t) ? "buggy-orange" : /crf|yz|kx|ktm|exc|dirt|mx|enduro|wr\d/.test(t) ? "motocross-air" : "motorbike";
+    if (e && e.cat === "car") return /hilux|ranger|d.?max|triton|navara|bt.?50|amarok|land.?cruiser|patrol|prado|pajero|ute|4x4|4wd/.test(t) ? "ute-ranger" : /mustang|camaro|corvette|challenger|gt\b|ss\b|v8/.test(t) ? "car-challenger" : "car-white-garage";
+    if (/mower/.test(t)) return "mower"; if (/rolex|omega|watch/.test(t)) return "watch-rolex-gold";
+    return "car-key";
+  }
+  function typeOf(r) { return ["car", "bike", "caravan", "boat", "trailer"].indexOf(r.cat) >= 0 ? r.cat : "other"; }
+
+  function build(list) {   // value every listing: Flip Pro's ranking (sold prices, costs), with the engine's guide price where there are no sold prices yet
+    if (!list.length) return [];
+    var res = UM.rank(list, db, cfg, opts, today()), byId = {};
+    res.top.concat(res.rest).forEach(function (r) { byId[r.id] = r; });
+    return list.map(function (x, n) {
+      var r = byId[x.id] || {}, e = null, g = null;
+      try { e = BF.parse((x.text || x.title) + "\n$" + x.price + (x.loc ? "\nListed today in " + x.loc : "")); g = BF.value(e, []); } catch (er) {}
+      var fair = r.value || (g && g.fair) || null, from = r.value ? "sold" : fair ? "guide" : "";
+      var under = fair ? 1 - x.price / fair : null, drop = x.first > x.price ? x.first - x.price : 0;
+      if (e && e.moto) r.cat = "bike";   // the engine knows side-by-sides and quads even when the words don't say "bike"
+      else if (e && e.cat === "car" && ["car", "caravan", "boat", "trailer", "bike"].indexOf(r.cat) < 0) r.cat = "car";
+      return { x: x, r: r, e: e, n: n, fair: fair, from: from, conf: r.value ? r.conf : g && g.conf, under: under, drop: drop,
+        year: e && e.year, km: e && e.km, town: x.loc || "", dist: r.km, distGuess: r.kmGuess, cat: r.cat || (e && e.cat === "car" ? "car" : "other"),
+        profit: r.value ? r.profit : null, roi: r.value ? r.roi : null, flags: r.flags || [], star: r.tier === "BUY",
+        major: r.tier === "careful" || (r.flags || []).some(function (k) { return /^(wovr|stolen|finance|scam|nopapers|flood)$/.test(k); }) };
+    });
+  }
+
+  function chipsUI() {
+    var row = function (key, list) { return list.map(function (c) { return '<button type="button" class="chip" data-k="' + key + '" data-v="' + c[0] + '" aria-pressed="' + (F[key] === c[0]) + '">' + esc(c[1]) + "</button>"; }).join(""); };
+    $("chips").innerHTML = row("type", TYPES) + '<span class="sep"></span>' + row("price", PRICES) + '<span class="sep"></span>' + row("dist", DISTS) +
+      '<span class="sep"></span><button type="button" class="chip" data-k="under" aria-pressed="' + F.under + '">15%+ under market</button>';
+    [].forEach.call($("chips").querySelectorAll(".chip"), function (b) { b.onclick = function () {
+      if (b.dataset.k === "under") F.under = !F.under; else F[b.dataset.k] = b.dataset.v; chipsUI(); draw(); }; });
+  }
+
+  function keep(d) {
+    var p = d.x.price;
+    if (F.type !== "all" && typeOf(d) !== F.type) return false;
+    if (F.price === "5" && !(p < 5000)) return false; if (F.price === "20" && !(p >= 5000 && p < 20000)) return false;
+    if (F.price === "50" && !(p >= 20000 && p < 50000)) return false; if (F.price === "50+" && !(p >= 50000)) return false;
+    if (F.dist !== "any" && !(d.dist != null && d.dist <= +F.dist)) return false;
+    if (F.under && !(d.under >= 0.15 && !d.major)) return false;
+    return true;
+  }
+  var SORTS = {
+    under: function (a, b) { return (a.major - b.major) || (b.under == null ? -9 : b.under) - (a.under == null ? -9 : a.under); },
+    drop: function (a, b) { return b.drop - a.drop || SORTS.under(a, b); },
+    cheap: function (a, b) { return a.x.price - b.x.price; },
+    near: function (a, b) { return (a.dist == null ? 1e9 : a.dist) - (b.dist == null ? 1e9 : b.dist); },
+    new: function (a, b) { return b.n - a.n; }
+  };
+
+  function card(d) {
+    var u = d.under, cls = d.major ? "b-bad" : u == null ? "b-none" : u >= 0.15 ? "b-good" : u >= -0.05 ? "b-fair" : "b-bad";
+    var badge = u == null ? "No value yet" : u >= 0 ? Math.round(u * 100) + "% under market" : Math.round(-u * 100) + "% over market";
+    if (d.major) badge = "⚠ Red flag · " + badge;   // cheap because something is wrong: never shown as a green deal
+    var facts = [d.year ? "📅 " + d.year : "", d.km ? "🛣 " + d.km.toLocaleString("en-AU") + " km" : "", d.town ? "📍 " + esc(d.town) : "", d.dist != null ? (d.distGuess ? "about " : "") + d.dist + " km away" : ""].filter(Boolean);
+    var note = d.profit != null ? "Flip it: <b>" + UM.pct(d.roi) + " profit, about " + money(d.profit) + "</b> after costs" + (d.star ? " ⭐" : "")
+      : d.from === "guide" ? "Fair price from the built-in guide" + (d.conf === "low" ? " (rough guess)" : "") + ". Add sold prices in Flip Pro for profit after costs." : "Not enough to value it yet. Add sold prices in Flip Pro.";
+    var link = d.x.link && /^https?:\/\//.test(d.x.link) ? '<a class="btn line sm" href="' + esc(d.x.link) + '" target="_blank" rel="noopener">See the ad</a>' : "";
+    return '<article class="card"><div class="ph"><img src="media/' + photo(d.r.cat ? d.r : { cat: d.cat, title: d.x.title }, d.e) + '.webp" alt="" loading="lazy"><span class="stock">Stock photo</span>' +
+      '<span class="badge ' + cls + '">' + badge + "</span>" + (d.drop ? '<span class="drop">▼ Down ' + money(d.drop) + "</span>" : "") + "</div>" +
+      '<div class="body"><h3>' + esc(d.x.title) + '</h3><div class="prices"><div><span>Asking</span><b>' + money(d.x.price) + '</b></div><div><span>Fair price</span><b>' + (d.fair ? money(d.fair) : "?") + "</b></div></div>" +
+      (facts.length ? '<div class="facts">' + facts.map(function (f) { return "<span>" + f + "</span>"; }).join("") + "</div>" : "") +
+      (d.flags.length ? '<div class="flags">' + d.flags.map(function (k) { return "<span>" + esc(FLAG[k] || k) + "</span>"; }).join("") + "</div>" : "") +
+      (d.drop ? '<p class="note">' + esc(UM.priceNote(d.x)) + "</p>" : "") + '<p class="note">' + note + "</p>" +
+      '<div class="acts"><button class="btn ink sm" data-check="' + d.n + '">Check it in full</button>' + link + (examples ? "" : '<button class="btn line sm" data-gone="' + esc(d.x.id) + '" aria-label="Remove ' + esc(d.x.title) + '">Gone</button>') + "</div></div></article>";
+  }
+
+  var built = [];
+  function rebuild() { built = build(examples || items); draw(); }
+  function draw() {
+    $("exNote").hidden = !examples;
+    var list = built.filter(keep).sort(SORTS[sortBy]), grid = $("grid");
+    $("count").textContent = built.length ? list.length + " of " + built.length + " listings" : "";
+    if (!built.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h2>No listings yet</h2><p>Paste a saved-search alert or a list of ads above, or tap <b>Show examples</b> to see how it works.</p></div>'; return; }
+    if (!list.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h2>Nothing matches those filters</h2><p>Try fewer filters.</p></div>'; return; }
+    grid.innerHTML = list.map(card).join("");
+    [].forEach.call(grid.querySelectorAll("[data-check]"), function (b) { b.onclick = function () {
+      var d = built[+b.dataset.check]; store.set("bf_web_paste", null);
+      try { localStorage.setItem("bf_web_paste", (d.x.text || d.x.title) + "\n$" + d.x.price + (d.x.loc ? "\n" + d.x.loc : "")); } catch (e) {}
+      location.href = "app.html"; }; });
+    [].forEach.call(grid.querySelectorAll("[data-gone]"), function (b) { b.onclick = function () {
+      items = items.filter(function (i) { return i.id !== b.dataset.gone; }); store.set("fp_um_items", items); rebuild(); }; });
+  }
+
+  $("pasteF").onsubmit = function (ev) {
+    ev.preventDefault(); var t = $("pasteT").value.trim(); if (!t) { $("pasteT").focus(); return; }
+    var got = UM.readListings(t);
+    if (!got.length) { $("msg").textContent = "I couldn't find any prices in that. Put one listing per line with its price, like the example."; return; }
+    var m = UM.mergeListings(items, got, today(), Date.now().toString(36));
+    items = m.list.slice(-300); store.set("fp_um_items", items); examples = null; $("pasteT").value = "";
+    $("msg").textContent = "Added " + m.added.length + " new" + (m.dropped ? ", " + m.dropped + " dropped in price" : "") + (m.rose ? ", " + m.rose + " went up" : "") + (m.same ? ", " + m.same + " unchanged" : "") + ".";
+    rebuild();
+  };
+  $("exBtn").onclick = function () {
+    if (examples) { examples = null; $("exBtn").textContent = "Show examples"; rebuild(); return; }
+    examples = UM.readListings([
+      "2016 Toyota Hilux SR5 dual cab 4x4 auto 168,000 km, $27,500, Warwick QLD",
+      "2019 Ford Ranger XLT dual cab 92,000 km, $38,900, Toowoomba QLD",
+      "2014 Hyundai i30 Active 155,000 km statutory write-off, $6,900, Tenterfield NSW",
+      "2020 Polaris RZR XP 1000 registered, $18,000, Toowoomba QLD",
+      "2018 Honda CRF250L 14,000 km, $4,200, Stanthorpe QLD",
+      "2017 Can-Am Outlander 650 quad, $7,900, Inverell NSW",
+      "2015 Yamaha WaveRunner VX jet ski, $7,500, Gold Coast QLD",
+      "2019 Isuzu D-Max LS-U 110,000 km, $26,000, Armidale NSW",
+      "Box trailer 7x5 tandem, $950, Stanthorpe QLD",
+      "2012 Toyota Corolla Ascent 180,000 km, $8,990, Brisbane QLD"
+    ].join("\n"));
+    // two of the examples were seen before at a higher price, to show the price-drop tag
+    examples[0].first = 29500; examples[0].seen = "12 Nov"; examples[3].first = 19500; examples[3].seen = "10 Nov"; examples[3].drops = 2;
+    $("exBtn").textContent = "Hide examples"; rebuild();
+  };
+  $("sort").onchange = function () { sortBy = $("sort").value; draw(); };
+  chipsUI(); rebuild();
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+})();
+</script>
+</body>
+</html>
