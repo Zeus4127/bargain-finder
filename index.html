@@ -35,7 +35,7 @@ section{padding-block:clamp(4.5rem,10vw,8rem)}.center{text-align:center}.center 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;font:700 1rem/1 var(--f);padding:1rem 1.45rem;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s,filter .15s;white-space:nowrap}
 .btn:hover{transform:translateY(-2px)}.btn.sun{background:var(--sun);color:#1B1300;box-shadow:0 8px 24px rgba(255,194,61,.35)}.btn.ink{background:var(--ink);color:#fff}.btn.ghost{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}
 .btn.line{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}.btn.sm{padding:.7rem 1.05rem;font-size:.92rem}
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}.reveal.in{opacity:1;transform:none}
+.reveal{opacity:0;transform:translateY(10px);transition:opacity .35s ease-out,transform .35s ease-out}.reveal.in{opacity:1;transform:none}
 /* nav */
 header.top{position:fixed;inset:0 0 auto;z-index:50;transition:background .25s,box-shadow .25s,color .25s;color:#fff}
 header.top.solid{background:rgba(255,255,255,.92);backdrop-filter:saturate(1.6) blur(14px);box-shadow:0 1px 0 var(--line);color:var(--ink)}
@@ -52,7 +52,7 @@ nav.links{display:flex;gap:1.6rem;font:600 .95rem/1 var(--f)}nav.links a{text-de
 .pill{display:inline-flex;align-items:center;gap:.55rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px);border-radius:999px;padding:.45rem .9rem .45rem .5rem;font:600 .86rem/1 var(--f);text-decoration:none}
 .pill b{background:var(--sun);color:#1B1300;border-radius:999px;padding:.28rem .55rem;font-size:.72rem;letter-spacing:.04em}
 .hero h1{font:900 clamp(2.9rem,7.4vw,6.2rem)/.95 var(--f);letter-spacing:-.055em;margin-top:1.3rem}
-.rot{display:inline-block;position:relative;color:var(--sun);min-width:4.6ch}.rot span{display:inline-block;transition:opacity .35s,transform .35s}.rot span.out{opacity:0;transform:translateY(-.25em)}
+.rot{display:inline-block;position:relative;color:var(--sun)}.rot span{display:inline-block;transition:opacity .35s,transform .35s}.rot span.out{opacity:0;transform:translateY(-.25em)}
 .hero .sub{margin-top:1.3rem;font-size:clamp(1.08rem,1.8vw,1.3rem);color:rgba(255,255,255,.88);max-width:44ch}
 .hero .cta{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:2rem}.hero .note{margin-top:1rem;font-size:.88rem;color:rgba(255,255,255,.7)}
 /* live demo card */
@@ -93,7 +93,8 @@ nav.links{display:flex;gap:1.6rem;font:600 .95rem/1 var(--f)}nav.links a{text-de
 .chip i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;color:#fff;background:var(--red)}.chip.ok i{background:var(--grass)}.chip.dn i{background:var(--sky)}
 /* phone frame */
 .phone{width:min(270px,100%);aspect-ratio:9/18.6;border-radius:44px;padding:10px;background:#0B1620;box-shadow:0 40px 80px rgba(0,0,0,.35),inset 0 0 0 2px #2b3a46;position:relative;margin:1.4rem 1.4rem -5rem}
-.phone::before{content:"";position:absolute;top:18px;left:50%;transform:translateX(-50%);width:84px;height:22px;border-radius:12px;background:#0B1620;z-index:2}
+.phone{padding-top:30px}
+.phone::before{content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);width:56px;height:9px;border-radius:9px;background:#22313D;z-index:2}
 .phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:34px;background:#fff}
 .float{animation:fl 6s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-10px)}}
 /* calculator */
@@ -158,6 +159,21 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
 .steps h3{font:800 1.25rem/1.2 var(--f);letter-spacing:-.02em}.steps p{margin-top:.5rem;color:var(--muted);font-size:.97rem}
 @media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}@media (max-width:520px){.steps{grid-template-columns:1fr}}
 
+/* phone: the deep sections open with one tap, so the page stays short */
+.foldbtn{display:none}
+@media (max-width:700px){
+  [data-fold]{padding-block:3rem}
+  [data-fold].folded>.wrap>:not(:first-child):not(.foldbtn){display:none}
+  [data-fold].folded .lead{display:none}
+  .foldbtn{display:flex;width:100%;justify-content:space-between;align-items:center;margin-top:1.1rem;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:1rem 1.1rem;font:800 1rem/1.2 var(--f);color:var(--ink);cursor:pointer}
+  .foldbtn::after{content:"+";font-size:1.4rem;font-weight:400;color:var(--muted)}
+  [data-fold]:not(.folded) .foldbtn::after{content:"–"}}
+/* phone: tighter cards so the useful middle takes fewer screens */
+@media (max-width:600px){
+  .bento{grid-auto-rows:auto;gap:.7rem;margin-top:2rem}.tile{min-height:12.5rem}.tile .tx{padding:1.1rem}.tile h3{font-size:1.2rem}.t-a .phone{width:200px}
+  .steps{gap:.6rem;margin-top:2rem}.steps li{display:grid;grid-template-columns:auto 1fr;gap:.2rem .9rem;padding:1.1rem}.steps li .sign{grid-row:span 2;margin:0;width:38px;height:38px}.steps p{margin-top:.2rem}
+  .hgrid{gap:.6rem;margin-top:2rem}.hcard{padding:1.1rem}.hcard b{font-size:1.9rem}
+}
 /* live value chart */
 .dep .seg{margin-bottom:.9rem}
 .depPick{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
@@ -253,7 +269,7 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
 </div></section>
 
 <!-- CHART: how fast they lose value (drawn live by the real engine, on this device) -->
-<section aria-labelledby="depH"><div class="wrap">
+<section aria-labelledby="depH" data-fold="Open the price chart"><div class="wrap">
   <div class="stack reveal" style="max-width:46rem"><p class="eyebrow">Price trends</p><h2 class="h2" id="depH">How fast do they lose value?</h2>
     <p class="lead">Pick what you're looking at and the years you care about. Each line is what Bargain Finder says a typical one is worth, worked out right here by the same engine as the app.</p></div>
   <div class="panel reveal dep" style="margin-top:2rem">
@@ -325,7 +341,7 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
 </div></section>
 
 <!-- COMPARE -->
-<section id="compare" aria-labelledby="cmpH"><div class="wrap">
+<section id="compare" aria-labelledby="cmpH" data-fold="See how it compares"><div class="wrap">
   <div class="center stack reveal"><p class="eyebrow">Compare</p><h2 class="h2" id="cmpH">Stop guessing.</h2></div>
   <div style="overflow-x:auto" class="reveal"><table class="cmp">
     <thead><tr><th scope="col"></th><th scope="col">Guessing from other ads</th><th scope="col">Asking on forums</th><th scope="col" class="us">Bargain Finder</th></tr></thead>
@@ -359,7 +375,7 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
   </div>
 </div></section>
 <!-- EXPERT: under the hood -->
-<section class="expert" id="expert" aria-labelledby="expH"><div class="wrap">
+<section class="expert" id="expert" aria-labelledby="expH" data-fold="Open the expert notes"><div class="wrap">
   <div class="stack reveal" style="max-width:48rem"><p class="eyebrow">For experts</p><h2 class="h2" id="expH">Under the hood.</h2>
     <p class="lead">Exactly how Bargain Finder works out a value, what it counts, and where it's weak. Nothing hidden.</p></div>
   <div style="margin-top:2rem">
@@ -417,6 +433,15 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
   var nav = $("nav"), onScroll = function () { nav.classList.toggle("solid", scrollY > 8); };   // solid as soon as the page moves, so nothing slides under see-through text
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
+  /* phone: fold the deep sections behind one tap (the button only shows on narrow screens) */
+  [].forEach.call(document.querySelectorAll("[data-fold]"), function (s) {
+    var wrap = s.querySelector(".wrap"), b = document.createElement("button"), label = s.dataset.fold;
+    b.type = "button"; b.className = "foldbtn"; b.textContent = label; b.setAttribute("aria-expanded", "false");
+    wrap.insertBefore(b, wrap.children[1] || null); s.classList.add("folded");
+    b.onclick = function () { var open = s.classList.toggle("folded") === false; b.setAttribute("aria-expanded", open); b.textContent = open ? "Close" : label;
+      if (open) { [].forEach.call(s.querySelectorAll(".reveal"), function (el) { el.classList.add("in"); }); s.dispatchEvent(new Event("unfold")); } };
+  });
+
   /* rotating word */
   var words = ["Rolex", "RZR", "Mustang", "Hilux", "dirt bike", "Porsche", "caravan"], wi = 0, w = $("rotW");
   if (!still) setInterval(function () { w.classList.add("out"); setTimeout(function () { wi = (wi + 1) % words.length; w.textContent = words[wi]; w.classList.remove("out"); }, 350); }, 2200);
@@ -424,12 +449,13 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
   /* reveal on scroll, count-up numbers, play videos only when on screen */
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: 0.12 });
-    [].forEach.call(document.querySelectorAll(".reveal:not(.in)"), function (el) { io.observe(el); });
+    // anything already on screen shows at once; only things further down fade in, and quickly
+    [].forEach.call(document.querySelectorAll(".reveal:not(.in)"), function (el) { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); else io.observe(el); });
     var co = new IntersectionObserver(function (es) { es.forEach(function (e) {
       if (!e.isIntersecting) return; co.unobserve(e.target); var end = +e.target.dataset.count, t0 = performance.now();
       if (still) return; (function step(t) { var k = Math.min(1, (t - t0) / 1200); e.target.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))).toLocaleString("en-AU"); if (k < 1) requestAnimationFrame(step); })(t0);
     }); }, { threshold: 0.6 });
-    [].forEach.call(document.querySelectorAll("[data-count]"), function (el) { co.observe(el); });
+    // the real numbers are printed in the HTML and never count up: a half-way number is a wrong number
     var vo = new IntersectionObserver(function (es) { es.forEach(function (e) { var v = e.target; if (e.isIntersecting && !still) { if (v.preload === "none") v.preload = "auto"; v.play().catch(function () {}); } else v.pause(); }); }, { threshold: 0.1 });
     [].forEach.call(document.querySelectorAll("video"), function (v) { if (still) { v.removeAttribute("autoplay"); v.pause(); } vo.observe(v); });
   } else { [].forEach.call(document.querySelectorAll(".reveal"), function (el) { el.classList.add("in"); }); }
@@ -594,11 +620,16 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
       var m = [t.slice(0, 40), t]; m.own = true; dep.own.push(m); $("depOwnT").value = ""; depUI(); };
     depUI();
   }
+  var depOn = false;
+  function depKick() {   // start once; if already started, redraw at the new width (e.g. after the phone fold opens)
+    if (depOn) { depDraw(); return; } depOn = true; depSeen.disconnect();
+    load(ENGINE).then(depStart).catch(function () { depOn = false; $("depNote").textContent = "Couldn't load the engine to draw this chart. Try reloading the page."; });
+  }
   var depSeen = new ("IntersectionObserver" in window ? IntersectionObserver : function (cb) { this.observe = function () { cb([{ isIntersecting: true }]); }; this.disconnect = function () {}; })(function (es) {
-    if (!es[0].isIntersecting) return; depSeen.disconnect();
-    load(ENGINE).then(depStart).catch(function () { $("depNote").textContent = "Couldn't load the engine to draw this chart. Try reloading the page."; });
+    if (es[0].isIntersecting && $("depSvg").clientWidth) depKick();
   }, { rootMargin: "300px" });
   depSeen.observe($("depSvg"));
+  $("depSvg").closest("section").addEventListener("unfold", depKick);
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();
